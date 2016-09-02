@@ -1,0 +1,537 @@
+﻿50881 -al     l
+32380 -ador    r
+19072 -achuelas s as las
+14151 -acas     s as  acas
+14217 -´acas    s as  acas
+14716 -áceas    s as    eas
+49751 -ajes     s  es    jes
+24603 -acos     s   os    acos
+24716 -´acos    s   os    acos
+19074 -achuelos s   os      los
+858 -ábamos     s   os mos
+15570 -áceos    s   os  eos
+6022 -aca        a   ca
+14216 -´aca      a   ca
+25035 -ada       a    da
+16645 -acha      a     ha
+19071 -achuela   a la
+34499 -adura     a  ra
+14715 -ácea      a   ea
+57116 -algia     a    ia
+
+74901 -anda    a da
+75731 -anga    a  ga
+58737 -alla    a   la
+74683 -ancia   a    ia
+4537 -able      e    le
+49610 -aje      e     je
+49973 -ajo       o jo
+19073 -achuelo   o  lo
+18487 -acho      o   ho
+15569 -áceo      o    eo
+20869 -aco       o co
+20870 -´aco      o co
+30387 -adero     o  ro
+31710 -ado       o   do
+68435 -amiento  o
+75792 -angas
+76142 -ango
+76159 -angos
+77169 -ano
+77170 -año
+78041 -ante
+80315 -anza
+80316 -anzas
+80516 -añera
+80519 -añero
+95028 -ar
+95136 -aracho
+95998 -arca
+98105 -ario
+99384 -arquía
+103971 -arro
+105140 -arros
+107136 -asa
+107916 -asco
+110324 -asis
+113387 -ata
+114802 -atario
+118096 -ativa
+118097 -ativo
+118252 -ato
+124555 -ava
+124556 -avas
+124557 -avos
+126419 -avo
+128532 -azgo
+128543 -azo
+129034 -azón
+135261 -baro
+141544 -bilísimo
+141887 -bio
+143549 -ble
+164935 -cardio
+171451 -cefalia
+174589 -ceta
+174593 -cete
+181182 -cica
+187271 -cico
+187282 -cida
+187284 -cidio
+187632 -cilla
+187642 -cillo
+188562 -ción
+189405 -císimo
+189500 -cita
+189565 -cito
+190403 -clastia
+194755 -cola
+197549 -dáctilo
+221357 -cracia
+221546 -´crata
+227391 -cultura
+229429 -dad
+229433 -dades
+238778 -dera
+238779 -deras
+239015 -dermia
+239018 -dermo
+239026 -dero
+315466 -e
+315467 -é
+315473 -ear
+315580 -ecer
+324530 -doncia
+324714 -dor
+324717 -dora
+324767 -doras
+324784 -dores
+326356 -dura
+326419 -duras
+327465 -eda
+327466 -edo
+327468 -edad
+327477 -edades
+327498 -edero
+327709 -edor
+327964 -edura
+328409 -ega
+328417 -egas
+328454 -ego
+328472 -egos
+329205 -ejo
+349717 -ena
+362589 -encia
+388854 -eno
+393790 -ense
+395663 -enta
+397005 -entas
+397007 -ente
+398570 -ento
+399541 -entos
+407359 -ea
+407360 -eas
+407361 -eo
+407362 -eos
+407363 -´eo
+408513 -er
+408516 -era
+408824 -es
+408825 -és
+409022 -ería
+409308 -ero
+409729 -érrimo
+415290 -esco
+420308 -esis
+428722 -eta
+432706 -ete
+441056 -ez
+441057 -eza
+441063 -ezas
+441080 -eces
+441175 -eño
+441969 -fagia
+445772 -fero
+445773 -´fero
+446888 -´fica
+446899 -ficar
+446921 -´ficas
+446997 -fico
+446998 -´fico
+447000 -´ficos
+448051 -filo
+448052 -´filo
+449538 -fito
+451795 -´foba
+451796 -´fobas
+451800 -fobo
+451801 -´fobo
+451804 -´fobos
+452481 -fono
+452482 -´fono
+452934 -forme
+457701 -´fuga
+457739 -´fugas
+457753 -fugo
+457754 -´fugo
+457755 -´fugos
+465122 -´geno
+468118 -gono
+468119 -´gono
+469401 -grafía
+469469 -grafo
+469470 -´grafo
+469554 -grama
+482041 -í
+482045 -ia
+482046 -ía
+482050 -íamos
+482056 -ias
+482058 -iasis
+489828 -ible
+489846 -ica
+489847 -´ica
+489855 -´icas
+489885 -icia
+489886 -icias
+489887 -icios
+489888 -icio
+489896 -ico
+489897 -´ico
+489927 -icas
+489928 -icos
+489929 -´icos
+489973 -ida
+489974 -´ida
+489975 -´idas
+489976 -´idos
+489979 -idad
+489980 -idades
+490263 -idero
+490389 -ido
+490390 -´ido
+490462 -idor
+490474 -idura
+490490 -iega
+490491 -iegas
+490492 -iego
+490493 -iegos
+490495 -iencia
+490496 -ienta
+490497 -ientas
+490498 -iente
+490499 -iento
+490500 -ientos
+490506 -ífero
+490507 -ificar
+490920 -ijo
+490929 -il
+490930 -´il
+491109 -iles
+491110 -´iles
+491130 -ilidad
+491131 -ilidades
+491148 -illa
+491180 -illo
+491852 -imiento
+491947 -imos
+494309 -ín
+494313 -ina
+494526 -inas
+498818 -ines
+502727 -ino
+502848 -inos
+510059 -io
+510060 -ío
+510130 -ios
+510131 -íos
+510181 -ir
+511355 -isco
+511370 -ísima
+511371 -ísimas
+511372 -ísimo
+511373 -ísimos
+511509 -ismo
+511598 -ista
+511600 -iste
+511803 -itiva
+511804 -itivo
+511805 -ito
+511934 -iva
+512009 -ivo
+512021 -iza
+512051 -izar
+512086 -izas
+512102 -izco
+512118 -izo
+512119 -izos
+524951 -latría
+525970 -lecto
+534024 -logía
+534032 -logo
+534033 -´logo
+542774 -mancia
+542775 -mancía
+544377 -mano
+544378 -´mano
+554548 -menta
+554549 -mente
+554593 -mento
+556669 -metra
+556670 -´metra
+556675 -´metras
+556677 -metría
+556738 -metro
+556739 -´metro
+556746 -´metros
+557600 -miento
+566084 -mos
+571675 -ncia
+571676 -ndo
+574481 -nomía
+575531 -nta
+575533 -nte
+576123 -o
+576124 -ó
+578388 -oca
+578895 -oco
+581400 -ón
+581403 -ona
+581727 -onimia
+581728 -ónimo
+582742 -or
+582745 -ora
+582812 -oras
+583282 -ores
+584392 -orra
+584396 -orras
+584406 -orria
+584407 -orrias
+584411 -orrio
+584413 -orrios
+584416 -orro
+584418 -orros
+585097 -osis
+585122 -oso
+612455 -plasia
+635640 -r
+639281 -s
+686031 -rra
+686032 -rras
+686033 -rro
+686034 -rros
+696723 -saurio
+696871 -sco
+704607 -sis
+716288 -stato
+716290 -ste
+725292 -tana
+725296 -tanas
+725679 -tano
+725683 -tanos
+726098 -teca
+726100 -tecas
+729029 -tecnia
+729107 -teco
+731686 -tica
+731687 -´tica
+731691 -ticas
+731692 -´ticas
+731699 -tico
+731700 -´tico
+731703 -ticos
+731704 -´ticos
+731963 -terapia
+738293 -tor
+738441 -toria
+738442 -torias
+738443 -torios
+738448 -torio
+750950 -trices
+752267 -triz
+756011 -uda
+756020 -udas
+756024 -udo
+756026 -udos
+756033 -uela
+756034 -uelo
+756461 -una
+757489 -uno
+757493 -unas
+757494 -unos
+757719 -ura
+757812 -uras
+758709 -usco
+759248 -uzco
+770701 -´voro
+771552 -engo
+771553 -fobia
+771554 -illón
+771555 -itis
+771556 -lito
+771557 -oide
+771558 -oideo
+771559 -ol
+771560 -oma
+771561 -patía
+771562 -plastia
+771563 -scopia
+771564 -scopio
+771565 -zoo
+771566 -zón
+771569 -a
+771700 -aba
+
+Prefijos
+
+771664 a-
+ 73600 an-              a-
+ 73602 ana-         an- a-
+ 74071 anarco- ana- an- a-
+ 76105 anglo-       an- a-
+ 78043 ante-        an- a-
+ 78799 anti-        an- a-
+ 30116 aden-            a-
+ 30124 adeno- aden-     a-
+ 34910 aero-            a-
+ 39722 afro-            a-
+ 44400 agro-            a-
+ 60572 alo-             a-
+ 66739 ambi-            a-
+112632 astro-           a-
+123190 auto-            a-
+
+230159 de-
+238994 derm-                  de-
+238995 dermat-          derm- de-
+238997 dermato- dermat- derm- de-
+239019 dermo-           derm- de-
+236002 demo-                  de-
+239994 des-                   de-
+
+349715 en-
+369597 endo-  en-
+400051 entre- en-
+
+434299 ex-
+434301 exa-   ex-
+439719 extra- ex-
+
+494312 in-
+500454 infra- in-
+505773 inter- in-
+
+637596 re-
+671542 requete- re-
+672378 res-     re-
+
+191679 co-
+196986 com- co-
+
+478946 hepat-
+478955 hepato- hepat-
+
+585313 ot-
+585503 oto- ot-
+
+616982 pos-
+617708 post- pos-
+
+624655 pro-
+629195 proto- pro-
+
+635540 quir-
+635761 quiro- quir-
+
+698453 selen-
+698461 seleno- selen-
+
+705002 so-
+705784 sobre- so-
+
+135262 baro-
+140806 biblio-
+141888 bio-
+149557 bronco-
+164574 carcino-
+164936 cardio-
+189566 cito-
+197550 dactilo-
+201693 con-
+222690 crio-
+223675 crono-
+318689 dis-
+323954 dolico-
+327238 eco-
+329416 em-
+329724 electro-
+407459 epi-
+408827 es-
+432998 etno-
+433058 eu-
+446868 fibro-
+448053 filo-
+449539 fito-
+452483 fono-
+454143 foto-
+455066 franco-
+460476 galo-
+464118 gastr-
+465123 geno-
+465244 geo-
+466048 giga-
+469471 grafo-
+476738 halo-
+478407 helio-
+480643 hetero-
+481020 hidro-
+482044 i-
+482384 hiper-
+482785 hipo-
+483394 histo-
+484558 homo-
+490294 idio-
+491496 im-
+511513 iso-
+519427 kilo-
+531475 lito-
+537157 macro-
+539022 mal-
+552534 mega-
+555963 meta-
+557309 micro-
+557952 mili-
+559028 mini-
+559548 mio-
+563553 mono-
+568130 multi-
+570688 nano-
+571924 necro-
+572979 neumo-
+573013 neuro-
+580601 oligo-
+581367 omni-
+589797 pan-
+591315 para-
+593286 paro-
+595887 pato-
+605478 peta-
+606962 pico-
+609813 piro-
+613632 pluri-
+614482 poli-
+618517 pre-
+637143 radio-
+703399 sin-
+716419 sub-
+720537 super-
+721518 supra-
+729376 tele-
+731900 tera-
+732331 termo-
+741345 trans-
+744060 tras-
+756902 uni-
+766359 vice-
+771517 xeno-
+777169 zoo-
