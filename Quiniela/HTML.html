@@ -1,0 +1,37 @@
+﻿<html>
+	<head>
+		<meta charset="UTF-8"></meta>
+		<title>Predictor de Quiniela</title>
+		<link rel="icon" href="favicon.png"></link>
+		<script src="General/General.js"></script>
+		<script src="General/ordenar.js"></script>
+		<script src="programa.js"></script>
+		<script src="HTML.js"></script>
+	</head>
+	<body>
+		<table>
+		<tr>
+		<td>
+		<p><b>Programa javascript que intenta mostrar una estadística de la Quiniela.</b></p>
+		<div>Copiar y pegar los 20 números (tal cual) en la caja de texto.</div>
+		<div><a href="http://www.resultadoloterianacional.com/quiniela-nacional-3-de-septiembre.html">http://www.resultadoloterianacional.com/quiniela-nacional-3-de-septiembre.html</a>.</div>
+		</td>
+		<td>
+		<p>
+			<div><b>Ejemplo:</b></div>
+			<div>01	02	03	04	05	06	07	08	09	10</div>
+			<div>2338-3035-4029-5210-3648-3853-5135-9167-7154-2892-</div>
+			<div>11	12	13	14	15	16	17	18	19	20</div>
+			7700-4698-9901-2674-7253-7078-6653-7511-7986-2148</div>
+		</p>
+		</tr>
+		</table>
+		<p>
+			<button onclick="predecir()">Generar Estadística</button>
+		</p>
+		<div>Entrada:</div>
+		<textarea style="width: 900px; height: 150px" id="ta_entrada"></textarea>
+		<div>Estadística:</div>
+		<textarea disabled style="width: 200px; height: 200px" id="ta_salida"></textarea>
+	</body>
+</html>
