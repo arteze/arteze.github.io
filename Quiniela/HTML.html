@@ -30,7 +30,12 @@
 			<button onclick="predecir()">Generar Estadística</button>
 		</p>
 		<div>Entrada:</div>
-		<textarea style="width: 900px; height: 150px" id="ta_entrada" onkeyup="predecir()"></textarea>
+		<textarea
+			style="width: 900px; height: 150px"
+			id="ta_entrada"
+			onkeyup="predecir()"
+			onkeypress="predecir()"
+		></textarea>
 		<div>Estadística:</div>
 		<textarea disabled style="width: 200px; height: 200px" id="ta_salida"></textarea>
 	</body>
