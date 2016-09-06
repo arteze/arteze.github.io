@@ -33,6 +33,7 @@ function extraerNúmeros(texto)
 {
 	var devuelve=texto
 	devuelve=devuelve.match(/[0-9]{4}/g)
+	devuelve=devuelve==null?[]:devuelve
 	var array=[]
 	rellenarArray(array,1)
 	for(var i=0;i<devuelve.length;i++)
