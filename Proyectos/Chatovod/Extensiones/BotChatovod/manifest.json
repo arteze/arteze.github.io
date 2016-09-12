@@ -1,0 +1,38 @@
+﻿{
+	"name": "Bot para Chatovod",
+	"short_name": "BotChatovod",
+	"description": "Bot conversacional basado en Alizia.",
+	"version": "1.3",
+	"manifest_version": 2,
+	"minimum_chrome_version": "32",
+	"update_url": "https://clients2.google.com/service/update2/crx",
+	"homepage_url": "http://otecald.atspace.com/Javascript/Paginas/Alizia/Bot.html",
+	"icons": {
+		"128": "imágenes/íconos/128.png",
+		"16": "imágenes/íconos/16.png",
+		"48": "imágenes/íconos/48.png"
+	},
+	"browser_action": {
+		"default_icon": {
+			"19": "imágenes/íconos/19.png",
+			"38": "imágenes/íconos/38.png"
+		}
+	},
+	"content_scripts": [ {
+		"all_frames": false,
+		"js": [
+			"inyectar.js"
+		],
+		"matches": [ "*://*.chatovod.com/*" ],
+		"run_at": "document_end"
+	} ],
+	"web_accessible_resources": [
+		"Alizia.js",
+		"Bot.js"
+	],
+	"permissions": [
+		"storage",
+		"http://*/",
+		"https://*/" 
+	]
+}
