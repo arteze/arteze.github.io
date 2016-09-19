@@ -8,14 +8,14 @@
 	"update_url": "https://clients2.google.com/service/update2/crx",
 	"homepage_url": "http://otecald.atspace.com/Javascript/Paginas/Alizia/Bot.html",
 	"icons": {
-		"128": "imágenes/íconos/128.png",
-		"16": "imágenes/íconos/16.png",
-		"48": "imágenes/íconos/48.png"
+		"128": "imagenes/iconos/128.png",
+		"16": "imagenes/iconos/16.png",
+		"48": "imagenes/iconos/48.png"
 	},
 	"browser_action": {
 		"default_icon": {
-			"19": "imágenes/íconos/19.png",
-			"38": "imágenes/íconos/38.png"
+			"19": "imagenes/iconos/19.png",
+			"38": "imagenes/iconos/38.png"
 		}
 	},
 	"content_scripts": [ {
