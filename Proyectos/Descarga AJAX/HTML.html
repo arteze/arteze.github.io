@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8"></meta>
+		<title>Base 64 a palabras Wikcionario</title>
+		<link rel="icon" href="../../General/favicon.png"></link>
+		<script src="programa.js"></script>
+	</head>
+	<body>
+		<p>Convierte código Base 64 a palabras de Wikcionario y viceversa.</p>
+		<p>
+			<button id="haciaPalabrasButton" onclick="haciaPalabras()" disabled>Base 64 a Palabras</button>
+			<button id="haciaBase64Button" onclick="haciaBase64()" disabled>Palabras a Base 64</button>
+		</p>
+		<div>Base 64:</div>
+		<textarea style="width: 900px; height: 150px" id="ta"></textarea>
+		<div>Palabras:</div>
+		<textarea style="width: 900px; height: 150px" id="ta_salida"></textarea>
+		<div>Suma de verificación:<div>
+		<textarea style="width: 900px; height: 100px" id="comprobado"></textarea>
+	</body>
+</html>
