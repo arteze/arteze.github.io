@@ -8,7 +8,7 @@
 }
 function inyectarBot()
 {
-	var archivos=["Alizia.js","Bot.js"]
+	var archivos=["OtecaldBot.js","Bot.js"]
 	for(var i=0;i<archivos.length;i++)
 	{
 		inyectarArchivo(archivos[i])

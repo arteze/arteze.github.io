@@ -233,7 +233,7 @@ function reEnviarMensajeSiEsGeneral()
 }
 function chatAutomático(borrar)
 {
-	var esDeixi
+	var esOtecald
 	khPrototypeVj()
 	muestraPeticiones=false
 	tiempo=1500
@@ -243,11 +243,11 @@ function chatAutomático(borrar)
 	}
 	dueños={}
 	try{csrfToken}catch(e){csrfToken=""}
-	try{DeixiBot;esDeixi=true}catch(e){esDeixi=false}
+	try{OtecaldBot;esOtecald=true}catch(e){esOtecald=false}
 	try{clearInterval(intervalo)}catch(e){}
-	botName=esDeixi?"Alizia":"Eliza"
-	console.log("esDe: "+DeixiBot)
-	bot=esDeixi?new DeixiBot(botData):new ElizaBot()
+	botName=esOtecald?"OtecaldBot":"Eliza"
+	console.log("esDe: "+OtecaldBot)
+	bot=esOtecald?new OtecaldBot(botData):new ElizaBot()
 	if(borrar)
 	{
 		var áreaTexto=document.getElementsByClassName("chatSendControlsWrapper")[0]
@@ -259,7 +259,7 @@ function chatAutomático(borrar)
 function esperarBot(borrar)
 {
 	var activados=[false,false]
-	try{DeixiBot;activados[0]=true}catch(e){}
+	try{OtecaldBot;activados[0]=true}catch(e){}
 	try{ElizaBot;activados[1]}catch(e){}
 	if(activados[0]|activados[1])
 	{
