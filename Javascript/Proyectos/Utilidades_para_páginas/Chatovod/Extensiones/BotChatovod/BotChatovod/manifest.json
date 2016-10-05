@@ -27,7 +27,7 @@
 		"run_at": "document_end"
 	} ],
 	"web_accessible_resources": [
-		"Alizia.js",
+		"OtecaldBot.js",
 		"Bot.js"
 	],
 	"permissions": [
