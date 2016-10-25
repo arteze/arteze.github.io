@@ -1,0 +1,6 @@
+function fonetizar(entrada)
+{
+	var salida=entrada
+	return salida
+}
+

@@ -1,0 +1,77 @@
+ABDEFGIJKLMNOPRSTU - 18
+
+Este abecedario se separa en:
+1) vocales		: AEIOU
+2) consonantes	: BDFGJKMNPST
+3) conectores	: LR
+
+Este abecedario no lleva ni tildes ni minúsculas.
+
+Carácteres especiales
+19 - Espacio
+20 - < Comienzo número
+21 - , Coma de número o texto
+22 - > Cierre de número
+23 - & L&LL LL&L
+
+5 bits = 2^32
+
+8 letras = 5 bytes
+
+Política de evitamientos de palabras.
+Los tipos de palabras que se evitan.
+
+*Personas, como ana.
+*lugares.
+*Palabras en inglés, como rock.
+*Expresiones, como uy o eu.
+*Notas musicales, como do o fa.
+*Siglas.
+*Abreviaciones.
+*Númeraciones, excepto UN, UNA y UNO.
+*La palabra Ta, de Ta-Te-Ti.
+
+El funcionamiento de las letras faltantes:
+C Ca Ce Ci Co Cu - KA SE SI KO KU
+Ñ Ña Ñe Ñi Ño Ñu - NIA NIE NI NIO NIU
+Q Que Qui - Ke Ki
+V Va Ve Vi Vo Vu - BA BE BI BO BU
+X Xa Xe Xi Xo Xu - KSA KSE KSI KSO KSU
+Y Ya Ye Yi Yo Yu - LLA LLE LLI LLO LLU
+Z Za Ze Zi Zo Zu - SA SE SI SO SU
+
+La letra H juega un papel compuesto.
+Ch y Sh, de lo contrario desaparece.
+
+La G
+
+Ga Gue Gui Go Gu - GA GE GI GO GU
+Ejemplos:
+Guerra será GERRA
+Gato será GATO
+Gerra no existe, pero sería Jerra.
+
+La U también puede tener diéresis... En ese caso.
+Güa Güe Güi Güo Güu - GUA GUE GUI GUO GU
+
+Pingüino será PINGUINO
+Pinguino sin diéresis, que no existe, será PINGINO
+Pingino, que tampoco existe será PINJINO
+Pinjino, que tampoco existe, será también PINJINO.
+
+La lectra Che
+
+Cha Che Chi Cho Chu - TLLA TLLE TLLI TLLO TLLU
+Chancleta - TLLANKLETA
+Choque - TLLOKE
+
+El compuesto Sh
+Sh - Sha She Shi Sho Shu - LLA LLE LLI LLO LLU
+Shell - LLEL
+
+Incompatibilidad entre Sh y L normal
+ISH - ILL
+IL - IL
+ILSHA - IL&LLA
+ISHLA - ILL&LA
+

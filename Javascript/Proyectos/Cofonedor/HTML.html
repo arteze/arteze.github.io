@@ -1,0 +1,43 @@
+﻿<html>
+	<head>
+		<meta charset="UTF-8"></meta>
+		<title>Cofonedor</title>
+		<link rel="icon" href="favicon.png"></link>
+		<script src="General/General.js"></script>
+		<script src="programa.js"></script>
+		<script src="HTML.js"></script>
+	</head>
+	<body>
+		<p><b>Cofonedor:</b> Convierte texto a fonética.</p>
+		<p>
+			<p>
+				Algunas cosas a considerar: ¿Qué pasa al convertir y
+				reconvertir ciertas palabras? La R normal queda igual, mientras
+				que la doble R, es decir, RR, se convierte en Z, ya que se
+				pronuncian diferente. Tanto la Z, como CE y CI pasa a S, 
+				mientras que CA, CO y CU QUE QUI pasan a K. Es importante que
+				antes de convertir, se escriba con la diéresis, por ejemplo, GÜ 
+				pasa a GU. GE y GI pasa a J, mientras que GA, GO y GU se quedan 
+				igual. CH sería TLL, pero ya que LL pasa a Y, queda TY. La H 
+				no se pronuncia. Tanto la W como la V pasa a B, la Ñ pasa a
+				NI, la X pasa a KS.
+			</p>
+			<div>
+				<b>Ratón:</b> ZATON SATON ; Arado ARADO ; 
+				<b>Guitarra:</b> GITAZA JITASA;
+				<b>Pingüino:</b> PINGUINO PINGINO PINJINO ;
+				<b>Chaparrón:</b> TYAPAZON TIAPASON ;
+			</div>
+		</p>
+		<p><button onclick="fonetizarHTML()">Fonetizar</button></p>
+		<div>Texto:</div>
+		<textarea
+			style="width:900px;height:100px"
+			id="ta"
+			onkeyup="fonetizarHTML()"
+		></textarea>
+		<div>Fonética:</div>
+		<textarea disabled style="width:900px;height:100px" id="ta_salida">
+		</textarea>
+	</body>
+</html>

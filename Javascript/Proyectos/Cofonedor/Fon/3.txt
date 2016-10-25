@@ -1,0 +1,22 @@
+Palabras de 3 letras
+
+ABE ADA AGA AJO AKA AKI ALA AMA AME AMO ANO ARO ASA ASE ASI ASO ATA ATE ATO AUN
+        EGO EJE                             ERA ESA ESE     ESO                
+IBA IDA IGO IJA IJO     ILA ILO     IPO IRA IRE     ISE     ISO                
+ODA OIA OJA OJO OKA OLA OLE         ORA ORE ORO OSA         OSO                
+UBA UBE UBO UIA UIR UIS UKA UMO UNA UNE UNI UNO USA USE     USO                
+
+    LAS     LEI LEO LIO     LLA LLO     LOS LUS
+RAP RAS RED REI RES RIA RIE RIO ROK ROL RON RUA
+
+B     BAN BAS BEA BEN BEO BER BES BIL BIS         BUS    
+D                         DAR DAS DEL DEN DON    
+F         FAS FEA     FEO FIA FIN FIO         FUI        
+G         GAS             GIA     GIE     GOL    
+K             KAE         KAI KAL         KON    
+M MAL MAR MAS MEA MEO MES MIA MIL MIO MIS MOL MUI
+N                                 NIU NOS        
+P         PAN PAR PAS PES PIN PIS PON POR PRO PUA PUS    
+S SAL SEA SED SER SET SIN SOI SOL SON SOS SUM SUR SUS
+T TAL TAN TAU TEN TES TIA TIO     TOR TOS         TUS
+

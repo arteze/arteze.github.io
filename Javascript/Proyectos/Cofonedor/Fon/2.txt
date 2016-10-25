@@ -1,0 +1,28 @@
+Palabras de 2 letras
+
+AN AS AI AU AL AR
+EN ES LA LE EL LO
+BA BE BI DA DE IR
+DI OS OI FE KE   
+UN    NI NO SE SI
+   ME MI    TE TI
+
+  AEIO
+B XXX 
+D XXX 
+F  X  
+K  X  
+M  XX 
+N   XX
+S  XX 
+T  XX 
+
+  AEO
+L XXX
+
+  NS IU LR
+A XX XX X 
+E XX    X 
+I        X
+O  X X    
+U X       
