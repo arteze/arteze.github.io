@@ -61,7 +61,7 @@ function fonetizar(texto)
 		["GUE","GE"],["GUI","GI"],
 		["GÜE","GUE"],["GÜI","GUI"],
 		
-		["CH","TY"],["LL","Y"],["H",""],
+		["CH","TY"],["SH","Y"],["LL","Y"],["H",""],
 		
 		["WA","BUA"],["WE","BUE"],["WI","BUI"],["WO","BUO"],["WU","BU"],
 		["ÑA","NIA"],["ÑE","NIE"],["ÑO","NIO"],["ÑU","NIU"],["ÑI","NI"],
