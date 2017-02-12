@@ -16,6 +16,18 @@ function eliminarElementoArray(array,posición)
 	array.length--
 	return array
 }
+function eliminarDuplicadosEnArrayOrdenado(array)
+{
+	var devuelve=[]
+	for(var i=0;i<array.length;i++)
+	{
+		if(devuelve[devuelve.length-1]!=array[i])
+		{
+			devuelve[devuelve.length]=array[i]
+		}
+	}
+	return devuelve
+}
 function buscarEnArray(array,elemento)
 {
 	var devuelve=-1

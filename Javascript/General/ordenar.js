@@ -1,36 +1,59 @@
-﻿function buscar(A,a,compara)
+﻿function generarPosiciones(array)
+{
+	var devuelve=[]
+	for(var i=0;i<array.length;i++)
+	{
+		devuelve[devuelve.length]=i
+	}
+	return devuelve
+}
+function buscar(array,valor,compara,de_menor_a_mayor)
 {
 	var i=0
-	var k=A.length
+	var k=array.length
 	var j=Math.floor((i+k)*.5)
 	while(i<k)
 	{
-		if(compara(a,A[j])==1){i=j+1}else{k=j}
+		if(compara(valor,array[j][1],de_menor_a_mayor)==1){i=j+1}else{k=j}
 		j=Math.floor((i+k)*.5)
 	}
 	return j
 }
-function insertar(A,a,pos)
+function insertar(array,valor,posición)
 {
-	A.length++
-	for(var i=A.length-1;i>pos;i--){A[i]=A[i-1]}
-	A[pos]=a
-}
-function buscarInsertar(A,a,compara)
-{
-	var pos=buscar(A,a,compara)
-	insertar(A,a,pos)
-	return A
-}
-function ordenar(A,compara)
-{
-	var B=[]
-	for(var i=0;i<A.length;i++)
+	array.length++
+	for(var i=array.length-1;i>posición;i--)
 	{
-		buscarInsertar(B,A[i],compara)
-		if(i%1000==0){console.log(i)}
+		array[i]=array[i-1]
 	}
-	return B
+	array[posición]=valor
+	return array
+}
+function buscarInsertar(array,inicial,valor,compara,de_menor_a_mayor)
+{
+	var posición=buscar(array,valor,compara,de_menor_a_mayor)
+	insertar(array,[inicial,valor],posición)
+	return array
+}
+function ordenar(array,compara,de_menor_a_mayor)
+{
+	var devuelve=[]
+	var paralelo=generarPosiciones(array)
+	for(var i=0;i<array.length;i++)
+	{
+		buscarInsertar(devuelve,i,array[i],compara,de_menor_a_mayor)
+		if(i%1000==0&i>0){console.log(i)}
+	}
+	return devuelve
+}
+function extraer_columna(array,columna)
+{
+	var array_columna=[]
+	for(var i=0;i<array.length;i++)
+	{
+		array_columna[array_columna.length]=array[i][columna]
+	}
+	return array_columna
 }
 //Prueba
 function homogeneizar(p)
@@ -53,8 +76,9 @@ function homogeneizar(p)
 	}
 	return o
 }
-function compara(a,b)
+function compara(a,b,de_menor_a_mayor)
 {
+	var devuelve=0
 	var a=homogeneizar(a[0])
 	var b=homogeneizar(b[0])
 	var abecedario = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
@@ -64,16 +88,19 @@ function compara(a,b)
 	{
 		var A=abecedario.search(a[i])
 		var B=abecedario.search(b[i])
-		if(A<B){return -1}
-		if(A>B){return 1}
+		if(A<B){devuelve=-1}
+		if(A>B){devuelve= 1}
 	}
-	if(a.length>b.length){return 1}
-	if(a.length<b.length){return -1}
-	return 0
+	if(a.length>b.length){devuelve= 1}
+	if(a.length<b.length){devuelve=-1}
+	if(de_menor_a_mayor){devuelve*=-1}
+	return devuelve
 }
-function comparaNúmeros(a,b)
+function comparaNúmeros(a,b,de_menor_a_mayor)
 {
-	if(a[1]<b[1]){return 1}
-	if(a[1]>b[1]){return -1}
-	return 0
+	var devuelve=0
+	if(a*1<b*1){devuelve= 1}
+	if(a*1>b*1){devuelve=-1}
+	if(de_menor_a_mayor){devuelve*=-1}
+	return devuelve
 }
