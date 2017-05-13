@@ -89,7 +89,7 @@ function generarGrupos(cabezas,mostrar)
 			texto_actual="/*"+veces+"\t"+puntaje+"*/\t"+JSON.stringify(grupo)
 			if(i>0){texto_actual+=","}
 			texto+=texto_actual+"\n"
-			devuelve[devuelve.length]=grupo
+			devuelve.push(grupo)
 		}
 	}
 	texto+="]"+"\n"
@@ -128,7 +128,7 @@ function filtrarNúmeros(cabezas,grupo)
 	var salida_2=[]
 	for(var i=0;i<salida_1.length;i++)
 	{
-		salida_2[salida_2.length]=salida_1[i].length
+		salida_2.push(salida_1[i].length)
 	}
 	salida_2=(salida_2+"").replace(/,/g," ")
 	return salida_2
@@ -139,7 +139,7 @@ function iésima_posición(cadena,posición,cantidad,espaciar)
 	cadena=cadena.split(" ")
 	for(var i=0;i<cadena.length;i++)
 	{
-		array[array.length]=cadena[i].slice(posición,posición+cantidad)
+		array.push(cadena[i].slice(posición,posición+cantidad))
 	}
 	devuelve=(array+"")
 	devuelve=espaciar?devuelve.replace(/,/g," "):devuelve.replace(/,/g,"")
@@ -159,14 +159,14 @@ function buscar_grupo(cabezas,cantidad,cifras)
 		{
 			if(encontrados.length==cantidad)
 			{
-				devuelve[devuelve.length]=i_2
+				devuelve.push(i_2)
 			}
 		}
 		else
 		{
 			if(cantidad==0)
 			{
-				devuelve[devuelve.length]=i_2
+				devuelve.push(i_2)
 			}
 		}
 	}
@@ -180,7 +180,7 @@ function filtrarPorDígito(cabezas,posición,dígito)
 	var salida_2=[]
 	for(var i=0;i<salida_1.length;i++)
 	{
-		salida_2[salida_2.length]=salida_1[i].length
+		salida_2.push(salida_1[i].length)
 	}
 	if(salida_2[salida_2.length-1]==0){salida_2.length--}
 	salida_2=(salida_2+"").replace(/,/g," ")
@@ -200,7 +200,7 @@ function analizar_tres_cifras(cabezas)
 	for(var i=0;i<tres.length;i++)
 	{
 		var expresión=new RegExp("\\d"+tres[i]+" ","")
-		array[array.length]=[tres[i],1+cabezas.split(expresión)[1].length/5+1]
+		array.push([tres[i],1+cabezas.split(expresión)[1].length/5+1])
 	}
 	
 	var columnas=[[1,false],[0,false]]
@@ -270,12 +270,12 @@ function analizar_aleatoriedad_1_dígito(cabezas,índice)
 	var resultados=[]
 	for(var i=0;i<10;i++)
 	{
-		resultados[resultados.length]=[i,0]
+		resultados.push([i,0])
 		var lista=filtrarPorDígito(cabezas,3,i).split(" ")
 		for(var j=0;j<20;j++)
 		{
 			var actual=resultados[resultados.length-1]
-			actual[actual.length]=(actual[actual.length-1]+(+lista[lista.length-j-1]))
+			actual.push(actual[actual.length-1]+(+lista[lista.length-j-1]))
 		}
 	}
 	if(índice==undefined){índice=3}
@@ -296,7 +296,7 @@ function generar_modo(array,modo)
 	if(modo==16)
 	{
 		ancho=5
-		array[array.length]=["xx",0]
+		array.push(["xx",0])
 		var orden=[
 			modo,modo,4, 8,12,
 			   0,   1,5, 9,13,
@@ -307,7 +307,7 @@ function generar_modo(array,modo)
 	if(modo==18)
 	{
 		ancho=5
-		array[array.length]=["xx",0]
+		array.push(["xx",0])
 		var orden=[
 			   0,2,6,10,14,
 			   1,3,7,11,15,
@@ -326,7 +326,7 @@ function analizar_todos(cabezas,modo,mostrar)
 		var falta=analizar_aleatoriedad(cabezas,i)
 		if(falta>0)
 		{
-			array[array.length]=[i_2,falta]
+			array.push([i_2,falta])
 		}
 	}
 	var columnas=[[1,false],[0,false]]
@@ -390,6 +390,27 @@ function simular_jugadas(cabezas,cantidad_a_jugar)
 	console.log(JSON.stringify(consola))
 	console.log(unos,ceros,100*unos/(ceros+unos)/cantidad_a_jugar)
 	return adivinado
+}
+function filtrarTodo(cabezas)
+{
+	var devuelve=[]
+	var dos_dígitos=iésima_posición(cabezas,2,2,true).split(" ")
+	var primero=dos_dígitos[0]
+	var último=dos_dígitos[dos_dígitos.length-1]
+	for(var i=0;i<100;i++)
+	{
+		var i_2=rellenar(i,"0",2)
+		var actual=filtrarNúmeros(cabezas,i_2)
+			.split(" ")
+		if(i_2!=primero){actual=actual.slice(1)}
+		if(i_2!=último){actual=actual.slice(0,-1)}
+		actual=actual
+			.map(function(a){return a*1})
+			.sort(function(a,b){return a>b})
+		//devuelve+=i_2+" "+actual+"\n"
+		devuelve[dev]
+	}
+	return devuelve
 }
 clear()
 //generarGrupos(cabezas)
