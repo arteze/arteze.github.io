@@ -2,7 +2,7 @@
 {
 	var devuelve=""
 	devuelve+="<table border=1>"
-	//if(mensaje_extra)
+	if(mensaje_extra)
 	{
 		devuelve+="<tr>"
 		for(var i in mensaje_extra)
