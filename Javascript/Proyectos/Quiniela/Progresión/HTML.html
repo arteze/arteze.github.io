@@ -1,0 +1,25 @@
+﻿<html>
+	<head>
+		<meta charset="UTF-8"></meta>
+		<title>Progresión de Quiniela</title>
+		<link rel="icon" href="../../../General/favicon.png"></link>
+		<script src="programa.js"></script>
+		<script src="HTML.js"></script>
+	</head>
+	<body>
+		<p>Programa que calcula la progresión en la Quiniela.</p>
+		<p>
+			<div>A: Cantidad de números</div>
+			<div>B: Dinero por cada número</div>
+			<div>C: A*B (gastado en la jugada)</div>
+			<div>D: 7*B (lo que se espera ganar)</div>
+			<div>E: D-C (ganancia real)</div>
+			<div>F: Diferencia luego de recuperar el dinero</div>			
+			<div>G: Dinero luego de jugar</div>			
+		</p>
+		<div>Dinero que tengo: <input onkeyup="progresión()" id="tengo"></input></div>
+		<div>Lista de gastos (separados por coma): <input onkeyup="progresión()" id="gastos"></input></div>
+		<p>Resultado:</p>
+		<p id=res></p>
+	</body>
+</html>
