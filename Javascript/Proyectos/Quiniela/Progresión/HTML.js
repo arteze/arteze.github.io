@@ -27,7 +27,7 @@
 }
 function progresión()
 {
-	var dinero=tengo.value
+	var dinero=eval(tengo.value)
 	var gastado=eval("["+gastos.value+"]")
 	var resultado=pérdidas_consecutivas(dinero,gastado)
 	var mensaje_extra="ABCDEFG"
