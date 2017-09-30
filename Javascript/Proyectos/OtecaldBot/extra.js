@@ -1,7 +1,7 @@
 ﻿var eliza = new ElizaBot()
 var mensajes_array = new Array()
 
-function elizaReset()
+function reiniciar_bot()
 {
 	eliza.reset()
 	mensajes_array.length = 0
@@ -15,7 +15,7 @@ function iterar_bot()
 		entrada.value = ""
 		if (confirm("This session is over.\nStart over?"))
 		{
-			elizaReset()
+			reiniciar_bot()
 		}
 		entrada.focus()
 		return;
@@ -54,4 +54,4 @@ function iterar_bot()
 
 	texto.scrollTop=Math.pow(10,4)
 }
-setTimeout(elizaReset,100)
+setTimeout(reiniciar_bot,100)
