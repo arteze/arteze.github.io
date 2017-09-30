@@ -10,51 +10,43 @@ function reiniciar_bot()
 function iterar_bot()
 {
 	var mensaje = entrada.value
+	var nombres = {
+		usuario:"Yo:  ",
+		bot:    "Bot: "
+	}
+	var mensajes={
+		usuario: nombres.usuario + mensaje,
+		bot: nombres.bot + bot.transform(mensaje)
+	}
 	if(bot.quit)
 	{
 		entrada.value = ""
-		if (confirm("This session is over.\nStart over?"))
-		{
+		if(confirm(
+			"Esta sesión ha terminado."+"\n"+
+			"¿Comenzar de nuevo?"
+		)){
 			reiniciar_bot()
 		}
 		entrada.focus()
 		return;
 	}
-	else
+	if(mensaje=="")
 	{
-		var nombres={
-			usuario:"Yo:  ",
-			bot:    "Bot: "
-		}
-		if (mensaje != "")
+		if(!mensajes_array.length)
 		{
-			var mensajes={
-				usuario: nombres.usuario + mensaje,
-				bot: nombres.bot + bot.transform(mensaje)
-			}
-			mensajes_array.push(mensajes.usuario)
-			mensajes_array.push(mensajes.bot)
-			var temporal  = new Array()
-			for (var i=mensajes_array.length-1; i>=0; i--)
-			{
-				temporal.push(mensajes_array[i])
-			}
-			mensajes_array = temporal.reverse()
-			texto.value = mensajes_array.join("\n")
+			var inicial=nombres.bot+bot.getInitial()
+			mensajes_array.push(inicial)
+			texto.value=inicial+"\n"
 		}
-		else
-		{
-			if (mensajes_array.length == 0)
-			{
-				var inicial = nombres.usuario + bot.getInitial()
-				mensajes_array.push(inicial)
-				texto.value = inicial + '\n'
-			}
-		}
+		return;
 	}
-	entrada.value = ""
+	mensajes_array.push(mensajes.usuario)
+	mensajes_array.push(mensajes.bot)
+	texto.value=mensajes_array.join("\n")
+	entrada.value=""
 	entrada.focus()
-
+	
+	//Pone scroll al final.
 	texto.scrollTop=Math.pow(10,4)
 }
 setTimeout(reiniciar_bot,100)
