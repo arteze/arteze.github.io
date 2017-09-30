@@ -5,6 +5,6 @@ Los archivos originales han sido copiados a la carpeta de GitHub.
 
 Los archivos son:
 
-* JS: elizabot.js y elizadata.js
-* HTML: eliza_test.html y index.html.
+* JS originales: elizabot.js, elizadata.js, atajos.js y extra.js
+* HTML: HTML.html
 
