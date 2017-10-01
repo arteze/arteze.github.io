@@ -4,7 +4,7 @@
 	this.capitalizeFirstLetter=true;
 	this.debug=false;
 	this.memSize=20;
-	this.version="1.3";
+	this.version="1.1 (original)";
 	if (!this._dataParsed) this._init();
 	this.reset();
 }
@@ -202,7 +202,7 @@ bot_otecald.prototype._execRule = function(k) {
 				'\ndecomp: '+decomps[i][0]+
 				'\nreasmb: '+rpl+
 				'\nmemflag: '+memflag);
-			if (rpl.search('^ir a ', 'i')==0) {
+			if (rpl.search('^goto ', 'i')==0) {
 				ki=this._getRuleIndexByKey(rpl.substring(5));
 				if (ki>=0) return this._execRule(ki);
 			}

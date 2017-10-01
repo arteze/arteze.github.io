@@ -21,10 +21,14 @@ function iterar_bot()
 	if(bot.quit)
 	{
 		entrada.value = ""
+		var inicial=nombres.bot+bot.getFinal()
+		mensajes_array.push(inicial)
+		texto.value=inicial+"\n"
 		if(confirm(
-			"Esta sesión ha terminado."+"\n"+
-			"¿Comenzar de nuevo?"
+			inicial+"\n\n"+
+			"¿Quieres iniciar una nueva conversación?"
 		)){
+
 			reiniciar_bot()
 		}
 		entrada.focus()

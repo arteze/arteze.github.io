@@ -1,23 +1,22 @@
 ﻿var elizaInitials = [
-	"¿Cómo estás? ¿Cuál es tu problema?",
-	"¿Qué es lo que te molesta?",
-	"¿Te preocupa algo?"
+	"How do you do.  Please tell me your problem.",
+	"Please tell me what's been bothering you.",
+	"Is something troubling you?"
 ]
 var elizaFinals = [
-	"Adiós. Fue una conversación agradable.",
-	"Adiós. Me gustó la charla.",
-	"Adiós. Me gustaría encontrarte en otra ocasión.",
-	"Lamento haber terminado esta charla. ¡Estaba tan divertida!",
-	"¡Hay tantos temas para hablar! Hubiera querido charlar más. Adiós."
+	"Goodbye.  It was nice talking to you.",
+	"Goodbye.  This was really a nice talk.",
+	"Goodbye.  I'm looking forward to our next session.",
+	"This was a good session, wasn't it -- but time is over now. Goodbye.",
+	"Maybe we could discuss this moreover in our next session? Goodbye."
 ]
 var elizaQuits = [
-	"adiós",
-	"chau",
-	"me despido",
-	"me voy",
+	"bye",
+	"goodbye",
+	"done",
+	"exit",
+	"quit"
 ]
-
-//Por traducir
 var elizaPres = [
 	"dont", "don't",
 	"cant", "can't",
@@ -38,8 +37,6 @@ var elizaPres = [
 	"identical", "alike",
 	"equivalent", "alike"
 ]
-
-//Por traducir
 var elizaPosts = [
 	"am", "are",
 	"your", "my",
@@ -51,8 +48,6 @@ var elizaPosts = [
 	"my", "your",
 	"i'm", "you are"
 ]
-
-//Por traducir
 var elizaSynons = {
 	"be": ["am", "is", "are", "was"],
 	"belief": ["feel", "think", "believe", "wish"],
@@ -63,88 +58,82 @@ var elizaSynons = {
 	"happy": ["elated", "glad", "better"],
 	"sad": ["unhappy", "depressed", "sick"]
 }
-
-//Por traducir
 var elizaKeywords = [
 	["xnone", 0, [
-		["*", [
-			"No te entiendo del todo.",
-			"Sigue. Está interesante.",
-			"¿Qué te hace pensar eso?",
-			"¿Te hace bien discutir esas cosas?",
-			"Eso es interesante. Quisiera saber más sobre eso.",
-			"Cuéntame más sobre eso.",
-			"¿Te gustaría hablar sobre eso?"
-		]]
-	]],
-	["perdón", 0, [
-		["*", [
-			"No te disculpes, está bien.",
-			"No es necesario que te disculpes.",
-			"Ya te dije que no hace falta disculparse.",
-			"No me molesta. Sigue, es interesante."
-		]]
-	]],
-	["disculpa", 0, [
 	 ["*", [
-		"ir a perdón"
+		 "I'm not sure I understand you fully.",
+		 "Please go on.",
+		 "What does that suggest to you?",
+		 "Do you feel strongly about discussing such things?",
+		 "That is interesting.  Please continue.",
+		 "Tell me more about that.",
+		 "Does talking about this bother you?"
 	  ]]
 	]],
-	["recuerdo", 5, [
-		["* recuerdo *", [
-			"¿Frecuentemente piensas en (2)?",
-			"¿Pensar en (2) te trae algo más a la mente?",
-			"¿Qué más recuerdas?",
-			"¿Por qué te acuerdas de (2) justo ahora?",
-			"¿Entonces ahora te acuerdas de (2)?",
-			"¿Qué tengo que ver yo con (2)?",
-			"¿Qué más te hace recordar (2)?"
-		]]
+	["sorry", 0, [
+	 ["*", [
+		 "Please don't apologise.",
+		 "Apologies are not necessary.",
+		 "I've told you that apologies are not required.",
+		 "It did not bother me.  Please continue."
+	  ]]
 	]],
-	["recuerdas", 5, [
-		["* tú recuerdas *", [
-			"¿Cómo voy a olvidar (2)?",
-			"¿Qué debo recordar sobre (2)?",
-			"ir a you"
-		]],
-		["* recuerdas *", [
-			"¿Pensaste que me olvidaría (2)?",
-			"¿Por qué debemos recordar (2) ahora?",
-			"¿Qué pasa con (2)?",
-			"¿Mencionaste (2)?",
-			"ir a que"
-		]]
+	["apologise", 0, [
+	 ["*", [
+		 "goto sorry"
+	  ]]
 	]],
-	["he olvidado", 5, [
-		["* he olvidado *", [
-			"¿Por qué olvidas (2)?",
-			"¿Por qué no puedes recordar (2)?",
-			"¿Frecuentemente piensas en (2)?",
-			"¿Te molesta olvidar eso?",
-			"¿Podría ser un bloqueo mental.",
-			"¿Es usted generalmente olvidadizo?",
-			"¿Te importa poco (2)?"
-		]]
+	["remember", 5, [
+	 ["* i remember *", [
+		 "Do you often think of (2)?",
+		 "Does thinking of (2) bring anything else to mind?",
+		 "What else do you recollect?",
+		 "Why do you remember (2) just now?",
+		 "What in the present situation reminds you of (2)?",
+		 "What is the connection between me and (2)?",
+		 "What else does (2) remind you of?"
+	  ]],
+	 ["* do you remember *", [
+		 "Did you think I would forget (2)?",
+		 "Why do you think I should recall (2) now?",
+		 "What about (2)?",
+		 "goto what",
+		 "You mentioned (2)?"
+	  ]],
+	 ["* you remember *", [
+		 "How could I forget (2)?",
+		 "What about (2) should I remember?",
+		 "goto you"
+	  ]]
 	]],
-	["olvidaste", 5, [
-		["* olvidaste *", [
-			"¿Por qué preguntas?",
-			"¿Estás seguro dijiste eso?",
-			"¿Te molesta si olvido (2)?",
-			"¿Por qué recordar (2) ahora?",
-			"Cuéntame más sobre (2).",
-			"ir a que"
-		]]
+	["forget", 5, [
+	 ["* i forget *", [
+		 "Can you think of why you might forget (2)?",
+		 "Why can't you remember (2)?",
+		 "How often do you think of (2)?",
+		 "Does it bother you to forget that?",
+		 "Could it be a mental block?",
+		 "Are you generally forgetful?",
+		 "Do you think you are suppressing (2)?"
+	  ]],
+	 ["* did you forget *", [
+		 "Why do you ask?",
+		 "Are you sure you told me?",
+		 "Would it bother you if I forgot (2)?",
+		 "Why should I recall (2) just now?",
+		 "goto what",
+		 "Tell me more about (2)."
+	  ]]
 	]],
-	["si", 3, [
-	 ["* si *", [
-		 "¿Puede ser que (2)?",
-		 "¿Deseas que (2)?",
-		 "¿Qué sabes sobre (2)?",
-		 "¿Realmente (2)?",
-		 "¿Qué haces si (2)?",
-		 "Pero, ¿Que probabilidad hay de que (2)?",
-		 "¿A qué viene esto?"
+	["if", 3, [
+	 ["* if *", [
+		 "Do you think it's likely that (2)?",
+		 "Do you wish that (2)?",
+		 "What do you know about (2)?",
+		 "Really, if (2)?",
+		 "What would you do if (2)?",
+		 "But what are the chances that (2)?",
+		 "What does this speculation lead to?"
 	  ]]
 	]],
 	["dreamed", 4, [
@@ -152,7 +141,7 @@ var elizaKeywords = [
 		 "Really, (2)?",
 		 "Have you ever fantasized (2) while you were awake?",
 		 "Have you ever dreamed (2) before?",
-		 "ir a dream"
+		 "goto dream"
 	  ]]
 	]],
 	["dream", 3, [
@@ -181,25 +170,25 @@ var elizaKeywords = [
 	]],
 	["deutsch", 0, [
 	 ["*", [
-		 "ir a xforeign",
+		 "goto xforeign",
 		 "I told you before, I don't understand German."
 	  ]]
 	]],
 	["francais", 0, [
 	 ["*", [
-		 "ir a xforeign",
+		 "goto xforeign",
 		 "I told you before, I don't understand French."
 	  ]]
 	]],
 	["italiano", 0, [
 	 ["*", [
-		 "ir a xforeign",
+		 "goto xforeign",
 		 "I told you before, I don't understand Italian."
 	  ]]
 	]],
 	["espanol", 0, [
 	 ["*", [
-		 "ir a xforeign",
+		 "goto xforeign",
 		 "I told you before, I don't understand Spanish."
 	  ]]
 	]],
@@ -210,8 +199,8 @@ var elizaKeywords = [
 	]],
 	["hello", 0, [
 	 ["*", [
-		 "How do you do. Please state your problem.",
-		 "Hi. What seems to be your problem?"
+		 "How do you do.  Please state your problem.",
+		 "Hi.  What seems to be your problem?"
 	  ]]
 	]],
 	["computer", 50, [
@@ -231,10 +220,10 @@ var elizaKeywords = [
 		 "Would you want to be (2)?",
 		 "Do you wish I would tell you you are (2)?",
 		 "What would it mean if you were (2)?",
-		 "ir a que"
+		 "goto what"
 	  ]],
 	 ["* i am *", [
-		 "ir a i"
+		 "goto i"
 	  ]],
 	 ["*", [
 		 "Why do you say 'am'?",
@@ -247,12 +236,12 @@ var elizaKeywords = [
 		 "Would you prefer if I weren't (2)?",
 		 "Perhaps I am (2) in your fantasies.",
 		 "Do you sometimes think I am (2)?",
-		 "ir a que",
+		 "goto what",
 		 "Would it matter to you?",
 		 "What if I were (2)?"
 	  ]],
 	 ["* you are *", [
-		 "ir a you"
+		 "goto you"
 	  ]],
 	 ["* are *", [
 		 "Did you think they might not be (2)?",
@@ -280,7 +269,7 @@ var elizaKeywords = [
 		 "Were you (2)?",
 		 "What would it mean if you were (2)?",
 		 "What does ' (2) ' suggest to you?",
-		 "ir a que"
+		 "goto what"
 	  ]],
 	 ["* i was *", [
 		 "Were you really?",
@@ -317,7 +306,7 @@ var elizaKeywords = [
 		 "Can you explain why you are suddenly (3)?"
 	  ]],
 	 ["* i was *", [
-		 "ir a was"
+		 "goto was"
 	  ]],
 	 ["* i @belief i *", [
 		 "Do you really think so?",
@@ -325,7 +314,7 @@ var elizaKeywords = [
 		 "Do you really doubt you (3)?"
 	  ]],
 	 ["* i* @belief *you *", [
-		 "ir a you"
+		 "goto you"
 	  ]],
 	 ["* i am *", [
 		 "Is it because you are (2) that you came to me?",
@@ -368,7 +357,7 @@ var elizaKeywords = [
 	]],
 	["you", 0, [
 	 ["* you remind me of *", [
-		 "ir a alike"
+		 "goto alike"
 	  ]],
 	 ["* you are *", [
 		 "What makes you think I am (2)?",
@@ -440,7 +429,7 @@ var elizaKeywords = [
 	["can", 0, [
 	 ["* can you *", [
 		 "You believe I can (2) don't you?",
-		 "ir a que",
+		 "goto what",
 		 "You want me to be able to (2).",
 		 "Perhaps you would like to be able to (2) yourself."
 	  ]],
@@ -448,10 +437,10 @@ var elizaKeywords = [
 		 "Whether or not you can (2) depends on you more than on me.",
 		 "Do you want to be able to (2)?",
 		 "Perhaps you don't want to (2).",
-		 "ir a que"
+		 "goto what"
 	  ]]
 	]],
-	["que", 0, [
+	["what", 0, [
 	 ["*", [
 		 "Why do you ask?",
 		 "Does that question interest you?",
@@ -466,22 +455,22 @@ var elizaKeywords = [
 	]],
 	["who", 0, [
 	 ["who *", [
-		 "ir a que"
+		 "goto what"
 	  ]]
 	]],
 	["when", 0, [
 	 ["when *", [
-		 "ir a que"
+		 "goto what"
 	  ]]
 	]],
 	["where", 0, [
 	 ["where *", [
-		 "ir a que"
+		 "goto what"
 	  ]]
 	]],
 	["how", 0, [
 	 ["how *", [
-		 "ir a que"
+		 "goto what"
 	  ]]
 	]],
 	["because", 0, [
@@ -498,17 +487,17 @@ var elizaKeywords = [
 		 "Perhaps I will (2) in good time.",
 		 "Should you (2) yourself?",
 		 "You want me to (2)?",
-		 "ir a que"
+		 "goto what"
 	  ]],
 	 ["* why can't i *", [
 		 "Do you think you should be able to (2)?",
 		 "Do you want to be able to (2)?",
 		 "Do you believe this will help you to (2)?",
 		 "Have you any idea why you can't (2)?",
-		 "ir a que"
+		 "goto what"
 	  ]],
 	 ["*", [
-		 "ir a que"
+		 "goto what"
 	  ]]
 	]],
 	["everyone", 2, [
@@ -526,17 +515,17 @@ var elizaKeywords = [
 	]],
 	["everybody", 2, [
 	 ["*", [
-		 "ir a everyone"
+		 "goto everyone"
 	  ]]
 	]],
 	["nobody", 2, [
 	 ["*", [
-		 "ir a everyone"
+		 "goto everyone"
 	  ]]
 	]],
 	["noone", 2, [
 	 ["*", [
-		 "ir a everyone"
+		 "goto everyone"
 	  ]]
 	]],
 	["always", 1, [
@@ -561,7 +550,7 @@ var elizaKeywords = [
 	]],
 	["like", 10, [
 	 ["* @be *like *", [
-		 "ir a alike"
+		 "goto alike"
 	  ]]
 	]],
 	["different", 0, [
@@ -576,8 +565,6 @@ var elizaKeywords = [
 	  ]]
 	]]
 ]
-
-//Por traducir
 var elizaPostTransforms = [
 	/ old old/g, " old",
 	/\bthey were( not)? me\b/g, "it was$1 me",
