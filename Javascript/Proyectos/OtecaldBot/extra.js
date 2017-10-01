@@ -18,7 +18,7 @@ function iterar_bot()
 		usuario: nombres.usuario + mensaje,
 		bot: nombres.bot + bot.transform(mensaje)
 	}
-	if(bot.quit)
+	if(bot.fin)
 	{
 		entrada.value = ""
 		var inicial=nombres.bot+bot.getFinal()
@@ -28,7 +28,6 @@ function iterar_bot()
 			inicial+"\n\n"+
 			"¿Quieres iniciar una nueva conversación?"
 		)){
-
 			reiniciar_bot()
 		}
 		entrada.focus()

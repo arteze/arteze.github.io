@@ -9,7 +9,7 @@
 	this.reset();
 }
 bot_otecald.prototype.reset = function() {
-	this.quit=false;
+	this.fin=false;
 	this.mem=[];
 	this.lastchoice=[];
 	for (var k=0; k<elizaKeywords.length; k++) {
@@ -131,7 +131,7 @@ bot_otecald.prototype._sortKeywords = function(a,b) {
 }
 bot_otecald.prototype.transform = function(text) {
 	var rpl='';
-	this.quit=false;
+	this.fin=false;
 	text=text.toLowerCase();
 	text=text.replace(/@#\$%\^&\*\(\)_\+=~`\{\[\}\]\|:;<>\/\\\t/g, ' ');
 	text=text.replace(/\s+-+\s+/g, '.');
@@ -144,7 +144,7 @@ bot_otecald.prototype.transform = function(text) {
 		if (part!='') {
 			for (var q=0; q<elizaQuits.length; q++) {
 				if (elizaQuits[q]==part) {
-					this.quit=true;
+					this.fin=true;
 					return this.getFinal();
 				}
 			}
