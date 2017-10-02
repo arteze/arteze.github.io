@@ -1,4 +1,8 @@
-﻿var elizaInitials = [
+﻿var bot={
+	
+}
+
+var elizaInitials = [
 	"¿Cómo estás? ¿Cuál es tu problema?",
 	"¿Qué es lo que te molesta?",
 	"¿Te preocupa algo?"

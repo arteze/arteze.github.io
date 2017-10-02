@@ -1,14 +1,14 @@
 ﻿function bot_otecald(noRandomFlag)
 {
-	this.noRandom= (noRandomFlag)? true:false;
+	this.noRandom=(noRandomFlag)?true:false;
 	this.capitalizeFirstLetter=true;
 	this.debug=false;
 	this.memSize=20;
 	this.version="1.3";
 	if (!this._dataParsed) this._init();
-	this.reset();
+	this.reiniciar();
 }
-bot_otecald.prototype.reset = function() {
+bot_otecald.prototype.reiniciar = function() {
 	this.fin=false;
 	this.mem=[];
 	this.lastchoice=[];
@@ -129,7 +129,7 @@ bot_otecald.prototype._sortKeywords = function(a,b) {
 	else if (a[3]<b[3]) return -1
 	else return 0;
 }
-bot_otecald.prototype.transform = function(text) {
+bot_otecald.prototype.responder = function(text) {
 	var rpl='';
 	this.fin=false;
 	text=text.toLowerCase();
@@ -145,7 +145,7 @@ bot_otecald.prototype.transform = function(text) {
 			for (var q=0; q<elizaQuits.length; q++) {
 				if (elizaQuits[q]==part) {
 					this.fin=true;
-					return this.getFinal();
+					return this.finalizar();
 				}
 			}
 			var m=this.preExp.exec(part);
@@ -275,7 +275,7 @@ bot_otecald.prototype._memGet = function() {
 	}
 	else return '';
 }
-bot_otecald.prototype.getFinal = function() {
+bot_otecald.prototype.finalizar = function() {
 	if (!bot_otecald.prototype.global.elizaFinals) return '';
 	return elizaFinals[Math.floor(Math.random()*elizaFinals.length)];
 }

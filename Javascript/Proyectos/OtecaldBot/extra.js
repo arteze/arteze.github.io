@@ -1,9 +1,9 @@
-﻿var bot = new bot_otecald()
+﻿var bot_actual = new bot_otecald()
 var mensajes_array = new Array()
 
 function reiniciar_bot()
 {
-	bot.reset()
+	bot_actual.reiniciar()
 	mensajes_array.length = 0
 	iterar_bot()
 }
@@ -16,12 +16,12 @@ function iterar_bot()
 	}
 	var mensajes={
 		usuario: nombres.usuario + mensaje,
-		bot: nombres.bot + bot.transform(mensaje)
+		bot: nombres.bot + bot_actual.responder(mensaje)
 	}
-	if(bot.fin)
+	if(bot_actual.fin)
 	{
 		entrada.value = ""
-		var inicial=nombres.bot+bot.getFinal()
+		var inicial=nombres.bot+bot_actual.finalizar()
 		mensajes_array.push(inicial)
 		texto.value=inicial+"\n"
 		if(confirm(
@@ -37,7 +37,7 @@ function iterar_bot()
 	{
 		if(!mensajes_array.length)
 		{
-			var inicial=nombres.bot+bot.getInitial()
+			var inicial=nombres.bot+bot_actual.getInitial()
 			mensajes_array.push(inicial)
 			texto.value=inicial+"\n"
 		}
