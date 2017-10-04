@@ -1,7 +1,4 @@
-﻿var bot_actual = new bot_otecald()
-var mensajes_array = new Array()
-
-function reiniciar_bot()
+﻿function reiniciar_bot()
 {
 	bot_actual.reiniciar()
 	mensajes_array.length = 0
@@ -21,11 +18,11 @@ function iterar_bot()
 	if(bot_actual.fin)
 	{
 		entrada.value = ""
-		var inicial=nombres.bot+bot_actual.finalizar()
-		mensajes_array.push(inicial)
-		texto.value=inicial+"\n"
+		var mensaje_actual=nombres.bot+bot_actual.obtener_mensaje_final()
+		mensajes_array.push(mensaje_actual)
+		texto.value=mensaje_actual+"\n"
 		if(confirm(
-			inicial+"\n\n"+
+			mensaje_actual+"\n\n"+
 			"¿Quieres iniciar una nueva conversación?"
 		)){
 			reiniciar_bot()
@@ -37,19 +34,16 @@ function iterar_bot()
 	{
 		if(!mensajes_array.length)
 		{
-			var inicial=nombres.bot+bot_actual.getInitial()
-			mensajes_array.push(inicial)
-			texto.value=inicial+"\n"
+			var mensaje_actual=nombres.bot+bot_actual.obtener_mensaje_inicial()
+			mensajes_array.push(mensaje_actual)
+			texto.value=mensaje_actual+"\n"
 		}
 		return;
 	}
-	mensajes_array.push(mensajes.usuario)
-	mensajes_array.push(mensajes.bot)
+	mensajes_array.push(mensajes.usuario,mensajes.bot)
 	texto.value=mensajes_array.join("\n")
 	entrada.value=""
 	entrada.focus()
-	
-	//Pone scroll al final.
-	texto.scrollTop=Math.pow(10,4)
+
+	scroll_al_final(texto)
 }
-setTimeout(reiniciar_bot,100)

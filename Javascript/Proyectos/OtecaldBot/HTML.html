@@ -3,13 +3,19 @@
 		<meta charset="UTF-8"></meta>
 		<title>Bot Otecald</title>
 		<link rel="icon" href="../../General/favicon.png"></link>
+		<script src="funciones.js"></script>
 		<script src="bot.js"></script>
 		<script src="datos.js"></script>
 		<script src="extra.js"></script>
 		<script src="atajos.js"></script>
+		<script src="observador.js"></script>
+		<script src="ejecuta.js"></script>
 	</head>
-	<body onload="agregarTeclado()">
-		<textarea disabled id="texto" style="width: 500px; height: 300px"></textarea>
+	<body onload="iniciar()">
+		<textarea
+			readonly
+			id="texto"
+			style="width: 500px; height: 300px; background-color: #EBEBE4;color:#545454;"></textarea>
 		<div/>
 		<input id="entrada" size="50" />
 		<div/>
