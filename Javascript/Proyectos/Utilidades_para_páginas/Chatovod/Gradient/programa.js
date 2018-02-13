@@ -85,8 +85,8 @@ function gradual(booleano,tamañoInicial,frase,tamañoFuente,estático,arcoiris)
 				color[j]=entero16HaciaHexadecimal(aleatorio(16))
 			}
 			var de_tres=aleatorio(3)
-			color[de_tres*2+0]="A"
-			color[de_tres*2+1]="A"
+			color[de_tres*2+0]="F"
+			color[de_tres*2+1]="1"
 			salida+=color.join("")
 		}
 		salida+="]"
