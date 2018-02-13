@@ -18,6 +18,10 @@ function entero256HaciaHexadecimal(b256)
 	dos=entero16HaciaHexadecimal(dos)
 	return uno+""+dos
 }
+function aleatorio(entero)
+{
+	return Math.floor(Math.random()*entero)
+}
 function decimalHaciaMatiz(decimal)
 {
 	var matriz=[
@@ -75,10 +79,14 @@ function gradual(booleano,tamañoInicial,frase,tamañoFuente,estático,arcoiris)
 		}
 		else
 		{
+			var color=[]
 			for(var j=0;j<6;j++)
 			{
-				salida+=entero16HaciaHexadecimal((Math.floor(Math.random()*16)))
-			}			
+				color=entero16HaciaHexadecimal(aleatorio(16))
+			}
+			color[aleatorio(3)*2+0]="f"
+			color[aleatorio(3)*2+1]="f"
+			salida+=color.join("")
 		}
 		salida+="]"
 		if(booleano){salida+="[/size][size="+tamañoFuente+"][[/size][size="+tamañoFuente+"]"}else{salida+="["}
