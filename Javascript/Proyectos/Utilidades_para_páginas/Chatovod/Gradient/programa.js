@@ -82,7 +82,7 @@ function gradual(booleano,tamañoInicial,frase,tamañoFuente,estático,arcoiris)
 			var color=[]
 			for(var j=0;j<6;j++)
 			{
-				color=entero16HaciaHexadecimal(aleatorio(16))
+				color[j]=entero16HaciaHexadecimal(aleatorio(16))
 			}
 			var de_tres=aleatorio(3)
 			color[de_tres*2+0]="f"
