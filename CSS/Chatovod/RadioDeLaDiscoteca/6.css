@@ -1,0 +1,16 @@
+.chatMessages,.chatSendControlsWrapper,.chatUsersAndFilter{
+	background-attachment:fixed;
+}
+.chatRoomsAndMessages{
+	background-image:url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/RadioDeLaDiscoteca/kurt_guitarra_2.jpg");
+}
+.chatSendControlsWrapper{
+	background-image:url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/RadioDeLaDiscoteca/emoticones_1.jpg");
+}
+.chatUsersAndFilter{
+	background-position:right;
+	background-image:url("https://www.subeimagenes.com/img/caritas-usuarios-1832870.jpg");
+}
+.hl{
+	background-color:#00f6ff33 !important;
+}
