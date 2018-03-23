@@ -1,0 +1,66 @@
+.chatHeaderWrapper, .chatRooms ul li.active a, .chatRooms ul li.blink a, .chatRooms ul li:hover a, .chatRoomsButton a:hover, .closeIconWrapper > .closeIconColor, .chatWindow .header, .chatSendControlsWrapper div.buttonWrapper a.sendMessageButton, .chatSendControlsWrapper .buttons a.register, .nickIcon .filler {
+	background-color: #000000;
+	color:#ffff00;
+}
+.chatHeaderWrapper .goog-menu-button-open, .chatHeaderWrapper .goog-menu-button-hover {
+	background-color: #237d82;
+}
+.chatHeaderWrapper .menuItem .text {
+	color: #ffffff;
+}
+.chatSendControlsWrapper div.textareaWrapper {
+	background-image: url(https://imgur.com/a/6NTpY);
+}
+.chatMessage.hl {
+	background-color: #ffd966;
+}
+.chatSendControlsWrapper div.textareaWrapper textarea {
+	border: 2px solid #990000;
+}
+.chatSendControlsWrapper, .chatSignInWrapper {
+	left: 0;
+}
+.chatMessagesWrapper {
+	border: 2px solid #00ff00;
+	background-image: url();
+	background-position: bottom left;
+	background-repeat: repeat-x;
+}
+.chatSendControlsWrapper div.textareaWrapper {
+	background-image: url();
+	background-color: #F5F5F5;
+	right: 2px;
+}
+.chatMessagesScrollBar div {
+	background-color: #990000;
+}
+.chatUsersScrollBar div {
+	background-color: #990000;
+}
+.chatMessagesContainer {
+	bottom: 30px;
+}
+ body {
+	font-weight:bold ;
+}
+.chatSendControlsWrapper div.textareaWrapper > i.smileys {
+    width: 18px;
+    height: 18px;
+    right: -5px;
+    top: 5px;
+    background-image: url(http://st1.chatovod.com/u/cs/2016/05_26/61/798561/1465049703_0.gif);
+    background-size: contain;
+}
+.chatUsersTab {
+	background-position: center;
+	background-image: url(https://vignette.wikia.nocookie.net/noragami/images/2/26/Neko.gif/revision/latest?cb=20151223012852);
+	background-repeat: no-repeat;
+	background-color: #ffffff;
+	border: 2px solid #000000;
+}
+.admin .groupIcon {
+	background-image: url("https://i.imgur.com/2FVOqTE.png");
+}
+.moderator .groupIcon {
+	background-image: url("https://i.imgur.com/8XXEYKP.png"
+}
