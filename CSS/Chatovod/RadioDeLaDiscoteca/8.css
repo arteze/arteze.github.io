@@ -14,6 +14,6 @@
 .hl{
 	background-color:#FFF3DA88 !important;
 }
-.text{
+.text,.from,.to{
 	font-weight:bold;
 }
