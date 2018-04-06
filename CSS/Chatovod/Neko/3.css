@@ -13,7 +13,7 @@ body {
 
 }
 .chatRoomsAndMessages{
-	background-image:url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/Neko.jpg");
+	background-image:url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/Neko.png");
 	border: 2px solid #828effee;
 	background-position: bottom left;
 	background-repeat: repeat-x;
@@ -25,7 +25,7 @@ body {
 	background-color: #828effee;
 }
 .chatMessagesContainer {
-	bottom: 30px;
+	bottom: 2px;
 }
 .chatUsersTab {
 	background-position: center;
