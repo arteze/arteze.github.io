@@ -9,20 +9,25 @@ body {
 	background-color: #237d82;
 }
 .chatHeaderWrapper .menuItem .text {
-	color: #0988FB;
+	color: #828effee;
 
 }
 .chatMessagesWrapper {
-	border: 2px solid #0988FB;
-	background-image: url();
+	border: 2px solid #828effee;
+	background-position: bottom left;
+	background-repeat: repeat-x;
+}
+.chatRoomsAndMessages{
+	background-image:url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/Neko.jpg");
+	border: 2px solid #828effee;
 	background-position: bottom left;
 	background-repeat: repeat-x;
 }
 .chatMessagesScrollBar div {
-	background-color: #0988FB;
+	background-color: #828effee;
 }
 .chatUsersScrollBar div {
-	background-color: #0988FB;
+	background-color: #828effee;
 }
 .chatMessagesContainer {
 	bottom: 30px;
