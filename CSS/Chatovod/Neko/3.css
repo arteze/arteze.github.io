@@ -46,6 +46,6 @@ body {
 .goog-toolbar{
 	background-image: none
 }
-.chatSendControlsWrapper div.textareaWrapper {
-	background-image: url("https://i.imgur.com/2GlXNyK.jpg");
+.chatSendControlsWrapper{
+	background-color: #88888888;
 }
