@@ -35,6 +35,9 @@ body {
 	background-color: #abcdef10;
 	border: 3px solid #3d85c690;
 }
+.chatRoom{
+	background-color: #20304030;
+}
 textarea{
 	color: #123456;
 	border: 4px solid #12ff3480;
