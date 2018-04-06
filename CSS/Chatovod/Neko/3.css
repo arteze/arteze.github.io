@@ -1,9 +1,9 @@
 body {
 	font-weight:bold ;
-	text-shadow: 0 0 10px #cde;
+	text-shadow: 1px 1px 1px #ffffffd0
 }
 .chatRoomsAndMessages{
-	background-image:url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/Neko_3.png");
+	background-image:url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/Neko_4.png");
 	border: 2px solid #828effee;
 }
 .chatMessagesScrollBar div {
