@@ -16,6 +16,7 @@ body {
 	background-image: url("https://vignette.wikia.nocookie.net/noragami/images/2/26/Neko.gif");
 	background-color: #ffffff;
 	border: 2px solid #000000;
+	background-repeat: no-repeat;
 }
 .admin .groupIcon {
 	background-image: url("https://i.imgur.com/2FVOqTE.png");
@@ -27,7 +28,7 @@ body {
 	background-image: url("https://i.imgur.com/kmB7Lqn.png");
 }
 .goog-toolbar{
-	background-image: none #important
+	background-image: none; #important
 }
 .chatSendControlsWrapper{
 	background-color: #abcdefef;
