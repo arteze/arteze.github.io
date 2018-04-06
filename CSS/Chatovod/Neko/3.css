@@ -29,14 +29,17 @@ body {
 	background-image: url("https://i.imgur.com/kmB7Lqn.png");
 }
 .goog-toolbar{
-	background: #70a00015 url(""); #important
+	background: #70a00015 url("");
 }
 .chatSendControlsWrapper{
 	background-color: #abcdef10;
 	border: 3px solid #3d85c690;
 }
 .chatRoom{
-	background-color: #20304030;
+	background-color: #20304030 !important;
+}
+.hl{
+	background-color:#fff3dae0 !important;
 }
 textarea{
 	color: #123456;
