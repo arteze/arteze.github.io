@@ -1,6 +1,6 @@
 ﻿// ==UserScript==
 // @name		 Chatovod
-// @version	  0.6
+// @version	  0.7
 // @description  Mejoras para el Chatovod.
 // @author	   ArtEze
 // @match		*://*.chatovod.com/*
@@ -163,8 +163,9 @@ function procesar_mensajes(b)
 		eliminar_mensaje(número,sala)
 		accionado = true
 	}
-	if(!accionado&usuario!="Bot"&!entrada.includes("[img]"))
+	if(!accionado&!entrada.includes("[img]"))
 	{
+		var borrar = true
 		var puede_mostrar = false
 		var con_espacios = entrada
 		var transformado = entrada.replace(/ /gi,"").replace(/\/subefotos\.com\/ver\/\?/gi,"fotos.subefotos.com/")
@@ -185,7 +186,7 @@ function procesar_mensajes(b)
 			puede_mostrar = true
 		}
 		var g = "[a-z0-9-._%?=:]+"
-		var expresión	=	new RegExp(g+"\."+g+"(\/"+g+")+\.(jpg|gif|png)","gi")
+		var expresión	=	new RegExp(g+"\."+g+"(\/"+g+")+\.(jpe?g|gif|png)","gi")
 		var expresión_2 =	new RegExp(g+"\."+g+"(\/"+g+")+","gi")
 		if(transformado.includes("imgur.com"))
 		{
@@ -195,14 +196,23 @@ function procesar_mensajes(b)
 		{
 			transformado = "media.giphy.com/media/" + transformado.match(/[0-9a-z]+/gi).slice(-1)[0] + "/giphy.gif"
 		}
+		if(transformado.includes("youtube.com"))
+		{
+			borrar = false
+			puede_mostrar = true
+			transformado = "i.ytimg.com/vi/"
+				+ transformado.match(/v=[a-z0-9-_]+/gi)[0].split("=").slice(-1)[0]
+				+ "/hqdefault.jpg"
+		}
 		if(!puede_mostrar)
 		{
 			transformado = transformado.replace(/\?/gi," ")
 		}
 		var enlaces = transformado.match(puede_mostrar?expresión_2:expresión)
+		var enlaces_2 = con_espacios.match(puede_mostrar?expresión_2:expresión)
 		if(enlaces!=null | puede_mostrar)
 		{
-			eliminar_mensaje(número,sala)
+			if(borrar){eliminar_mensaje(número,sala)}
 			var salida = ""
 			con_espacios = con_espacios.replace(/https?:\/\//gi,"")
 			for(var k in enlaces)
@@ -219,8 +229,13 @@ function procesar_mensajes(b)
 				}
 				con_espacios = con_espacios.replace(enlaces[k],"")
 				salida += "[img]"+protocolo+"://"+enlaces[k]+"[/img]"
+				if(!borrar)
+				{
+					salida += " " + protocolo+"://"+enlaces_2[k]
+				}
 			}
-			con_espacios = con_espacios.replace(/([a-z0-9-]+\.)+[a-z0-9-]+(\/[a-z0-9-]+)+\/?/gi,"")
+			con_espacios = con_espacios.replace(/([a-z0-9-_]+\.)+[a-z0-9-_]+(\/[a-z0-9-_]+)+\/?/gi,"")
+			con_espacios = con_espacios.replace(/(\/?[a-z0-9-_]+)*\?[a-z0-9-_]+=[a-z0-9-_]+/gi,"")
 			salida+=" "+con_espacios
 			salida+="%0AEnviado por: [color=%23"+color+"]"+usuario+"[/color]"
 			console.log(salida)
