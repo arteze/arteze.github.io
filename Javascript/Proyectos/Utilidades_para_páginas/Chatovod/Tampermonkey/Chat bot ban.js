@@ -11,62 +11,47 @@
 
 // ban bot
 
-function descargar(dirección,función)
+window.votos = {}
+
+var desconocimiento = [
+	"No lo sé.",
+	"No tengo idea.",
+	"Realmente yo no lo sé.",
+	"¿y yo qué voy a saber?",
+	"Solo soy un bot, no me pregunte eso.",
+	"Quizás lo sepa otra persona.",
+	"No tengo ese conocimiento.",
+	"No sé de dónde obtener esa información.",
+	"Esa pregunta me parece complicada de responder.",
+	"No me programaron para responder eso.",
+	"Si tuviera la bola de cristal te lo diría."
+]
+window.responder_sin_saber = function()
+{
+	return desconocimiento[Math.floor(Math.random()*desconocimiento.length)]
+}
+var responder_sin_saber = window.responder_sin_saber
+window.descargar = function(dirección,función)
 {
 	var descarga = new XMLHttpRequest()
-	if(función!=undefined)
-	{
-		descarga.onreadystatechange = function()
+	descarga.onreadystatechange = function(){
+		if (descarga.readyState == 4 && descarga.status == 200)
 		{
-			if (descarga.readyState == 4 && descarga.status == 200)
-			{
-				función(descarga.responseText)
-			}
+			función!=undefined?función(descarga.responseText):console.log(descarga.responseText)
 		}
 	}
 	descarga.open('GET',dirección)
 	descarga.send()
 }
-function obtener_CSRF()
+var descargar = window.descargar
+window.obtener_CSRF = function()
 {
 	return location.host=="admin.chatovod.com"
 		?document.querySelector(".navbar-right>li>ul>li:nth-child(2)>a").href.slice(-6)
 		:document.body.querySelector('script').textContent.match(/\x22[A-Za-z0-9]{6}\x22/g)[0].slice(1,-1)
 }
-function banear(nombre,identidad)
-{
-	var devuelve = false
-	if(nombre.match(/arteze/gi)!=null&identidad!=1543185)
-	{
-		banear_segun_minutos(nombre,44640,"Copiar nick")
-		devuelve = true
-	}
-	if(
-		identidad==undefined
-		&nombre.match(/^[a-z]+19[78]\d$/gi)!=null
-	)
-	{
-		/*
-			"\nSex in your city! http://annahayes38784.tumblr.com"
-		*/
-		banear_segun_minutos(nombre,44640,"Chau")
-		devuelve = true
-	}
-	return devuelve
-}
-function analizar_moderación(datos,nombre)
-{
-	var objeto = JSON.parse(datos)
-	var identidad = objeto.accountId
-	banear(nombre,identidad)
-}
-function moderar_usuario(nombre)
-{
-	var chat = location.protocol+"//"+location.host+"/chat/"
-	var dirección = chat + "getChatNickLocalModInfo?nick=" + nombre
-	descargar(dirección,(datos)=>analizar_moderación(datos,nombre))
-}
-function banear_segun_minutos(nombre,minutos,causa)
+var obtener_CSRF = window.obtener_CSRF
+window.banear_según_minutos = function(nombre,minutos,causa)
 {
 	var chat = location.protocol+"//"+location.host+"/chat/"
 	var modo = minutos>=0?"ban":"signOut"
@@ -74,9 +59,25 @@ function banear_segun_minutos(nombre,minutos,causa)
 	if(minutos>=0){fin+="&roomId=1&nick=" + nombre}
 	if(minutos>0){fin+="&minutes=" + minutos + '&comment=' + causa}
 	var dirección = chat + modo + "?csrf="+ obtener_CSRF() + fin
-	descargar(dirección)
+	descargar(dirección,x=>console.log(x))
 }
-function eliminar_mensaje(número,sala)
+var banear_según_minutos = window.banear_según_minutos
+window.analizar_moderación = function(datos,nombre,función)
+{
+	var objeto = JSON.parse(datos)
+	console.log(objeto,nombre)
+	var identidad = objeto.accountId
+	función(nombre,identidad)
+}
+var analizar_moderación = window.analizar_moderación
+window.moderar_usuario = function(nombre,función)
+{
+	var chat = location.protocol+"//"+location.host+"/chat/"
+	var dirección = chat + "getChatNickLocalModInfo?nick=" + nombre
+	descargar(dirección,función)
+}
+var moderar_usuario = window.moderar_usuario
+window.eliminar_mensaje = function(número,sala)
 {
 	var chat = location.protocol+"//"+location.host+"/chat/"
 	var modo = "deleteMessages"
@@ -84,7 +85,8 @@ function eliminar_mensaje(número,sala)
 	var dirección = chat + modo + "?csrf="+ obtener_CSRF() + fin
 	descargar(dirección)
 }
-function enviar_mensaje(mensaje,sala,usuarios)
+var eliminar_mensaje = window.eliminar_mensaje
+window.enviar_mensaje = function(mensaje,sala,usuarios)
 {
 	var chat = location.protocol+"//"+location.host+"/chat/"
 	var modo = "send"
@@ -92,6 +94,73 @@ function enviar_mensaje(mensaje,sala,usuarios)
 	var fin = "&to="+hacia+"&roomId="+sala+"&msg="+ mensaje
 	var dirección = chat + modo + "?csrf="+ obtener_CSRF() + fin
 	descargar(dirección)
+}
+var enviar_mensaje = window.enviar_mensaje
+function obtener_país(datos,usuario)
+{
+	var elemento = document.createElement("html")
+	elemento.innerHTML = datos
+	var fecha = new Date()
+	var hora = fecha.getUTCHours()
+	var minutos = dos_dígitos(fecha.getUTCMinutes())
+	var placeLine = elemento.querySelector(".placeLine")
+	var mensaje
+	if(placeLine!=undefined)
+	{
+		var país = placeLine.textContent.replace(/[\s]/gi,"").split(",")[0]
+		var cambio = obtener_GMT(país)
+		if(cambio!=undefined)
+		{
+			mensaje = "Las " + dos_dígitos((hora+24+cambio)%24) + ":" + minutos + "."
+		}else{
+			mensaje = responder_sin_saber()
+		}
+	}else{
+		mensaje = responder_sin_saber()
+	}
+	enviar_mensaje(mensaje,1,[usuario])
+}
+function pedir_hora_usuario(datos,usuario)
+{
+	var objeto = JSON.parse(datos)
+	var identidad = objeto.nickId
+	var sitio = location.protocol +"//"+location.host
+	var dirección = sitio + "/id"+identidad
+	if(identidad!=undefined)
+	{
+		descargar(dirección,x=>obtener_país(x,usuario))
+	}else{
+		mensaje = responder_sin_saber()
+		enviar_mensaje(mensaje,1,[usuario])
+	}
+}
+function operar_perfil(usuario)
+{
+	moderar_usuario(usuario,(datos)=>pedir_hora_usuario(datos,usuario))
+}
+function baneo_automático(nombre,identidad)
+{
+	var devuelve = false
+	if(nombre.match(/arteze/gi)!=null&identidad!=1543185)
+	{
+		banear_según_minutos(nombre,44640,"Copiar nick")
+		devuelve = true
+	}
+	if(
+		identidad==undefined
+		&nombre.match(/^[a-z]+19[78]\d$/g)!=null
+	)
+	{
+		/*
+			"\nSex in your city! http://annahayes38784.tumblr.com"
+			"\nSex in your city! http://lisavargas38925.tumblr.com"
+			"\nI want sex, write  me http://lukundowang23413.tumblr.com"
+			"Alenka21: online sex dating! I am from Russia, small sexy model -->> ❤ https://kissx-chat.blogspot.com/ ❤"
+		*/
+		banear_según_minutos(nombre,44640,"Chau")
+		devuelve = true
+	}
+	return devuelve
 }
 function aleatorio_hora()
 {
@@ -106,28 +175,21 @@ function decir_la_hora()
 	var fecha = new Date()
 	var hora = fecha.getUTCHours()
 	var minutos = dos_dígitos(fecha.getUTCMinutes())
-	// Falta: Bolivia, Costa Rica, Cuba, Ecuador, El Salvador, Honduras
+	// Falta: Bolivia, Costa Rica, Cuba, El Salvador, Honduras
 	var color = "12aa21"
 	var sp = "%0a"
 	var mensaje = "[color=%23"+color+"]Horas en el mundo: [/color]" + sp +
 		dos_dígitos((hora+24-3)%24) + ":" + minutos + " Argentina y Uruguay." + sp +"[color=%23"+color+"]" +
 		dos_dígitos((hora+24-4)%24) + ":" + minutos + " Chile, Paraguay y Venezuela." + sp + "[/color]" +
-		dos_dígitos((hora+24-5)%24) + ":" + minutos + " Colombia, México, Panamá y Perú." + sp + "[color=%23"+color+"]" +
+		dos_dígitos((hora+24-5)%24) + ":" + minutos + " Colombia, Ecuador, México, Panamá y Perú." + sp + "[color=%23"+color+"]" +
 		dos_dígitos((hora+24-6)%24) + ":" + minutos + " Guatemala y Nicaragua." + sp +"[/color]" +
 		dos_dígitos((hora+24+2)%24) + ":" + minutos + " España."
 	enviar_mensaje(mensaje,1)
 	var tiempo = aleatorio_hora()
-	console.log(tiempo)
 	setTimeout(decir_la_hora,tiempo)
 }
-function procesar_mensajes(b)
+function mostrar_imágenes(entrada,número,usuario,sala,hacia)
 {
-	console.log(b)
-	var entrada = b.m
-	var número = b.ts
-	var usuario = b.f
-	var sala = b.r
-	var hacia = b.to
 	var colores = Array.map(
 		document.querySelectorAll(".chatUsers")[0].querySelectorAll("li a")
 		,x=>[
@@ -153,11 +215,12 @@ function procesar_mensajes(b)
 	var accionado = false
 	if(
 		entrada.match(/\b[aeiou]*m[aeiou]+rt[aeiou]+(ll|y|sh).*[aeiou]+[ns]?\b/gi)!=null
-		|entrada.includes("http")&usuario.match(/^[a-z]+19[78]\d$/gi)!=null
+		|entrada.includes("http")&usuario.match(/^[a-z]+19[78]\d$/g)!=null
 		|entrada.includes("chatovod.com")
 			&!entrada.includes(location.host.split(".")[0])
-			&!entrada.includes("coins.")
-			&!entrada.includes("st1.")
+			&!entrada.includes("coins.chatovod.com")
+			&!entrada.includes("st1.chatovod.com")
+			&!entrada.includes("a.chatovod.com")
 	)
 	{
 		eliminar_mensaje(número,sala)
@@ -168,7 +231,9 @@ function procesar_mensajes(b)
 		var borrar = true
 		var puede_mostrar = false
 		var con_espacios = entrada
-		var transformado = entrada.replace(/ /gi,"").replace(/\/subefotos\.com\/ver\/\?/gi,"fotos.subefotos.com/")
+		var transformado = entrada
+		//transformado = transformado.replace(/ /gi,"")
+		transformado = transformado.replace(/\/subefotos\.com\/ver\/\?/gi,"fotos.subefotos.com/")
 		if(transformado.includes("google."))
 		{
 			transformado = transformado.replace(/imgurl=/gi," ")
@@ -188,11 +253,13 @@ function procesar_mensajes(b)
 		var g = "[a-z0-9-._%?=:]+"
 		var expresión	=	new RegExp(g+"\."+g+"(\/"+g+")+\.(jpe?g|gif|png)","gi")
 		var expresión_2 =	new RegExp(g+"\."+g+"(\/"+g+")+","gi")
-		if(transformado.includes("imgur.com"))
-		{
+		if(
+			transformado.includes("imgur.com")|transformado.includes("gyazo.com")
+			&!transformado.includes("i.gyazo.com")
+		){
 			transformado = "i." + transformado + ".png"
 		}
-		if(transformado.includes("giphy.com"))
+		if(transformado.includes("giphy.com")&!transformado.includes("giphy.gif"))
 		{
 			transformado = "media.giphy.com/media/" + transformado.match(/[0-9a-z]+/gi).slice(-1)[0] + "/giphy.gif"
 		}
@@ -202,6 +269,14 @@ function procesar_mensajes(b)
 			puede_mostrar = true
 			transformado = "i.ytimg.com/vi/"
 				+ transformado.match(/v=[a-z0-9-_]+/gi)[0].split("=").slice(-1)[0]
+				+ "/hqdefault.jpg"
+		}
+		if(transformado.includes("youtu.be"))
+		{
+			borrar = false
+			puede_mostrar = true
+			transformado = "i.ytimg.com/vi/"
+				+ transformado.match(/[a-z0-9-_]+/gi).slice(-1)[0]
 				+ "/hqdefault.jpg"
 		}
 		if(!puede_mostrar)
@@ -223,6 +298,9 @@ function procesar_mensajes(b)
 					enlaces[k].includes("gstatic.")
 					|enlaces[k].includes("amazon.com")
 					|enlaces[k].includes("discordapp.com")
+					|enlaces[k].includes("gyazo.com")
+					|enlaces[k].includes("youtube.com")
+					|enlaces[k].includes("youtu.be")
 				)
 				{
 					protocolo = "https"
@@ -238,10 +316,80 @@ function procesar_mensajes(b)
 			con_espacios = con_espacios.replace(/(\/?[a-z0-9-_]+)*\?[a-z0-9-_]+=[a-z0-9-_]+/gi,"")
 			salida+=" "+con_espacios
 			salida+="%0AEnviado por: [color=%23"+color+"]"+usuario+"[/color]"
-			console.log(salida)
 			enviar_mensaje(salida,1,hacia)
 		}
 	}
+}
+function banear_por_votos(entrada,hacia)
+{
+	if( entrada.match(/^ban$/gi)!=null & hacia!=undefined )
+	{
+		if(hacia.length==1)
+		{
+			console.log(entrada,hacia)
+			var votado = hacia[0]
+			if(votos[votado]==undefined){votos[votado]=0}
+			++votos[votado]
+			if(votos[votado]==5){banear_según_minutos(votado,60,"Votación de usuarios.")}
+			enviar_mensaje(votado+" tiene "+votos[votado]+" votos",1)
+		}
+	}
+}
+function obtener_GMT(entrada)
+{
+	var cambio
+	if(entrada!=undefined)
+	{
+		if(entrada.match(/(argentina)|(uruguay)/gi)!=null){cambio = -3}
+		if(entrada.match(/(chile)|(paraguay)|(venezuela)/gi)!=null){cambio = -4}
+		if(entrada.match(/(colombia)|(m[eé]xico)|(panam[aá])|(per[uú])|(ecuador)/gi)!=null){cambio = -5}
+		if(entrada.match(/(guatemala)|(nicaragua)/gi)!=null){cambio = -6}
+		if(entrada.match(/(espa[ñn]i?a)|(spain)/gi)!=null){cambio = 2}
+	}
+	return cambio
+}
+function pedir_la_hora(entrada,usuario,sala)
+{
+	var hecho = false
+	if(!hecho&entrada.match(/(qu|k)h?[eé]h? h?ora e[hs]?/gi)!=null)
+	{
+		var mensaje = ""
+		var fecha = new Date()
+		var hora = fecha.getUTCHours()
+		var minutos = dos_dígitos(fecha.getUTCMinutes())
+		// Falta: Bolivia, Costa Rica, Cuba, Ecuador, El Salvador, Honduras
+		var color = "12aa21"
+		var sp = "%0a"
+		console.log(111)
+		var cambio = obtener_GMT(entrada)
+		if(cambio!=undefined)
+		{
+			mensaje = "Las " + dos_dígitos((hora+24+cambio)%24) + ":" + minutos + "."
+			enviar_mensaje(mensaje,sala,[usuario])
+		}else{
+			if(entrada.match(/ en /gi)!=null)
+			{
+				mensaje = responder_sin_saber()
+				enviar_mensaje(mensaje,sala,[usuario])
+			}
+			else
+			{
+				operar_perfil(usuario)
+			}
+		}
+	}
+}
+function procesar_mensajes(b)
+{
+	console.log(b)
+	var entrada = b.m
+	var número = b.ts
+	var usuario = b.f
+	var sala = b.r
+	var hacia = b.to
+	mostrar_imágenes(entrada,número,usuario,sala,hacia)
+	banear_por_votos(entrada,hacia)
+	pedir_la_hora(entrada,usuario,sala)
 }
 window.cargar = function()
 {
@@ -259,7 +407,8 @@ window.cargar = function()
 			{
 				if(entrada)
 				{
-					moderar_usuario(nombre)
+					var función = (datos)=>analizar_moderación(datos,nombre,baneo_automático)
+					moderar_usuario(nombre,función)
 				}
 			}
 		}
@@ -273,13 +422,20 @@ window.cargar = function()
 			var e=a.I[c+("room"==c?d:d.toLowerCase())]
 			window.xq(a,e,c,d,b)
 		}
-        //Array.map(document.querySelectorAll("link[rel='stylesheet']"),x=>x.remove())
+		//Array.map(document.querySelectorAll("link[rel='stylesheet']"),x=>x.remove())
 		var texto = document.querySelector("textarea")
 		texto.disabled=true
 		texto.value = "<b>No escribir.<b>"
 		setTimeout(decir_la_hora,aleatorio_hora())
 		console.log("Cargado")
 	}
-    Array.map(document.querySelectorAll(".chatErrorMessage"),x=>x.remove())
+	try{if(
+		!location.pathname.includes("id")
+		&!location.pathname.includes("users")
+        &!location.pathname.includes("login")
+	)
+	{
+		document.querySelectorAll("link")[3].remove()
+	}}catch(e){}
 }
 setTimeout(window.cargar,7000)
