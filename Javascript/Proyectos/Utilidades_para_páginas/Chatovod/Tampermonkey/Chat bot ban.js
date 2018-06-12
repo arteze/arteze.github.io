@@ -350,19 +350,77 @@ function agregar_imagen(datos,usuario,hacia,sala)
 }
 function mostrar_avatares(entrada,usuario,hacia,sala)
 {
-	if( entrada.match(/^avatar\s?[0-9]+?$/gi)!=null & hacia!=undefined )
+	if( entrada.match(/^avatar\s?[0-9]*$/gi)!=null & hacia!=undefined )
 	{
 		var salida = ""
 		for(var i in hacia)
 		{
 			var actual = hacia[i]
-			console.log("avatar",actual)
 			var función_2 = (datos)=>agregar_imagen(datos,usuario,actual,sala)
 			moderar_usuario(actual,función_2)
 
 		}
 	}
 }
+function quitar_puntos_números(entrada)
+{
+	var devuelve = true
+	var números = entrada.match(/(\b\d{1,3}(\.\d{3})+\b)/gi)
+	if(números==null)
+	{
+		devuelve = false
+	}else{
+		var mapa = números.map(x=>x.replace(/\./gi,""))
+		for(var i in mapa)
+		{
+			var regex = new RegExp(números[i],"gi")
+			entrada = entrada.replace(regex,mapa[i])
+		}
+	}
+	return [entrada,devuelve]
+}
+function formatear_resultado(número)
+{
+	var salida = número+""
+	var resto = salida.length%3
+	array = [salida.slice(0,resto),salida.slice(resto)]
+	if(array[1]!=null)
+	{
+		array[1] = array[1].match(/\d{3}/g).map(x=>"."+x)
+	}
+	return array[0]+array[1].join("")
+}
+window.evaluar_javascript = function(entrada,usuario,sala)
+{
+	entrada = entrada.replace(/\?/gi,"")
+	entrada = entrada.replace(/\¿/gi,"")
+	entrada = entrada.replace(/:v/gi,"")
+	entrada = entrada.replace(/cuanto es/gi,"")
+	entrada = entrada.replace(/entre/gi,"/")
+	entrada = entrada.replace(/\*/gi," * ")
+	if(!entrada.includes("=>"))
+	{
+		entrada = entrada.replace(/[×x]/gi," * ")
+	}
+	var quitar_puntos = quitar_puntos_números(entrada)
+	entrada = quitar_puntos[0]
+	if(entrada.match(/^".+"$/gi)){sala=1}
+	if(usuario.match(/bot/gi)==null&entrada!="")
+	{
+		var resultado = ""
+		try{
+			resultado = eval(entrada)
+			if(typeof resultado != "function")
+			{
+				if(quitar_puntos[1]){resultado = formatear_número(resultado)}
+				enviar_mensaje(resultado,sala,[usuario])
+			}else{
+				console.log("error",resultado)
+			}
+		}catch(e){}
+	}
+}
+var evaluar_javascript = window.evaluar_javascript
 function obtener_GMT(entrada)
 {
 	var cambio
@@ -429,13 +487,14 @@ window.pedir_la_hora = function(entrada,usuario,sala)
 	var hecho = false
     var mensaje
 	if(
-		!hecho&entrada.match(/hora.+en.+/gi)!=null
+		!hecho
+		&entrada.match(/hora.+en.+/gi)!=null
 		&entrada.match(/((virgo)|(gil)|(gay)|(novi)|(boli))/gi)!=null
 	){
-		mensaje = "La hora en la que " + objeto_aleatorio(sexo) + " a " + objeto_aleatorio(madre)+"."
+		mensaje = "La hora en la que " + objeto_aleatorio(sexo) + " a tu " + objeto_aleatorio(madre)+"."
 		enviar_mensaje(mensaje,sala,[usuario])
 	}else{
-		if(!hecho&entrada.match(/(qu|k)h?[eé]h? h?ora e[hs]?/gi)!=null)
+		if(!hecho&entrada.match(/(([qk]u?)|k)h?[eé]?h? h?ora e[hs]?/gi)!=null)
 		{
 			mensaje = ""
 			var fecha = new Date()
@@ -444,15 +503,16 @@ window.pedir_la_hora = function(entrada,usuario,sala)
 			// Falta: Bolivia, Costa Rica, Cuba, Ecuador, El Salvador, Honduras
 			var color = "12aa21"
 			var sp = "%0a"
-			console.log(111)
 			var cambio = obtener_GMT(entrada)
 			if(cambio!=undefined)
 			{
 				mensaje = "Las " + dos_dígitos((hora+24+cambio)%24) + ":" + minutos + "."
 				enviar_mensaje(mensaje,sala,[usuario])
 			}else{
-				if(entrada.match(/ en /gi)!=null)
-				{
+				if(
+					entrada.match(/ en /gi)!=null
+					&entrada.match(/mi pa[íi]s/gi)==null
+				){
 					mensaje = responder_sin_saber()
 					enviar_mensaje(mensaje,sala,[usuario])
 				}
@@ -478,12 +538,12 @@ function procesar_mensajes(b)
 	banear_por_votos(entrada,hacia)
 	pedir_la_hora(entrada,usuario,sala)
 	mostrar_avatares(entrada,usuario,hacia,sala)
+	evaluar_javascript(entrada,usuario,sala)
 }
 window.cargar = function()
 {
 	var existe_nick = window.nickMenu
 	var nick = existe_nick!=undefined?window.nickMenu.textContent.slice(0,-1):""
-	console.log(nick)
 	if(nick.includes("Bot"))
 	{
 		window.cc.prototype.log = function (a, b, c) {
