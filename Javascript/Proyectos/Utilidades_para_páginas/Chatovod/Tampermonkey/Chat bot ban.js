@@ -12,6 +12,7 @@
 // ban bot
 
 window.votos = {}
+var votos = window.votos
 
 var desconocimiento = [
 	"No lo sé.",
@@ -126,6 +127,7 @@ function pedir_hora_usuario(datos,usuario)
 	var identidad = objeto.nickId
 	var sitio = location.protocol +"//"+location.host
 	var dirección = sitio + "/id"+identidad
+    var mensaje
 	if(identidad!=undefined)
 	{
 		descargar(dirección,x=>obtener_país(x,usuario))
@@ -335,6 +337,32 @@ function banear_por_votos(entrada,hacia)
 		}
 	}
 }
+function agregar_imagen(datos,usuario,hacia,sala)
+{
+	var objeto = JSON.parse(datos)
+	var identidad = objeto.nickId
+	var hospedaje = "a.chatovod.com"
+	var sitio = location.protocol +"//"+ hospedaje
+	if(identidad!=undefined)
+	{
+		enviar_mensaje("[img]"+sitio+"/n/"+identidad+"/d[/img]",sala,[usuario,hacia])
+	}
+}
+function mostrar_avatares(entrada,usuario,hacia,sala)
+{
+	if( entrada.match(/^avatar\s?[0-9]+?$/gi)!=null & hacia!=undefined )
+	{
+		var salida = ""
+		for(var i in hacia)
+		{
+			var actual = hacia[i]
+			console.log("avatar",actual)
+			var función_2 = (datos)=>agregar_imagen(datos,usuario,actual,sala)
+			moderar_usuario(actual,función_2)
+
+		}
+	}
+}
 function obtener_GMT(entrada)
 {
 	var cambio
@@ -348,37 +376,96 @@ function obtener_GMT(entrada)
 	}
 	return cambio
 }
-function pedir_la_hora(entrada,usuario,sala)
+
+var madre = [
+	"vieja",
+	"viejo",
+	"madre",
+    "padre",
+	"papá",
+    "mamá",
+	"madrastra",
+	"padrastro",
+	"zorra",
+	"novia",
+	"perrita",
+	"novio",
+	"abuela",
+	"futuro hijo",
+	"futura hija",
+	"amigo de la esquina",
+	"jefe",
+	"jefa"
+]
+var sexo = [
+	"garché",
+	"cojí",
+	"emperné",
+	"le estaba enterrando la batata",
+	"mojé el bizcocho",
+	"empomé",
+	"entubaba",
+	"se la puse",
+	"culeaba",
+	"soplaba la cañita",
+	"sobaba el pirulin",
+	"trinqué",
+	"le regaba la lechuga",
+	"le divertía el pelado",
+	"le germinaba el poroto",
+	"le sacaba las telarañas",
+	"me enflautaba",
+	"fui a echarle un fierro"
+]
+
+window.objeto_aleatorio = function(objeto)
+{
+	return objeto[Math.floor(Math.random()*objeto.length)]
+}
+var objeto_aleatorio = window.objeto_aleatorio
+
+window.pedir_la_hora = function(entrada,usuario,sala)
 {
 	var hecho = false
-	if(!hecho&entrada.match(/(qu|k)h?[eé]h? h?ora e[hs]?/gi)!=null)
-	{
-		var mensaje = ""
-		var fecha = new Date()
-		var hora = fecha.getUTCHours()
-		var minutos = dos_dígitos(fecha.getUTCMinutes())
-		// Falta: Bolivia, Costa Rica, Cuba, Ecuador, El Salvador, Honduras
-		var color = "12aa21"
-		var sp = "%0a"
-		console.log(111)
-		var cambio = obtener_GMT(entrada)
-		if(cambio!=undefined)
+    var mensaje
+	if(
+		!hecho&entrada.match(/hora.+en.+/gi)!=null
+		&entrada.match(/((virgo)|(gil)|(gay)|(novi)|(boli))/gi)!=null
+	){
+		mensaje = "La hora en la que " + objeto_aleatorio(sexo) + " a " + objeto_aleatorio(madre)+"."
+		enviar_mensaje(mensaje,sala,[usuario])
+	}else{
+		if(!hecho&entrada.match(/(qu|k)h?[eé]h? h?ora e[hs]?/gi)!=null)
 		{
-			mensaje = "Las " + dos_dígitos((hora+24+cambio)%24) + ":" + minutos + "."
-			enviar_mensaje(mensaje,sala,[usuario])
-		}else{
-			if(entrada.match(/ en /gi)!=null)
+			mensaje = ""
+			var fecha = new Date()
+			var hora = fecha.getUTCHours()
+			var minutos = dos_dígitos(fecha.getUTCMinutes())
+			// Falta: Bolivia, Costa Rica, Cuba, Ecuador, El Salvador, Honduras
+			var color = "12aa21"
+			var sp = "%0a"
+			console.log(111)
+			var cambio = obtener_GMT(entrada)
+			if(cambio!=undefined)
 			{
-				mensaje = responder_sin_saber()
+				mensaje = "Las " + dos_dígitos((hora+24+cambio)%24) + ":" + minutos + "."
 				enviar_mensaje(mensaje,sala,[usuario])
-			}
-			else
-			{
-				operar_perfil(usuario)
+			}else{
+				if(entrada.match(/ en /gi)!=null)
+				{
+					mensaje = responder_sin_saber()
+					enviar_mensaje(mensaje,sala,[usuario])
+				}
+				else
+				{
+					operar_perfil(usuario)
+				}
 			}
 		}
 	}
 }
+var pedir_la_hora = window.pedir_la_hora
+
 function procesar_mensajes(b)
 {
 	console.log(b)
@@ -390,6 +477,7 @@ function procesar_mensajes(b)
 	mostrar_imágenes(entrada,número,usuario,sala,hacia)
 	banear_por_votos(entrada,hacia)
 	pedir_la_hora(entrada,usuario,sala)
+	mostrar_avatares(entrada,usuario,hacia,sala)
 }
 window.cargar = function()
 {
