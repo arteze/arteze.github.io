@@ -395,45 +395,46 @@ function formatear_número(número)
 window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 {
 	var puede_enviar = true
-	entrada = entrada.replace(/\?/gi,"")
-	entrada = entrada.replace(/\¿/gi,"")
-	if(entrada.match(/:[a-z0-9]+:/gi)==null)
+	var analizable = entrada.replace(/\?/gi,"")
+	analizable = analizable.replace(/\¿/gi,"")
+	if(analizable.match(/:[a-z0-9]+:/gi)==null)
 	{
-		entrada = entrada.replace(/:\S/gi,"")
-		entrada = entrada.replace(/\S:/gi,"")
-		entrada = entrada.replace(/>:v/gi,"")
+		analizable = analizable.replace(/:\S/gi,"")
+		analizable = analizable.replace(/\S:/gi,"")
+		analizable = analizable.replace(/>:v/gi,"")
 	}
-	entrada = entrada.replace(/xd/gi,"")
-	entrada = entrada.replace(/=$/gi,"")
-	entrada = entrada.replace(/\.\./gi,"")
-	var quitar_puntos = quitar_puntos_números(entrada)
-	entrada = quitar_puntos[0]
-	entrada = entrada.replace(/,/gi,".")
-	if(entrada.match(/(ra[ií]z)|(log)/gi)!=null)
+	analizable = analizable.replace(/%/gi,"/")
+	analizable = analizable.replace(/xd/gi,"")
+	analizable = analizable.replace(/=$/gi,"")
+	analizable = analizable.replace(/\.\./gi,"")
+	var quitar_puntos = quitar_puntos_números(analizable)
+	analizable = quitar_puntos[0]
+	analizable = analizable.replace(/,/gi,".")
+	if(analizable.match(/(ra[ií]z)|(log)/gi)!=null)
 	{
-		entrada = entrada.replace(/log(()|(2)|(1p)|(10)) (\d+)/gi,"Math.log$1($6)")
-		entrada = entrada.replace(/log(\d+)\s+(\d+)/gi,"Math.log($2)*Math.log(Math.E)/Math.log($1)")
-		entrada = entrada.replace(/ra[ií]z( cuadrada)? del? (\d+)/gi,"Math.sqrt($2)")
+		analizable = analizable.replace(/log(()|(2)|(1p)|(10)) (\d+)/gi,"Math.log$1($6)")
+		analizable = analizable.replace(/log(\d+)\s+(\d+)/gi,"Math.log($2)*Math.log(Math.E)/Math.log($1)")
+		analizable = analizable.replace(/ra[ií]z( cuadrada)? del? (\d+)/gi,"Math.sqrt($2)")
 		quitar_puntos[1] = false
 	}
-	entrada = entrada.replace(/al cuadrado/gi,"^2")
-	entrada = entrada.replace(/al cubo/gi,"^3")
-	entrada = entrada.replace(/(\d+)\s*((\^)|(a la)|(al))\s*(\d+)/gi,"Math.pow($1,$6)")
-	if(entrada.match(/^[a-z\s.,áéíóú()]+$/gi)==null)
+	analizable = analizable.replace(/al cuadrado/gi,"^2")
+	analizable = analizable.replace(/al cubo/gi,"^3")
+	analizable = analizable.replace(/(\d+)\s*((\^)|(a la)|(al))\s*(\d+)/gi,"Math.pow($1,$6)")
+	if(analizable.match(/^[a-z\s.,áéíóú()]+$/gi)==null)
 	{
-		entrada = entrada.replace(/menos/gi," - ")
-		entrada = entrada.replace(/mas/gi," + ")
-		entrada = entrada.replace(/por/gi," * ")
-		entrada = entrada.replace(/(((cu[aá]ntos?)|(cu[aá]l)) es)? ((el)|(la))?/gi,"")
-		entrada = entrada.replace(/^((el)|(la))/gi,"")
-		entrada = entrada.replace(/(entre|dividido)/gi,"/")
-		entrada = entrada.replace(/\*/gi," * ")
-		if(!entrada.includes("=>"))
+		analizable = analizable.replace(/menos/gi," - ")
+		analizable = analizable.replace(/mas/gi," + ")
+		analizable = analizable.replace(/por/gi," * ")
+		analizable = analizable.replace(/(((cu[aá]ntos?)|(cu[aá]l)) es)? ((el)|(la))?/gi,"")
+		analizable = analizable.replace(/^((el)|(la))/gi,"")
+		analizable = analizable.replace(/(entre|dividido)/gi,"/")
+		analizable = analizable.replace(/\*/gi," * ")
+		if(!analizable.includes("=>"))
 		{
-			entrada = entrada.replace(/[×x]/gi," * ")
+			analizable = analizable.replace(/[×x]/gi," * ")
 		}
 	}
-	if(entrada.match(/^".+"$/gi))
+	if(analizable.match(/^".+"$/gi)!=null)
 	{
 		if(sala==1){puede_enviar=false}
 		sala=1
@@ -442,16 +443,22 @@ window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 	{
 		hacia = [usuario]
 	}
-	if(usuario.match(/bot/gi)==null&entrada!="")
+	if(analizable.match(/^\d+$/gi)!=null)
+	{
+		analizable = "\""+window.númeroHaciaLetras(analizable.match(/\d+/gi).join(""))+"\""
+		quitar_puntos[1] = false
+	}
+	if(usuario.match(/bot/gi)==null&analizable!="")
 	{
 		var resultado = ""
 		try{
-			resultado = eval(entrada)
+			resultado = eval(analizable)
 			if(
 				typeof resultado != "function"
 				& typeof resultado != "object"
 				& typeof resultado != "undefined"
 				& resultado+"" != "NaN"
+				& entrada.match(/^\s*oh\s*$/)==null
 			){
 				if(quitar_puntos[1]){resultado = formatear_número(resultado)}
 				if(puede_enviar){enviar_mensaje(resultado,sala,hacia)}
