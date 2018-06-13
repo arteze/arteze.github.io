@@ -7,7 +7,7 @@
 // @grant		none
 // ==/UserScript==
 
-'use strict';
+"use strict";
 
 // ban bot
 
@@ -41,7 +41,7 @@ window.descargar = function(dirección,función)
 			función!=undefined?función(descarga.responseText):console.log(descarga.responseText)
 		}
 	}
-	descarga.open('GET',dirección)
+	descarga.open("GET",dirección)
 	descarga.send()
 }
 var descargar = window.descargar
@@ -49,7 +49,7 @@ window.obtener_CSRF = function()
 {
 	return location.host=="admin.chatovod.com"
 		?document.querySelector(".navbar-right>li>ul>li:nth-child(2)>a").href.slice(-6)
-		:document.body.querySelector('script').textContent.match(/\x22[A-Za-z0-9]{6}\x22/g)[0].slice(1,-1)
+		:document.body.querySelector("script").textContent.match(/\x22[A-Za-z0-9]{6}\x22/g)[0].slice(1,-1)
 }
 var obtener_CSRF = window.obtener_CSRF
 window.banear_según_minutos = function(nombre,minutos,causa)
@@ -58,7 +58,7 @@ window.banear_según_minutos = function(nombre,minutos,causa)
 	var modo = minutos>=0?"ban":"signOut"
 	var fin = ""
 	if(minutos>=0){fin+="&roomId=1&nick=" + nombre}
-	if(minutos>0){fin+="&minutes=" + minutos + '&comment=' + causa}
+	if(minutos>0){fin+="&minutes=" + minutos + "&comment=" + causa}
 	var dirección = chat + modo + "?csrf="+ obtener_CSRF() + fin
 	descargar(dirección,x=>console.log(x))
 }
@@ -362,7 +362,7 @@ function mostrar_avatares(entrada,usuario,hacia,sala)
 		}
 	}
 }
-function quitar_puntos_números(entrada)
+window.quitar_puntos_números = function(entrada)
 {
 	var devuelve = true
 	var números = entrada.match(/(\b\d{1,3}(\.\d{3})+\b)/gi)
@@ -379,41 +379,81 @@ function quitar_puntos_números(entrada)
 	}
 	return [entrada,devuelve]
 }
-function formatear_resultado(número)
+var quitar_puntos_números = window.quitar_puntos_números
+function formatear_número(número)
 {
+	var array = []
 	var salida = número+""
-	var resto = salida.length%3
-	array = [salida.slice(0,resto),salida.slice(resto)]
-	if(array[1]!=null)
+	while(salida.length>=3)
 	{
-		array[1] = array[1].match(/\d{3}/g).map(x=>"."+x)
+		array.unshift(salida.slice(-3))
+		salida = salida.slice(0,-3)
 	}
-	return array[0]+array[1].join("")
+	if(salida!=""){array.unshift(salida)}
+	return array.join(".")
 }
-window.evaluar_javascript = function(entrada,usuario,sala)
+window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 {
+	var puede_enviar = true
 	entrada = entrada.replace(/\?/gi,"")
 	entrada = entrada.replace(/\¿/gi,"")
-	entrada = entrada.replace(/:v/gi,"")
-	entrada = entrada.replace(/cuanto es/gi,"")
-	entrada = entrada.replace(/entre/gi,"/")
-	entrada = entrada.replace(/\*/gi," * ")
-	if(!entrada.includes("=>"))
+	if(entrada.match(/:[a-z0-9]+:/gi)==null)
 	{
-		entrada = entrada.replace(/[×x]/gi," * ")
+		entrada = entrada.replace(/:\S/gi,"")
+		entrada = entrada.replace(/\S:/gi,"")
+		entrada = entrada.replace(/>:v/gi,"")
 	}
+	entrada = entrada.replace(/xd/gi,"")
+	entrada = entrada.replace(/=$/gi,"")
+	entrada = entrada.replace(/\.\./gi,"")
 	var quitar_puntos = quitar_puntos_números(entrada)
 	entrada = quitar_puntos[0]
-	if(entrada.match(/^".+"$/gi)){sala=1}
+	if(entrada.match(/(ra[ií]z)|(log)/gi)!=null)
+	{
+		entrada = entrada.replace(/log(()|(2)|(1p)|(10)) (\d+)/gi,"Math.log$1($6)")
+		entrada = entrada.replace(/log(\d+)\s+(\d+)/gi,"Math.log($2)*Math.log(Math.E)/Math.log($1)")
+		entrada = entrada.replace(/ra[ií]z( cuadrada)? del? (\d+)/gi,"Math.sqrt($2)")
+		quitar_puntos[1] = false
+	}
+	entrada = entrada.replace(/al cuadrado/gi,"^2")
+	entrada = entrada.replace(/al cubo/gi,"^3")
+	entrada = entrada.replace(/(\d+)\s*((\^)|(a la)|(al))\s*(\d+)/gi,"Math.pow($1,$6)")
+	if(entrada.match(/^[a-z\s.,áéíóú()]+$/gi)==null)
+	{
+		entrada = entrada.replace(/menos/gi," - ")
+		entrada = entrada.replace(/mas/gi," + ")
+		entrada = entrada.replace(/por/gi," * ")
+		entrada = entrada.replace(/(((cu[aá]ntos?)|(cu[aá]l)) es)? ((el)|(la))?/gi,"")
+		entrada = entrada.replace(/^((el)|(la))/gi,"")
+		entrada = entrada.replace(/(entre|dividido)/gi,"/")
+		entrada = entrada.replace(/\*/gi," * ")
+		if(!entrada.includes("=>"))
+		{
+			entrada = entrada.replace(/[×x]/gi," * ")
+		}
+	}
+	if(entrada.match(/^".+"$/gi))
+	{
+		if(sala==1){puede_enviar=false}
+		sala=1
+	}
+	else
+	{
+		hacia = [usuario]
+	}
 	if(usuario.match(/bot/gi)==null&entrada!="")
 	{
 		var resultado = ""
 		try{
 			resultado = eval(entrada)
-			if(typeof resultado != "function")
-			{
+			if(
+				typeof resultado != "function"
+				& typeof resultado != "object"
+				& typeof resultado != "undefined"
+				& resultado+"" != "NaN"
+			){
 				if(quitar_puntos[1]){resultado = formatear_número(resultado)}
-				enviar_mensaje(resultado,sala,[usuario])
+				if(puede_enviar){enviar_mensaje(resultado,sala,hacia)}
 			}else{
 				console.log("error",resultado)
 			}
@@ -435,46 +475,8 @@ function obtener_GMT(entrada)
 	return cambio
 }
 
-var madre = [
-	"vieja",
-	"viejo",
-	"madre",
-    "padre",
-	"papá",
-    "mamá",
-	"madrastra",
-	"padrastro",
-	"zorra",
-	"novia",
-	"perrita",
-	"novio",
-	"abuela",
-	"futuro hijo",
-	"futura hija",
-	"amigo de la esquina",
-	"jefe",
-	"jefa"
-]
-var sexo = [
-	"garché",
-	"cojí",
-	"emperné",
-	"le estaba enterrando la batata",
-	"mojé el bizcocho",
-	"empomé",
-	"entubaba",
-	"se la puse",
-	"culeaba",
-	"soplaba la cañita",
-	"sobaba el pirulin",
-	"trinqué",
-	"le regaba la lechuga",
-	"le divertía el pelado",
-	"le germinaba el poroto",
-	"le sacaba las telarañas",
-	"me enflautaba",
-	"fui a echarle un fierro"
-]
+var madre = [ "vieja", "viejo", "madre", "padre", "papá", "mamá", "madrastra", "padrastro", "zorra", "novia", "perrita", "novio", "abuela", "futuro hijo", "futura hija", "amigo de la esquina", "jefe", "jefa" ]
+var sexo = [ "garché", "cojí", "emperné", "le estaba enterrando la batata", "mojé el bizcocho", "empomé", "entubaba", "se la puse", "culeaba", "soplaba la cañita", "sobaba el pirulin", "trinqué", "le regaba la lechuga", "le divertía el pelado", "le germinaba el poroto", "le sacaba las telarañas", "me enflautaba", "fui a echarle un fierro" ]
 
 window.objeto_aleatorio = function(objeto)
 {
@@ -488,11 +490,11 @@ window.pedir_la_hora = function(entrada,usuario,sala)
     var mensaje
 	if(
 		!hecho
-		&entrada.match(/hora.+en.+/gi)!=null
+		&entrada.match(/hora.+/gi)!=null
 		&entrada.match(/((virgo)|(gil)|(gay)|(novi)|(boli))/gi)!=null
 	){
 		mensaje = "La hora en la que " + objeto_aleatorio(sexo) + " a tu " + objeto_aleatorio(madre)+"."
-		enviar_mensaje(mensaje,sala,[usuario])
+		if(usuario.match(/bot/gi)==null){enviar_mensaje(mensaje,sala,[usuario])}
 	}else{
 		if(!hecho&entrada.match(/(([qk]u?)|k)h?[eé]?h? h?ora e[hs]?/gi)!=null)
 		{
@@ -538,7 +540,7 @@ function procesar_mensajes(b)
 	banear_por_votos(entrada,hacia)
 	pedir_la_hora(entrada,usuario,sala)
 	mostrar_avatares(entrada,usuario,hacia,sala)
-	evaluar_javascript(entrada,usuario,sala)
+	evaluar_javascript(entrada,usuario,sala,hacia)
 }
 window.cargar = function()
 {
@@ -570,7 +572,7 @@ window.cargar = function()
 			var e=a.I[c+("room"==c?d:d.toLowerCase())]
 			window.xq(a,e,c,d,b)
 		}
-		//Array.map(document.querySelectorAll("link[rel='stylesheet']"),x=>x.remove())
+		//Array.map(document.querySelectorAll("link[rel="stylesheet"]"),x=>x.remove())
 		var texto = document.querySelector("textarea")
 		texto.disabled=true
 		texto.value = "<b>No escribir.<b>"
