@@ -1,0 +1,17 @@
+﻿<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>Número a Letras (Otecald)</title>
+		<link rel=icon href=favicon.ico></link>
+		<script src="NúmeroHaciaLetras.js"></script>
+		<script src="NúmeroHaciaLetrasHTML.js"></script>
+	</head>
+	<body>
+		Escriba el número a transformar en letras: <input id="aNúmeroHaciaLetras" size="40" onkeyup="insertarResultado()" ></input>
+		<p><big id="resLetras">...</big></p>
+		<p>Por intervalo:</p>
+		<p>Mínimo: <input id="aMenor" size="40" onkeyup="insertarResultadoSector()" ></input></p>
+		<p>Máximo: <input id="aMayor" size="40" onkeyup="insertarResultadoSector()" ></input></p>
+		<textarea disabled id="sectorLetras" style="height: 512px; width: 512px;"></textarea>
+	</body>
+</html>

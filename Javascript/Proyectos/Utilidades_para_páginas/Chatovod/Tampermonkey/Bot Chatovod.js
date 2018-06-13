@@ -408,6 +408,7 @@ window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 	entrada = entrada.replace(/\.\./gi,"")
 	var quitar_puntos = quitar_puntos_números(entrada)
 	entrada = quitar_puntos[0]
+	entrada = entrada.replace(/,/gi,".")
 	if(entrada.match(/(ra[ií]z)|(log)/gi)!=null)
 	{
 		entrada = entrada.replace(/log(()|(2)|(1p)|(10)) (\d+)/gi,"Math.log$1($6)")
@@ -476,7 +477,7 @@ function obtener_GMT(entrada)
 }
 
 var madre = [ "vieja", "viejo", "madre", "padre", "papá", "mamá", "madrastra", "padrastro", "zorra", "novia", "perrita", "novio", "abuela", "futuro hijo", "futura hija", "amigo de la esquina", "jefe", "jefa" ]
-var sexo = [ "garché", "cojí", "emperné", "le estaba enterrando la batata", "mojé el bizcocho", "empomé", "entubaba", "se la puse", "culeaba", "soplaba la cañita", "sobaba el pirulin", "trinqué", "le regaba la lechuga", "le divertía el pelado", "le germinaba el poroto", "le sacaba las telarañas", "me enflautaba", "fui a echarle un fierro" ]
+var sexo = [ "garché", "cojí", "emperné", "le estaba enterrando la batata", "mojé el bizcocho", "empomé", "entubaba", "se la puse", "culeaba", "soplaba la cañita", "sobaba el pirulín", "trinqué", "le regaba la lechuga", "le divertía el pelado", "le germinaba el poroto", "le sacaba las telarañas", "me enflautaba", "fui a echarle un fierro" ]
 
 window.objeto_aleatorio = function(objeto)
 {

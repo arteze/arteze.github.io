@@ -1,0 +1,19 @@
+﻿<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>Letras hacia número (Otecald)</title>
+		<link rel=icon href=favicon.ico></link>
+		<script src="LetrasHaciaNúmero.js"></script>
+		<script src="LetrasHaciaNúmeroHTML.js"></script>
+	</head>
+	<body>
+		<div>Escriba las palabras a transformar en un conjunto de dígitos numéricos:<div>
+		<div><input id="aNúmeroHaciaLetras" size="130" onkeyup="insertarResultado()" ></input></div>
+		<p>Cálculo previo: <big id="resPrevisto"></big></p>
+		<p>Formateado: <big id="resNúmeroMiles"></big></p>
+		<p>Llano: <big id="resNúmeroLlano"></big></p>
+		<p>Convertir lista de números:</p>
+		<textarea id="sectorLetras" onkeyup="sectorLetrasHaciaNúmeros()" style="height: 512px; width: 512px;"></textarea>
+		<textarea disabled id="sectorNúmeros" style="height: 512px; width: 256px;"></textarea>
+	</body>
+</html>
