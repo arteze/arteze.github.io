@@ -9,17 +9,16 @@
 
 "use strict";
 
-// ban bot
-
 window.votos = {}
 var votos = window.votos
+window.máximo = 0
 
 var desconocimiento = [
 	"No lo sé.",
 	"No tengo idea.",
 	"Realmente yo no lo sé.",
 	"¿y yo qué voy a saber?",
-	"Solo soy un bot, no me pregunte eso.",
+	"Solo soy un programa, no me pregunte eso.",
 	"Quizás lo sepa otra persona.",
 	"No tengo ese conocimiento.",
 	"No sé de dónde obtener esa información.",
@@ -27,24 +26,43 @@ var desconocimiento = [
 	"No me programaron para responder eso.",
 	"Si tuviera la bola de cristal te lo diría."
 ]
-window.responder_sin_saber = function()
+var error_de_cálculo = [
+	"No se ha podido calcular correctamente.",
+	"Tuve problemas al realizar la operación que has pedido.",
+	"Usted me ha pedido algo que me parece imposible de resolver.",
+	"Perdone, pero esa pregunta me parece algo compleja.",
+	"Se me dificultó un poco resolver eso, por lo que me he rendido."
+]
+var madre = [ "vieja", "viejo", "madre", "padre", "papá", "mamá", "madrastra", "padrastro", "zorra", "novia", "perrita", "novio", "abuela", "futuro hijo", "futura hija", "amigo de la esquina", "jefe", "jefa" ]
+var sexo = [ "garché", "cojí", "emperné", "le estaba enterrando la batata", "mojé el bizcocho", "empomé", "entubaba", "se la puse", "culeaba", "soplaba la cañita", "sobaba el pirulín", "trinqué", "le regaba la lechuga", "le divertía el pelado", "le germinaba el poroto", "le sacaba las telarañas", "me enflautaba", "fui a echarle un fierro" ]
+
+window.objeto_aleatorio = function(objeto)
 {
-	return desconocimiento[Math.floor(Math.random()*desconocimiento.length)]
+	return objeto[Math.floor(Math.random()*objeto.length)]
 }
-var responder_sin_saber = window.responder_sin_saber
+var objeto_aleatorio = window.objeto_aleatorio
+
 window.descargar = function(dirección,función)
 {
 	var descarga = new XMLHttpRequest()
 	descarga.onreadystatechange = function(){
 		if (descarga.readyState == 4 && descarga.status == 200)
 		{
+			if(función!=undefined)
+			{
+				función(descarga.responseText)
+			}else
+			{
+				var descargado = descarga.responseText
+				if(/error/gi.test(descargado)){console.log("error",dirección)}
+				console.log(descargado)
+			}
 			función!=undefined?función(descarga.responseText):console.log(descarga.responseText)
 		}
 	}
 	descarga.open("GET",dirección)
 	descarga.send()
 }
-var descargar = window.descargar
 window.obtener_CSRF = function()
 {
 	return location.host=="admin.chatovod.com"
@@ -60,7 +78,7 @@ window.banear_según_minutos = function(nombre,minutos,causa)
 	if(minutos>=0){fin+="&roomId=1&nick=" + nombre}
 	if(minutos>0){fin+="&minutes=" + minutos + "&comment=" + causa}
 	var dirección = chat + modo + "?csrf="+ obtener_CSRF() + fin
-	descargar(dirección,x=>console.log(x))
+	window.descargar(dirección,x=>console.log(x))
 }
 var banear_según_minutos = window.banear_según_minutos
 window.analizar_moderación = function(datos,nombre,función)
@@ -75,7 +93,7 @@ window.moderar_usuario = function(nombre,función)
 {
 	var chat = location.protocol+"//"+location.host+"/chat/"
 	var dirección = chat + "getChatNickLocalModInfo?nick=" + nombre
-	descargar(dirección,función)
+	window.descargar(dirección,función)
 }
 var moderar_usuario = window.moderar_usuario
 window.eliminar_mensaje = function(número,sala)
@@ -84,7 +102,7 @@ window.eliminar_mensaje = function(número,sala)
 	var modo = "deleteMessages"
 	var fin = "&roomId="+sala+"&messages=" + número
 	var dirección = chat + modo + "?csrf="+ obtener_CSRF() + fin
-	descargar(dirección)
+	window.descargar(dirección)
 }
 var eliminar_mensaje = window.eliminar_mensaje
 window.enviar_mensaje = function(mensaje,sala,usuarios)
@@ -94,10 +112,10 @@ window.enviar_mensaje = function(mensaje,sala,usuarios)
 	var hacia = usuarios==undefined?"":usuarios
 	var fin = "&to="+hacia+"&roomId="+sala+"&msg="+ mensaje
 	var dirección = chat + modo + "?csrf="+ obtener_CSRF() + fin
-	descargar(dirección)
+	window.descargar(dirección)
 }
 var enviar_mensaje = window.enviar_mensaje
-function obtener_país(datos,usuario)
+window.obtener_país = function(datos,usuario,sala,hacia)
 {
 	var elemento = document.createElement("html")
 	elemento.innerHTML = datos
@@ -114,14 +132,14 @@ function obtener_país(datos,usuario)
 		{
 			mensaje = "Las " + dos_dígitos((hora+24+cambio)%24) + ":" + minutos + "."
 		}else{
-			mensaje = responder_sin_saber()
+			mensaje = objeto_aleatorio(desconocimiento)
 		}
 	}else{
-		mensaje = responder_sin_saber()
+		mensaje = objeto_aleatorio(desconocimiento)
 	}
-	enviar_mensaje(mensaje,1,[usuario])
+	enviar_mensaje(mensaje,sala,[usuario])
 }
-function pedir_hora_usuario(datos,usuario)
+window.pedir_hora_usuario = function(datos,usuario,sala,hacia)
 {
 	var objeto = JSON.parse(datos)
 	var identidad = objeto.nickId
@@ -130,15 +148,16 @@ function pedir_hora_usuario(datos,usuario)
     var mensaje
 	if(identidad!=undefined)
 	{
-		descargar(dirección,x=>obtener_país(x,usuario))
+		console.log(dirección)
+		window.descargar(dirección,x=>window.obtener_país(x,usuario,sala,hacia))
 	}else{
-		mensaje = responder_sin_saber()
-		enviar_mensaje(mensaje,1,[usuario])
+		mensaje = objeto_aleatorio(desconocimiento)
+		enviar_mensaje(mensaje,sala,[usuario])
 	}
 }
-function operar_perfil(usuario)
+function operar_perfil(usuario,sala,hacia)
 {
-	moderar_usuario(usuario,(datos)=>pedir_hora_usuario(datos,usuario))
+	moderar_usuario(usuario,(datos)=>window.pedir_hora_usuario(datos,usuario,sala,hacia))
 }
 function baneo_automático(nombre,identidad)
 {
@@ -182,7 +201,7 @@ function decir_la_hora()
 	var sp = "%0a"
 	var mensaje = "[color=%23"+color+"]Horas en el mundo: [/color]" + sp +
 		dos_dígitos((hora+24-3)%24) + ":" + minutos + " Argentina y Uruguay." + sp +"[color=%23"+color+"]" +
-		dos_dígitos((hora+24-4)%24) + ":" + minutos + " Chile, Paraguay y Venezuela." + sp + "[/color]" +
+		dos_dígitos((hora+24-4)%24) + ":" + minutos + " Chile, Paraguay, República Dominicana y Venezuela." + sp + "[/color]" +
 		dos_dígitos((hora+24-5)%24) + ":" + minutos + " Colombia, Ecuador, México, Panamá y Perú." + sp + "[color=%23"+color+"]" +
 		dos_dígitos((hora+24-6)%24) + ":" + minutos + " Guatemala y Nicaragua." + sp +"[/color]" +
 		dos_dígitos((hora+24+2)%24) + ":" + minutos + " España."
@@ -190,31 +209,8 @@ function decir_la_hora()
 	var tiempo = aleatorio_hora()
 	setTimeout(decir_la_hora,tiempo)
 }
-function mostrar_imágenes(entrada,número,usuario,sala,hacia)
+function banear_18(entrada,usuario,número,sala)
 {
-	var colores = Array.map(
-		document.querySelectorAll(".chatUsers")[0].querySelectorAll("li a")
-		,x=>[
-			x.textContent
-			,x.style.color.match(/\d+/gi)
-		]
-	)
-	colores = colores.map(
-		x=>x[1]==null?[x[0],"1D6E9C"]:[
-			x[0]
-			,x[1].map(x=>("0"+(1*x).toString(16)).slice(-2)).join("")
-		]
-	)
-	var color
-	for(var i in colores)
-	{
-		if(colores[i][0]==usuario)
-		{
-			color = colores[i][1]
-			break
-		}
-	}
-	var accionado = false
 	if(
 		entrada.match(/\b[aeiou]*m[aeiou]+rt[aeiou]+(ll|y|sh).*[aeiou]+[ns]?\b/gi)!=null
 		|entrada.includes("http")&usuario.match(/^[a-z]+19[78]\d$/g)!=null
@@ -228,112 +224,162 @@ function mostrar_imágenes(entrada,número,usuario,sala,hacia)
 		eliminar_mensaje(número,sala)
 		accionado = true
 	}
-	if(!accionado&!entrada.includes("[img]"))
+}
+window.detectar_enlaces = function(entrada)
+{
+	var entrada = entrada
+	var g = "[a-z0-9-_]+" // Dominio a.a.com
+	var h = "[a-z0-9-_=]+" // /aa/aa/aa
+	var expresión =	new RegExp(
+		(g+"\\.")+g // Dominio
+		+"(\/"+h+")+" // /aa/aa/aa
+		+"\\??" // ?
+		+"(\\.?"+h+")+(\\.(jpe?g)|(gif)|(png))?"
+		,"gi"
+	)
+	entrada = entrada.replace(/https?:\/\//gi,"")
+	entrada = entrada.replace(/%3A/gi,":")
+	entrada = entrada.replace(/%2F/gi,"/")
+	entrada = entrada.split(/\[img][^\x5B\x5d]+\[\/img]/gi).join("")
+	var enlaces = entrada.match(expresión)
+	return enlaces
+}
+detectar_enlaces = window.detectar_enlaces
+window.mostrar_imágenes = function(entrada,número,usuario,sala,hacia)
+{
+	var color = Array.map(
+		document.querySelectorAll(".chatUsers")[0].querySelectorAll("li a")
+		,x=>[
+			x.textContent
+			,x.style.color.match(/\d+/gi)
+		]
+	).map(
+		x=>x[1]==null?[x[0],"1D6E9C"]:[
+			x[0]
+			,x[1].map(x=>("0"+(1*x).toString(16)).slice(-2)).join("")
+		]
+	).map(x=>x[0]==usuario?x[1]:undefined).filter(x=>x!=undefined)[0]
+	var enlaces = detectar_enlaces(entrada)
+	var salida = ""
+	var puede_enviar = [false,false]
+	var borrar = true
+	function env(a){a[0]=true;a[1]=true}
+	for(var i in enlaces)
 	{
-		var borrar = true
-		var puede_mostrar = false
-		var con_espacios = entrada
-		var transformado = entrada
-		//transformado = transformado.replace(/ /gi,"")
-		transformado = transformado.replace(/\/subefotos\.com\/ver\/\?/gi,"fotos.subefotos.com/")
-		if(transformado.includes("google."))
+		var actual = enlaces[i]
+		var res = actual
+		res = res.replace(/\/subefotos\.com\/ver\/\?/gi,"fotos.subefotos.com/")
+		puede_enviar[0] = false
+		if(res.match(/\.(png|jpg|gif)/gi))
 		{
-			transformado = transformado.replace(/imgurl=/gi," ")
-			transformado = transformado.replace(/%3A/gi,":")
-			transformado = transformado.replace(/%2F/gi,"/")
-			transformado = transformado.replace(/&/gi," ")
-			puede_mostrar = true
+			env(puede_enviar)
+			//borrar = true
 		}
-		if(transformado.includes("gstatic."))
-		{
-			puede_mostrar = true
-		}
-		if(transformado.includes("ddn.i.ntere.st")&transformado.includes("image"))
-		{
-			puede_mostrar = true
-		}
-		var g = "[a-z0-9-._%?=:]+"
-		var expresión	=	new RegExp(g+"\."+g+"(\/"+g+")+\.(jpe?g|gif|png)","gi")
-		var expresión_2 =	new RegExp(g+"\."+g+"(\/"+g+")+","gi")
 		if(
-			transformado.includes("imgur.com")|transformado.includes("gyazo.com")
-			&!transformado.includes("i.gyazo.com")
+			res.includes("gstatic.")
+			|res.includes("ddn.i.ntere.st")&res.includes("image")
 		){
-			transformado = "i." + transformado + ".png"
+			env(puede_enviar)
 		}
-		if(transformado.includes("giphy.com")&!transformado.includes("giphy.gif"))
+		if(res.includes("imgur.com")|res.includes("gyazo.com"))
 		{
-			transformado = "media.giphy.com/media/" + transformado.match(/[0-9a-z]+/gi).slice(-1)[0] + "/giphy.gif"
+			if(
+				!res.includes("i.")
+				&!res.includes(".png")
+				&!res.includes(".jpg")
+				&!res.includes(".jpeg")
+				&!res.includes(".gif")
+			){
+				res = "i." + res
+				env(puede_enviar)
+			}
 		}
-		if(transformado.includes("youtube.com"))
+		if(res.includes("giphy.com")&!res.includes("giphy.gif"))
 		{
-			borrar = false
-			puede_mostrar = true
-			transformado = "i.ytimg.com/vi/"
-				+ transformado.match(/v=[a-z0-9-_]+/gi)[0].split("=").slice(-1)[0]
+			res = "media.giphy.com/media/" + res.match(/[0-9a-z]+/gi).slice(-1)[0] + "/giphy.gif"
+			env(puede_enviar)
+		}
+		if(res.includes("youtube.com"))
+		{
+			borrar = true
+			env(puede_enviar)
+			res = "i.ytimg.com/vi/"
+				+ res.match(/v=[a-z0-9-_]+/gi)[0].split("=").slice(-1)[0]
 				+ "/hqdefault.jpg"
 		}
-		if(transformado.includes("youtu.be"))
+		if(res.includes("youtu.be"))
 		{
-			borrar = false
-			puede_mostrar = true
-			transformado = "i.ytimg.com/vi/"
-				+ transformado.match(/[a-z0-9-_]+/gi).slice(-1)[0]
+			borrar = true
+			env(puede_enviar)
+			res = "i.ytimg.com/vi/"
+				+ res.match(/[a-z0-9-_]+/gi).slice(-1)[0]
 				+ "/hqdefault.jpg"
 		}
-		if(!puede_mostrar)
+		if(puede_enviar[0])
 		{
-			transformado = transformado.replace(/\?/gi," ")
-		}
-		var enlaces = transformado.match(puede_mostrar?expresión_2:expresión)
-		var enlaces_2 = con_espacios.match(puede_mostrar?expresión_2:expresión)
-		if(enlaces!=null | puede_mostrar)
-		{
-			if(borrar){eliminar_mensaje(número,sala)}
-			var salida = ""
-			con_espacios = con_espacios.replace(/https?:\/\//gi,"")
-			for(var k in enlaces)
+			var protocolo = "http"
+			var sitios = [
+				["ytimg"]
+				,["gstatic","imgur","gyazo","amazon","discordapp","pinimg"]
+			]
+			for(var j in sitios)
 			{
-				console.log(k,enlaces[k])
-				var protocolo = "http"
-				if(
-					enlaces[k].includes("gstatic.")
-					|enlaces[k].includes("amazon.com")
-					|enlaces[k].includes("discordapp.com")
-					|enlaces[k].includes("gyazo.com")
-					|enlaces[k].includes("youtube.com")
-					|enlaces[k].includes("youtu.be")
-				)
+				var actual_2 = sitios[j]
+				for(var k in actual_2)
 				{
-					protocolo = "https"
-				}
-				con_espacios = con_espacios.replace(enlaces[k],"")
-				salida += "[img]"+protocolo+"://"+enlaces[k]+"[/img]"
-				if(!borrar)
-				{
-					salida += " " + protocolo+"://"+enlaces_2[k]
+					var actual_3 = actual_2[k]
+					console.log(res,actual_3)
+					if(res.includes(actual_3))
+					{
+						protocolo = "https"
+						borrar = true
+					}else
+					{
+
+					}
 				}
 			}
-			con_espacios = con_espacios.replace(/([a-z0-9-_]+\.)+[a-z0-9-_]+(\/[a-z0-9-_]+)+\/?/gi,"")
-			con_espacios = con_espacios.replace(/(\/?[a-z0-9-_]+)*\?[a-z0-9-_]+=[a-z0-9-_]+/gi,"")
-			salida+=" "+con_espacios
-			salida+="%0AEnviado por: [color=%23"+color+"]"+usuario+"[/color]"
-			enviar_mensaje(salida,1,hacia)
+			var bool = false
+			if(actual.includes("gyazo."))
+			{
+				salida += "[img]"+protocolo+"://"+res+".jpg[/img]"
+				salida += "[img]"+protocolo+"://"+res+".png[/img]"
+				salida += "[img]"+protocolo+"://"+res+".gif[/img]"
+				bool = true
+			}
+			if(!bool&actual.match(/youtu\.be|youtube\./gi)!=null)
+			{
+				salida += "[img]"+protocolo+"://"+res+"[/img]%0A" + protocolo+"://" + actual + ""
+				bool = true
+			}
+			if(!borrar)
+			{
+				salida += " " + protocolo+"://"+res
+			}
+			salida+="%0AEnviado por: [b][color=%23"+color+"]"+usuario+"[/color][/b]"
+		}else
+		{
+			salida+=res
 		}
+	}
+	if(puede_enviar[1])
+	{
+		//console.log(salida)
+		enviar_mensaje(salida,1,hacia)
+		if(borrar){eliminar_mensaje(número,sala)}
 	}
 }
 function banear_por_votos(entrada,hacia)
 {
-	if( entrada.match(/^ban$/gi)!=null & hacia!=undefined )
+	if(entrada.match(/(^ban$)|(^\[b]ban\[\/b]$)/gi)!=null & hacia!=undefined )
 	{
 		if(hacia.length==1)
 		{
-			console.log(entrada,hacia)
 			var votado = hacia[0]
 			if(votos[votado]==undefined){votos[votado]=0}
 			++votos[votado]
-			if(votos[votado]==5){banear_según_minutos(votado,60,"Votación de usuarios.")}
 			enviar_mensaje(votado+" tiene "+votos[votado]+" votos",1)
+			if(votos[votado]>=5){banear_según_minutos(votado,60,"Votación de usuarios.");votos=0}
 		}
 	}
 }
@@ -394,65 +440,95 @@ function formatear_número(número)
 }
 window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 {
-	var puede_enviar = true
-	var analizable = entrada.replace(/\?/gi,"")
-	analizable = analizable.replace(/\¿/gi,"")
-	if(analizable.match(/:[a-z0-9]+:/gi)==null)
+	var conv = entrada
+	var es_texto = conv.match(/^"[^"]+"$/gi)!=null
+	if(es_texto)
 	{
-		analizable = analizable.replace(/:\S/gi,"")
-		analizable = analizable.replace(/\S:/gi,"")
-		analizable = analizable.replace(/>:v/gi,"")
-	}
-	analizable = analizable.replace(/%/gi,"/")
-	analizable = analizable.replace(/xd/gi,"")
-	analizable = analizable.replace(/=$/gi,"")
-	analizable = analizable.replace(/\.\./gi,"")
-	var quitar_puntos = quitar_puntos_números(analizable)
-	analizable = quitar_puntos[0]
-	analizable = analizable.replace(/,/gi,".")
-	if(analizable.match(/(ra[ií]z)|(log)/gi)!=null)
-	{
-		analizable = analizable.replace(/log(()|(2)|(1p)|(10)) (\d+)/gi,"Math.log$1($6)")
-		analizable = analizable.replace(/log(\d+)\s+(\d+)/gi,"Math.log($2)*Math.log(Math.E)/Math.log($1)")
-		analizable = analizable.replace(/ra[ií]z( cuadrada)? del? (\d+)/gi,"Math.sqrt($2)")
-		quitar_puntos[1] = false
-	}
-	analizable = analizable.replace(/al cuadrado/gi,"^2")
-	analizable = analizable.replace(/al cubo/gi,"^3")
-	analizable = analizable.replace(/(\d+)\s*((\^)|(a la)|(al))\s*(\d+)/gi,"Math.pow($1,$6)")
-	if(analizable.match(/^[a-z\s.,áéíóú()]+$/gi)==null)
-	{
-		analizable = analizable.replace(/menos/gi," - ")
-		analizable = analizable.replace(/mas/gi," + ")
-		analizable = analizable.replace(/por/gi," * ")
-		analizable = analizable.replace(/(((cu[aá]ntos?)|(cu[aá]l)) es)? ((el)|(la))?/gi,"")
-		analizable = analizable.replace(/^((el)|(la))/gi,"")
-		analizable = analizable.replace(/(entre|dividido)/gi,"/")
-		analizable = analizable.replace(/\*/gi," * ")
-		if(!analizable.includes("=>"))
-		{
-			analizable = analizable.replace(/[×x]/gi," * ")
-		}
-	}
-	if(analizable.match(/^".+"$/gi)!=null)
-	{
-		if(sala==1){puede_enviar=false}
 		sala=1
+		enviar_mensaje(entrada.slice(1,-1),sala,hacia)
+		return;
 	}
 	else
 	{
 		hacia = [usuario]
 	}
-	if(analizable.match(/^\d+$/gi)!=null)
+	if(!es_texto)
 	{
-		analizable = "\""+window.númeroHaciaLetras(analizable.match(/\d+/gi).join(""))+"\""
-		quitar_puntos[1] = false
+		conv = conv.replace(/\?/gi,"")
+		conv = conv.replace(/\¿/gi,"")
+		conv = conv.replace(/^\s*y*\s*?/gi,"")
+		if(conv.match(/:[a-z0-9]+:/gi)==null)
+		{
+			conv = conv.replace(/:\S/gi,"")
+			conv = conv.replace(/\S:/gi,"")
+			conv = conv.replace(/>:v/gi,"")
+		}
+		conv = conv.replace(/%/gi,"/")
+		conv = conv.replace(/dd/gi,"")
+		conv = conv.replace(/xd+/gi,"")
+		conv = conv.replace(/x+/gi,"x")
+		conv = conv.replace(/=$/gi,"")
+		conv = conv.replace(/\.\./gi,"")
+		var quitar_puntos = quitar_puntos_números(conv)
+		conv = quitar_puntos[0]
+		conv = conv.replace(/,/gi,".")
+		conv = conv.replace(/\bal\s+cuadrado\b/gi,"^2")
+		conv = conv.replace(/\bal\s+cubo\b/gi,"^3")
+		conv = conv.replace(/(\d+)\s*((\^)|(a la)|(al))\s*(\d+)/gi,"Math.pow($1,$6)")
+
+		// Palabras
+		console.log(conv)
+		conv = conv.replace(/^\s*b[aeiouáéíóú]t\b/gi,"")
+
+		conv = conv.replace(/\bmenos\b/gi," - ")
+		conv = conv.replace(/\bmas\b/gi," + ")
+		conv = conv.replace(/\bpor\b/gi," * ")
+		conv = conv.replace(/\bcu[aá]ntos?\b/gi,"")
+		conv = conv.replace(/\bes\b/gi,"")
+		conv = conv.replace(/\bcu[aá]l\s+es\b/gi,"")
+		conv = conv.replace(/\b(el)|(la)\b/gi,"")
+		conv = conv.replace(/\b(entre)|(dividido)\b/gi,"/")
+		if(!conv.includes("=>"))
+		{
+			conv = conv.replace(/[×x]/gi," * ")
+		}
+		if(conv.match(/(ra[ií]z)|(log)/gi)!=null)
+		{
+			conv = conv.replace(/log(()|(2)|(1p)|(10)) (\d+)/gi,"Math.log$1($6)")
+			conv = conv.replace(/log(\d+)\s+(\d+)/gi,"Math.log($2)*Math.log(Math.E)/Math.log($1)")
+			conv = conv.replace(/ra[ií]z\s+c[uú]bica\s+(de\s+)?(\d+)/gi,"+Math.pow($2,1/3).toFixed(14)")
+			conv = conv.replace(/ra[ií]z( cuadrada)? del? (\d+)/gi,"Math.sqrt($2)")
+			quitar_puntos[1] = false
+		}
+		var está_convertido = false
+		var convertido
+		if(conv.match(/^\d+$/gi)!=null)
+		{
+			conv = "\""+window.númeroHaciaLetras(conv.match(/\d+/gi).join(""))+"\""
+			quitar_puntos[1] = false
+			está_convertido = true
+		}
+		if(!está_convertido)
+		{
+			if(conv.match(/^[a-z\sáéíóú]+.?$/gi)!=null)
+			{
+				convertido = "\""+formatear_número(window.letrasHaciaNúmero(
+					conv.match(/[a-z\s.áéíóú]+/gi).join(" ")
+				).replace(/\./gi,""))+"\""
+				if(convertido!="\"0\""|convertido=="\"0\""&conv.match(/cero/gi)!=null)
+				{
+					conv = convertido
+					quitar_puntos[1] = false
+					está_convertido = true
+				}
+			}
+		}
 	}
-	if(usuario.match(/bot/gi)==null&analizable!="")
+	if(conv!="")
 	{
 		var resultado = ""
 		try{
-			resultado = eval(analizable)
+			resultado = eval(conv)
 			if(
 				typeof resultado != "function"
 				& typeof resultado != "object"
@@ -461,48 +537,49 @@ window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 				& entrada.match(/^\s*oh\s*$/)==null
 			){
 				if(quitar_puntos[1]){resultado = formatear_número(resultado)}
-				if(puede_enviar){enviar_mensaje(resultado,sala,hacia)}
+				resultado = resultado+""
+				if(isFinite(resultado)){resultado = resultado.replace(/\./gi,",")}
+				resultado = resultado.replace(/\+/gi,"%2B")
+				if(resultado.includes("undefined"))
+				{
+					enviar_mensaje(objeto_aleatorio(error_de_cálculo),sala,hacia)
+				}else
+				{
+					enviar_mensaje(resultado,sala,hacia)
+				}
 			}else{
 				console.log("error",resultado)
 			}
-		}catch(e){}
+		}catch(e)
+		{
+			console.log("error 2",resultado)
+		}
 	}
 }
-var evaluar_javascript = window.evaluar_javascript
 function obtener_GMT(entrada)
 {
 	var cambio
 	if(entrada!=undefined)
 	{
-		if(entrada.match(/(argentina)|(uruguay)/gi)!=null){cambio = -3}
-		if(entrada.match(/(chile)|(paraguay)|(venezuela)/gi)!=null){cambio = -4}
-		if(entrada.match(/(colombia)|(m[eé]xico)|(panam[aá])|(per[uú])|(ecuador)/gi)!=null){cambio = -5}
-		if(entrada.match(/(guatemala)|(nicaragua)/gi)!=null){cambio = -6}
-		if(entrada.match(/(espa[ñn]i?a)|(spain)/gi)!=null){cambio = 2}
+		if(entrada.match(/argentina|uruguay/gi)!=null){cambio = -3}
+		if(entrada.match(/chile|paraguay|rep[uú]blica dominicana|venezuela/gi)!=null){cambio = -4}
+		if(entrada.match(/colombia|m[eé]xico|panam[aá]|per[uú]|ecuador/gi)!=null){cambio = -5}
+		if(entrada.match(/guatemala|nicaragua/gi)!=null){cambio = -6}
+		if(entrada.match(/espa[ñn]i?a|spain/gi)!=null){cambio = 2}
 	}
 	return cambio
 }
-
-var madre = [ "vieja", "viejo", "madre", "padre", "papá", "mamá", "madrastra", "padrastro", "zorra", "novia", "perrita", "novio", "abuela", "futuro hijo", "futura hija", "amigo de la esquina", "jefe", "jefa" ]
-var sexo = [ "garché", "cojí", "emperné", "le estaba enterrando la batata", "mojé el bizcocho", "empomé", "entubaba", "se la puse", "culeaba", "soplaba la cañita", "sobaba el pirulín", "trinqué", "le regaba la lechuga", "le divertía el pelado", "le germinaba el poroto", "le sacaba las telarañas", "me enflautaba", "fui a echarle un fierro" ]
-
-window.objeto_aleatorio = function(objeto)
-{
-	return objeto[Math.floor(Math.random()*objeto.length)]
-}
-var objeto_aleatorio = window.objeto_aleatorio
-
-window.pedir_la_hora = function(entrada,usuario,sala)
+window.pedir_la_hora = function(entrada,usuario,sala,hacia)
 {
 	var hecho = false
     var mensaje
 	if(
 		!hecho
 		&entrada.match(/hora.+/gi)!=null
-		&entrada.match(/((virgo)|(gil)|(gay)|(novi)|(boli))/gi)!=null
+		&entrada.match(/virgo|gil|gay|novi|boli/gi)!=null
 	){
 		mensaje = "La hora en la que " + objeto_aleatorio(sexo) + " a tu " + objeto_aleatorio(madre)+"."
-		if(usuario.match(/bot/gi)==null){enviar_mensaje(mensaje,sala,[usuario])}
+		enviar_mensaje(mensaje,sala,[usuario])
 	}else{
 		if(!hecho&entrada.match(/(([qk]u?)|k)h?[eé]?h? h?ora e[hs]?/gi)!=null)
 		{
@@ -523,38 +600,70 @@ window.pedir_la_hora = function(entrada,usuario,sala)
 					entrada.match(/ en /gi)!=null
 					&entrada.match(/mi pa[íi]s/gi)==null
 				){
-					mensaje = responder_sin_saber()
+					mensaje = objeto_aleatorio(desconocimiento)
 					enviar_mensaje(mensaje,sala,[usuario])
 				}
 				else
 				{
-					operar_perfil(usuario)
+					operar_perfil(usuario,sala,hacia)
 				}
 			}
 		}
 	}
 }
 var pedir_la_hora = window.pedir_la_hora
-
-function procesar_mensajes(b)
+function fonetizar_mensaje(entrada,usuario,sala,hacia)
 {
-	console.log(b)
+	if(entrada.match(/^\s*fon\s+/gi)!=null)
+	{
+		entrada = entrada.replace(/^\s*fon\s+/gi,"")
+		entrada = window.fonetizar(entrada)
+		enviar_mensaje(entrada,sala,[usuario])
+	}
+}
+window.color_arcoiris = function(entrada,usuario,sala,hacia)
+{
+	if(entrada.match(/^\s*color\s+/gi)!=null)
+	{
+		entrada = entrada.replace(/^\s*color\s+/gi,"")
+		entrada = entrada.replace(/\[\/?b\]/gi,"")
+		entrada = window.gradual(0,30,entrada,13,0,1)
+		entrada = "[b]"+entrada+"[/b]"
+		entrada = entrada.replace(/#/gi,"%23")
+		enviar_mensaje(entrada,sala,[])
+	}
+}
+window.procesar_mensajes = function(b)
+{
 	var entrada = b.m
 	var número = b.ts
 	var usuario = b.f
 	var sala = b.r
 	var hacia = b.to
-	mostrar_imágenes(entrada,número,usuario,sala,hacia)
-	banear_por_votos(entrada,hacia)
-	pedir_la_hora(entrada,usuario,sala)
-	mostrar_avatares(entrada,usuario,hacia,sala)
-	evaluar_javascript(entrada,usuario,sala,hacia)
+	console.log(usuario,número,sala)
+	console.log(hacia)
+	console.log(entrada)
+	if(!/bot/gi.test(usuario))
+	{
+		if(número>window.máximo)
+		{
+			banear_18(entrada,usuario,número,sala)
+			window.mostrar_imágenes(entrada,número,usuario,sala,hacia)
+			banear_por_votos(entrada,hacia)
+			pedir_la_hora(entrada,usuario,sala,hacia)
+			mostrar_avatares(entrada,usuario,hacia,sala)
+			window.evaluar_javascript(entrada,usuario,sala,hacia)
+			fonetizar_mensaje(entrada,usuario,sala,hacia)
+			window.color_arcoiris(entrada,usuario,sala,hacia)
+			window.máximo = número
+		}
+	}
 }
 window.cargar = function()
 {
 	var existe_nick = window.nickMenu
 	var nick = existe_nick!=undefined?window.nickMenu.textContent.slice(0,-1):""
-	if(nick.includes("Bot"))
+	if(/bot/gi.test(nick))
 	{
 		window.cc.prototype.log = function (a, b, c) {
 			var info = b.split(" ")
@@ -571,7 +680,7 @@ window.cargar = function()
 			}
 		}
 		window.yq = function(a, b) {
-			procesar_mensajes(b)
+			window.procesar_mensajes(b)
 			var c,d
 			void 0!==b.r?(c="room",d=b.r):(
 				c="private"
@@ -581,19 +690,16 @@ window.cargar = function()
 			window.xq(a,e,c,d,b)
 		}
 		//Array.map(document.querySelectorAll("link[rel="stylesheet"]"),x=>x.remove())
-		var texto = document.querySelector("textarea")
-		texto.disabled=true
-		texto.value = "<b>No escribir.<b>"
 		setTimeout(decir_la_hora,aleatorio_hora())
+		try{if(
+			!location.pathname.includes("id")
+			&!location.pathname.includes("users")
+			&!location.pathname.includes("login")
+		)
+		{
+			document.querySelectorAll("link")[3].remove()
+		}}catch(e){}
 		console.log("Cargado")
 	}
-	try{if(
-		!location.pathname.includes("id")
-		&!location.pathname.includes("users")
-        &!location.pathname.includes("login")
-	)
-	{
-		document.querySelectorAll("link")[3].remove()
-	}}catch(e){}
 }
-setTimeout(window.cargar,7000)
+setTimeout(window.cargar,6000)
