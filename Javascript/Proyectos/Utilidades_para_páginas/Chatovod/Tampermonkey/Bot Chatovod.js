@@ -642,6 +642,7 @@ window.procesar_mensajes = function(b)
 	{
 		if(número>window.máximo)
 		{
+			window.máximo = número
 			window.banear_18(entrada,usuario,número,sala)
 			window.banear_otro_chat(entrada,usuario,número,sala)
 			martillo(entrada,número,sala)
@@ -654,7 +655,6 @@ window.procesar_mensajes = function(b)
 			window.color_arcoiris(entrada,usuario,sala,hacia)
 		}
 	}
-	window.máximo = número
 }
 window.cargar = function()
 {
