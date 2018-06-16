@@ -160,31 +160,33 @@ function operar_perfil(usuario,sala,hacia)
 {
 	moderar_usuario(usuario,(datos)=>window.pedir_hora_usuario(datos,usuario,sala,hacia))
 }
-function aleatorio_hora()
+window.aleatorio_hora = function()
 {
 	return 60000*Math.floor(1+Math.random()*720)
 }
-function dos_dígitos(número)
+window.dos_dígitos = function(número)
 {
 	return (número/100).toFixed(2).slice(2)
 }
-function decir_la_hora()
+window.decir_la_hora = function()
 {
 	var fecha = new Date()
 	var hora = fecha.getUTCHours()
-	var minutos = dos_dígitos(fecha.getUTCMinutes())
+	var minutos = window.dos_dígitos(fecha.getUTCMinutes())
 	// Falta: Bolivia, Costa Rica, Cuba, El Salvador, Honduras
 	var color = "12aa21"
 	var sp = "%0a"
+	var v = ""
 	var mensaje = "[color=%23"+color+"]Horas en el mundo: [/color]" + sp +
-		dos_dígitos((hora+24-3)%24) + ":" + minutos + " Argentina y Uruguay." + sp +"[color=%23"+color+"]" +
-		dos_dígitos((hora+24-4)%24) + ":" + minutos + " Chile, Paraguay, República Dominicana y Venezuela." + sp + "[/color]" +
-		dos_dígitos((hora+24-5)%24) + ":" + minutos + " Colombia, Ecuador, México, Panamá y Perú." + sp + "[color=%23"+color+"]" +
-		dos_dígitos((hora+24-6)%24) + ":" + minutos + " Guatemala y Nicaragua." + sp +"[/color]" +
-		dos_dígitos((hora+24+2)%24) + ":" + minutos + " España."
+		window.dos_dígitos((hora+24-3)%24) + ":" + minutos + " Argentina y Uruguay." + sp + "[color=%23"+color+"]" +
+		window.dos_dígitos((hora+24-4)%24) + ":" + minutos + " Chile, Paraguay, República Dominicana y Venezuela." + sp + "[/color]" +
+		window.dos_dígitos((hora+24-5)%24) + ":" + minutos + " Colombia, Ecuador, México, Panamá y Perú." + sp + "[color=%23"+color+"]" +
+		window.dos_dígitos((hora+24-6)%24) + ":" + minutos + " Guatemala y Nicaragua." + sp +"[/color]" +
+		window.dos_dígitos((hora+24+1)%24) + ":" + minutos + " España Islas Canarias." + sp + "[color=%23"+color+"]" +
+		window.dos_dígitos((hora+24+2)%24) + ":" + minutos + " España Madrid." + v + "[/color]"
 	enviar_mensaje(mensaje,1)
-	var tiempo = aleatorio_hora()
-	setTimeout(decir_la_hora,tiempo)
+	var tiempo = window.aleatorio_hora()
+	setTimeout(window.decir_la_hora,tiempo)
 }
 window.banear_18 = function(entrada,usuario,número,sala)
 {
@@ -561,7 +563,9 @@ function obtener_GMT(entrada)
 		if(entrada.match(/chile|paraguay|rep[uú]blica dominicana|venezuela/gi)!=null){cambio = -4}
 		if(entrada.match(/colombia|m[eé]xico|panam[aá]|per[uú]|ecuador/gi)!=null){cambio = -5}
 		if(entrada.match(/guatemala|nicaragua/gi)!=null){cambio = -6}
+		// España
 		if(entrada.match(/espa[ñn]i?a|spain/gi)!=null){cambio = 2}
+		if(entrada.match(/las palmas/gi)!=null){cambio = 1}
 	}
 	return cambio
 }
@@ -687,7 +691,7 @@ window.cargar = function()
 			window.xq(a,e,c,d,b)
 		}
 		//Array.map(document.querySelectorAll("link[rel="stylesheet"]"),x=>x.remove())
-		setTimeout(decir_la_hora,aleatorio_hora())
+		setTimeout(window.decir_la_hora,window.aleatorio_hora())
 		try{if(
 			!location.pathname.includes("id")
 			&!location.pathname.includes("users")
