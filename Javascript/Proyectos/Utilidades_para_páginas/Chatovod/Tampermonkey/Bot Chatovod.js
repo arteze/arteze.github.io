@@ -33,8 +33,10 @@ var error_de_cálculo = [
 	"Perdone, pero esa pregunta me parece algo compleja.",
 	"Se me dificultó un poco resolver eso, por lo que me he rendido."
 ]
-var madre = [ "vieja", "viejo", "madre", "padre", "papá", "mamá", "madrastra", "padrastro", "zorra", "novia", "perrita", "novio", "abuela", "futuro hijo", "futura hija", "amigo de la esquina", "jefe", "jefa" ]
-var sexo = [ "garché", "cojí", "emperné", "le estaba enterrando la batata", "mojé el bizcocho", "empomé", "entubaba", "se la puse", "culeaba", "soplaba la cañita", "sobaba el pirulín", "trinqué", "le regaba la lechuga", "le divertía el pelado", "le germinaba el poroto", "le sacaba las telarañas", "me enflautaba", "fui a echarle un fierro" ]
+
+var madre = [ "vieja", "viejo", "madre", "padre", "papá", "mamá", "madrastra", "padrastro", "zorra", "novia", "perrita", "novio", "abuela", "futuro hijo", "futura hija", "amigo de la esquina", "jefe", "jefa", "prima", "abuela", "tía", "tío", "esposa", "esposo", "nieto", "nieta", "tatarabuela", "tatarabuelo", "sobrino", "sobrina", "mujer", "hombre", "bisabuelo", "bisabuela" ]
+
+var sexo = [ "garché", "cojí", "emperné", "empomaba", "empomé", "entubaba", "culeaba", "trinqué", "encamé", "acosté", "conejeaba", "daba matraca", "le estaba enterrando la batata", "mojé el bizcocho", "se la puse", "soplaba la cañita", "sobaba el pirulín", "le regaba la lechuga", "le divertía el pelado", "le germinaba el poroto", "le sacaba las telarañas", "me enflautaba", "fui a echarle un fierro", "le mojé la chaucha", "le pintaba el templo", "le regué la lechuga", "le lustraba la manija", "le destapaba las cloacas", "le limpié el horno" ]
 
 window.objeto_aleatorio = function(objeto)
 {
@@ -158,30 +160,6 @@ function operar_perfil(usuario,sala,hacia)
 {
 	moderar_usuario(usuario,(datos)=>window.pedir_hora_usuario(datos,usuario,sala,hacia))
 }
-function baneo_automático(nombre,identidad)
-{
-	var devuelve = false
-	if(nombre.match(/arteze/gi)!=null&identidad!=1543185)
-	{
-		banear_según_minutos(nombre,44640,"Copiar nick")
-		devuelve = true
-	}
-	if(
-		identidad==undefined
-		&nombre.match(/^[a-z]+19[78]\d$/g)!=null
-	)
-	{
-		/*
-			"\nSex in your city! http://annahayes38784.tumblr.com"
-			"\nSex in your city! http://lisavargas38925.tumblr.com"
-			"\nI want sex, write  me http://lukundowang23413.tumblr.com"
-			"Alenka21: online sex dating! I am from Russia, small sexy model -->> ❤ https://kissx-chat.blogspot.com/ ❤"
-		*/
-		banear_según_minutos(nombre,44640,"Chau")
-		devuelve = true
-	}
-	return devuelve
-}
 function aleatorio_hora()
 {
 	return 60000*Math.floor(1+Math.random()*720)
@@ -208,20 +186,40 @@ function decir_la_hora()
 	var tiempo = aleatorio_hora()
 	setTimeout(decir_la_hora,tiempo)
 }
-function banear_18(entrada,usuario,número,sala)
+window.banear_18 = function(entrada,usuario,número,sala)
 {
-	if(
-		entrada.match(/\b[aeiou]*m[aeiou]+rt[aeiou]+(ll|y|sh).*[aeiou]+[ns]?\b/gi)!=null
-		|entrada.includes("http")&usuario.match(/^[a-z]+19[78]\d$/g)!=null
-		|entrada.includes("chatovod.com")
-			&!entrada.includes(location.host.split(".")[0])
-			&!entrada.includes("coins.chatovod.com")
-			&!entrada.includes("st1.chatovod.com")
-			&!entrada.includes("a.chatovod.com")
-	)
+	if(/\bsexy?\b/gi.test(entrada)&/https?:\/\//gi.test(entrada))
 	{
 		eliminar_mensaje(número,sala)
-		accionado = true
+		banear_según_minutos(usuario,44640,"%2B18")
+	}
+}
+window.banear_otro_chat = function(entrada,usuario,número,sala)
+{
+	if(entrada.includes("chatovod.com")&!entrada.includes(location.host.split(".")[0]))
+	{
+		borrar = true
+		var lista = ["a","st1","coins","help","account","admin"]
+		for(var i in lista)
+		{
+			if(entrada.includes(lista[i]+".chatovod.com"))
+			{
+				booleano = false
+				break
+			}
+		}
+		if(booleano)
+		{
+			eliminar_mensaje(número,sala)
+			banear_según_minutos(usuario,44640,"Pasar chat.")
+		}
+	}
+}
+function martillo(entrada,número,sala)
+{
+	if(/\b[aeiou]*m[aeiou]+rt[aeiou]+(ll|y|sh).*[aeiou]+[ns]?\b/gi.test(entrada))
+	{
+		eliminar_mensaje(número,sala)
 	}
 }
 window.detectar_enlaces = function(entrada)
@@ -476,7 +474,6 @@ window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 		conv = conv.replace(/(\d+)\s*((\^)|(a la)|(al))\s*(\d+)/gi,"Math.pow($1,$6)")
 
 		// Palabras
-		console.log(conv)
 		conv = conv.replace(/^\s*b[aeiouáéíóú]t\b/gi,"")
 
 		conv = conv.replace(/\bmenos\b/gi," - ")
@@ -575,7 +572,7 @@ window.pedir_la_hora = function(entrada,usuario,sala,hacia)
 	if(
 		!hecho
 		&entrada.match(/\bhora\b/gi)!=null
-		&entrada.match(/\b(virgo|gil|gay|novi)\b/gi)!=null
+		&entrada.match(/virgo|gil|gay|novi/gi)!=null
 	){
 		mensaje = "La hora en la que " + objeto_aleatorio(sexo) + " a tu " + objeto_aleatorio(madre)+"."
 		enviar_mensaje(mensaje,sala,[usuario])
@@ -610,8 +607,7 @@ window.pedir_la_hora = function(entrada,usuario,sala,hacia)
 		}
 	}
 }
-var pedir_la_hora = window.pedir_la_hora
-function fonetizar_mensaje(entrada,usuario,sala,hacia)
+window.fonetizar_mensaje = function(entrada,usuario,sala,hacia)
 {
 	if(entrada.match(/^\s*fon\s+/gi)!=null)
 	{
@@ -640,21 +636,22 @@ window.procesar_mensajes = function(b)
 	var sala = b.r
 	var hacia = b.to
 	console.log(usuario,número,sala)
-	console.log(hacia)
 	console.log(entrada)
+	console.log(hacia)
 	if(!/bot/gi.test(usuario))
 	{
 		if(número>window.máximo)
 		{
-			banear_18(entrada,usuario,número,sala)
+			window.banear_18(entrada,usuario,número,sala)
+			window.banear_otro_chat(entrada,usuario,número,sala)
+			martillo(entrada,número,sala)
 			window.mostrar_imágenes(entrada,número,usuario,sala,hacia)
 			banear_por_votos(entrada,hacia)
-			pedir_la_hora(entrada,usuario,sala,hacia)
+			window.pedir_la_hora(entrada,usuario,sala,hacia)
 			mostrar_avatares(entrada,usuario,hacia,sala)
 			window.evaluar_javascript(entrada,usuario,sala,hacia)
-			fonetizar_mensaje(entrada,usuario,sala,hacia)
+			window.fonetizar_mensaje(entrada,usuario,sala,hacia)
 			window.color_arcoiris(entrada,usuario,sala,hacia)
-			
 		}
 	}
 	window.máximo = número
@@ -666,6 +663,7 @@ window.cargar = function()
 	if(/bot/gi.test(nick))
 	{
 		window.cc.prototype.log = function (a, b, c) {
+			console.log(a,b,c)
 			var info = b.split(" ")
 			var entrada = info[0]
 			entrada = entrada=="enter"?1:entrada=="leave"?0:-1
@@ -674,8 +672,7 @@ window.cargar = function()
 			{
 				if(entrada)
 				{
-					var función = (datos)=>analizar_moderación(datos,nombre,baneo_automático)
-					moderar_usuario(nombre,función)
+					console.log(nombre)
 				}
 			}
 		}
