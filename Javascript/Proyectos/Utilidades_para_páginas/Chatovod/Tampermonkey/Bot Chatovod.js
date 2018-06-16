@@ -57,7 +57,6 @@ window.descargar = function(dirección,función)
 				if(/error/gi.test(descargado)){console.log("error",dirección)}
 				console.log(descargado)
 			}
-			función!=undefined?función(descarga.responseText):console.log(descarga.responseText)
 		}
 	}
 	descarga.open("GET",dirección)
@@ -575,8 +574,8 @@ window.pedir_la_hora = function(entrada,usuario,sala,hacia)
     var mensaje
 	if(
 		!hecho
-		&entrada.match(/hora.+/gi)!=null
-		&entrada.match(/virgo|gil|gay|novi|boli/gi)!=null
+		&entrada.match(/\bhora\b/gi)!=null
+		&entrada.match(/\b(virgo|gil|gay|novi)\b/gi)!=null
 	){
 		mensaje = "La hora en la que " + objeto_aleatorio(sexo) + " a tu " + objeto_aleatorio(madre)+"."
 		enviar_mensaje(mensaje,sala,[usuario])
@@ -655,9 +654,10 @@ window.procesar_mensajes = function(b)
 			window.evaluar_javascript(entrada,usuario,sala,hacia)
 			fonetizar_mensaje(entrada,usuario,sala,hacia)
 			window.color_arcoiris(entrada,usuario,sala,hacia)
-			window.máximo = número
+			
 		}
 	}
+	window.máximo = número
 }
 window.cargar = function()
 {
