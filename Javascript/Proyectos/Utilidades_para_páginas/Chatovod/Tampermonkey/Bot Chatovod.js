@@ -227,10 +227,10 @@ function martillo(entrada,número,sala)
 window.detectar_enlaces = function(entrada)
 {
 	var entrada = entrada
-	var g = "[a-z0-9-_]+" // Dominio a.a.com
+	var g = "[a-z0-9-_.]+" // Dominio a.a.com
 	var h = "[a-z0-9-_=]+" // /aa/aa/aa
 	var expresión =	new RegExp(
-		(g+"\\.")+g // Dominio
+		g // Dominio
 		+"(\/"+h+")+" // /aa/aa/aa
 		+"\\??" // ?
 		+"(\\.?"+h+")+(\\.(jpe?g)|(gif)|(png))?"
@@ -334,7 +334,7 @@ window.mostrar_imágenes = function(entrada,número,usuario,sala,hacia)
 						borrar = true
 					}else
 					{
-
+						;
 					}
 				}
 			}
@@ -351,9 +351,9 @@ window.mostrar_imágenes = function(entrada,número,usuario,sala,hacia)
 				salida += "[img]"+protocolo+"://"+res+"[/img]%0A" + protocolo+"://" + actual + ""
 				bool = true
 			}
-			if(!borrar)
+			if(!bool)
 			{
-				salida += " " + protocolo+"://"+res
+				salida += "[img]"+protocolo+"://"+res+"[/img]"
 			}
 			salida+="%0AEnviado por: [b][color=%23"+color+"]"+usuario+"[/color][/b]"
 		}else
@@ -364,8 +364,8 @@ window.mostrar_imágenes = function(entrada,número,usuario,sala,hacia)
 	if(puede_enviar[1])
 	{
 		//console.log(salida)
-		enviar_mensaje(salida,1,hacia)
 		if(borrar){eliminar_mensaje(número,sala)}
+		enviar_mensaje(salida,1,hacia)
 	}
 }
 function banear_por_votos(entrada,hacia)
@@ -667,7 +667,6 @@ window.cargar = function()
 	if(/bot/gi.test(nick))
 	{
 		window.cc.prototype.log = function (a, b, c) {
-			console.log(a,b,c)
 			var info = b.split(" ")
 			var entrada = info[0]
 			entrada = entrada=="enter"?1:entrada=="leave"?0:-1
