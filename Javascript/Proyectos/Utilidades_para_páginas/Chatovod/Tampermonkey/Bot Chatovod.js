@@ -442,7 +442,6 @@ function formatear_número(número)
 window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 {
 	var números_en_letras = "cero un ún dos dós tre cua cinc sei séi siete och nueve quin setec novec die once doce trece cat veint ses set noni".split(" ")
-	console.log()
 	
 	var conv = entrada
 	var es_texto = conv.match(/^"[^"]+"$/gi)!=null
@@ -502,10 +501,8 @@ window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 			conv = conv.replace(/log(()|(2)|(1p)|(10)) (\d+)/gi,"Math.log$1($6)")
 			conv = conv.replace(/log(\d+)\s+(\d+)/gi,"Math.log($2)*Math.log(Math.E)/Math.log($1)")
 			conv = conv.replace(/ra[ií]z\s+c[uú]bica\s+(de\s+)?(\d+)/gi,"+Math.pow($2,1/3).toFixed(14)")
-			conv = conv.replace(/ra[ií]z( cuadrada)? del? (\d+[.,]\d+)/gi,"Math.sqrt($2)")
-			
+			conv = conv.replace(/\bra[ií]z( cuadrada)? del? (\d+([.,]\d+)?)\b/gi,"Math.sqrt($2)")
 			console.log(654,conv)
-			
 			quitar_puntos[1] = false
 		}
 		var está_convertido = false
