@@ -229,11 +229,12 @@ window.detectar_enlaces = function(entrada)
 	var entrada = entrada
 	var g = "[a-z0-9-_.]+" // Dominio a.a.com
 	var h = "[a-z0-9-_=]+" // /aa/aa/aa
+	var i = "[a-z0-9-_=:]+" // /aa/aa/aa
 	var expresión =	new RegExp(
 		g // Dominio
 		+"(\/"+h+")+" // /aa/aa/aa
 		+"\\??" // ?
-		+"(\\.?"+h+")+(\\.(jpe?g)|(gif)|(png))?"
+		+"(\\.?"+i+")+(\\.(jpe?g)|(gif)|(png))?"
 		,"gi"
 	)
 	entrada = entrada.replace(/https?:\/\//gi,"")
@@ -332,18 +333,19 @@ window.mostrar_imágenes = function(entrada,número,usuario,sala,hacia)
 					{
 						protocolo = "https"
 						borrar = true
-					}else
-					{
-						;
+						break
 					}
 				}
 			}
 			var bool = false
-			if(actual.includes("gyazo."))
-			{
+			if(res.includes("gyazo.")
+				&!res.includes(".jpg")	
+				&!res.includes(".gif")
+				&!res.includes(".png")
+			){
 				salida += "[img]"+protocolo+"://"+res+".jpg[/img]"
-				salida += "[img]"+protocolo+"://"+res+".png[/img]"
 				salida += "[img]"+protocolo+"://"+res+".gif[/img]"
+				salida += "[img]"+protocolo+"://"+res+".png[/img]"
 				bool = true
 			}
 			if(!bool&actual.match(/youtu\.be|youtube\./gi)!=null)
