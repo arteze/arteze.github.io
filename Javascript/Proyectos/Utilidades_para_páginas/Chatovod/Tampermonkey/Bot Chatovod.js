@@ -190,7 +190,7 @@ window.decir_la_hora = function()
 }
 window.banear_18 = function(entrada,usuario,número,sala)
 {
-	if(/\bsexy?\b/gi.test(entrada)&/https?:\/\//gi.test(entrada))
+	if(/\b(sexy?|adult)\b/gi.test(entrada)&/https?:\/\//gi.test(entrada))
 	{
 		eliminar_mensaje(número,sala)
 		banear_según_minutos(usuario,44640,"%2B18")
@@ -441,6 +441,9 @@ function formatear_número(número)
 }
 window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 {
+	var números_en_letras = "cero un ún dos dós tre cua cinc sei séi siete och nueve quin setec novec die once doce trece cat veint ses set noni".split(" ")
+	console.log()
+	
 	var conv = entrada
 	var es_texto = conv.match(/^"[^"]+"$/gi)!=null
 	if(es_texto)
@@ -472,7 +475,9 @@ window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 		conv = conv.replace(/\.\./gi,"")
 		var quitar_puntos = quitar_puntos_números(conv)
 		conv = quitar_puntos[0]
-		conv = conv.replace(/,/gi,".")
+		conv = conv.replace(/,/gi,"☺")
+		conv = conv.replace(/\./gi,",")
+		conv = conv.replace(/\☺/gi,".")
 		conv = conv.replace(/\bal\s+cuadrado\b/gi,"^2")
 		conv = conv.replace(/\bal\s+cubo\b/gi,"^3")
 		conv = conv.replace(/(\d+)\s*((\^)|(a la)|(al))\s*(\d+)/gi,"Math.pow($1,$6)")
@@ -484,8 +489,8 @@ window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 		conv = conv.replace(/\bmas\b/gi," + ")
 		conv = conv.replace(/\bpor\b/gi," * ")
 		conv = conv.replace(/\bcu[aá]ntos?\b/gi,"")
-		conv = conv.replace(/\bes\b/gi,"")
 		conv = conv.replace(/\bcu[aá]l\s+es\b/gi,"")
+		conv = conv.replace(/\bes\b/gi,"")
 		conv = conv.replace(/\b(el)|(la)\b/gi,"")
 		conv = conv.replace(/\b(entre)|(dividido)\b/gi,"/")
 		if(!conv.includes("=>"))
@@ -497,7 +502,10 @@ window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 			conv = conv.replace(/log(()|(2)|(1p)|(10)) (\d+)/gi,"Math.log$1($6)")
 			conv = conv.replace(/log(\d+)\s+(\d+)/gi,"Math.log($2)*Math.log(Math.E)/Math.log($1)")
 			conv = conv.replace(/ra[ií]z\s+c[uú]bica\s+(de\s+)?(\d+)/gi,"+Math.pow($2,1/3).toFixed(14)")
-			conv = conv.replace(/ra[ií]z( cuadrada)? del? (\d+)/gi,"Math.sqrt($2)")
+			conv = conv.replace(/ra[ií]z( cuadrada)? del? (\d+[.,]\d+)/gi,"Math.sqrt($2)")
+			
+			console.log(654,conv)
+			
 			quitar_puntos[1] = false
 		}
 		var está_convertido = false
