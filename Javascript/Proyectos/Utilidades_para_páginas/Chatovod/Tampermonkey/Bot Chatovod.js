@@ -12,6 +12,8 @@
 window.votos = {}
 var votos = window.votos
 window.máximo = 0
+window.flood = {}
+window.sala = 1
 
 var desconocimiento = [
 	"No lo sé.",
@@ -56,8 +58,10 @@ window.descargar = function(dirección,función)
 			}else
 			{
 				var descargado = descarga.responseText
-				if(/error/gi.test(descargado)){console.log("error",dirección)}
-				console.log(descargado)
+				var hecho = false
+				if(/error/gi.test(descargado)){console.log("error",dirección,descargado);hecho = true}
+				if(/{}/gi.test(descargado)&!hecho){console.log("correcto",dirección);hecho = true}
+				if(!hecho){console.log(descargado)}
 			}
 		}
 	}
@@ -70,18 +74,29 @@ window.obtener_CSRF = function()
 		?document.querySelector(".navbar-right>li>ul>li:nth-child(2)>a").href.slice(-6)
 		:document.body.querySelector("script").textContent.match(/\x22[A-Za-z0-9]{6}\x22/g)[0].slice(1,-1)
 }
-var obtener_CSRF = window.obtener_CSRF
+window.caracteres_hacia_hexadecimal = function(texto)
+{
+	var caracteres = ["\\+",":","\n","#","&","\x20"]
+	for(var i in caracteres)
+	{
+		var actual = caracteres[i]
+		var exp = new RegExp(actual,"gi")
+		var char_hacia_hex = x=>"%"+("0"+x.slice(-1).charCodeAt().toString(16).toUpperCase()).slice(-2)
+		texto = texto.replace(exp,char_hacia_hex(actual))
+	}
+	return texto
+}
 window.banear_según_minutos = function(nombre,minutos,causa)
 {
 	var chat = location.protocol+"//"+location.host+"/chat/"
 	var modo = minutos>=0?"ban":"signOut"
 	var fin = ""
+	causa = window.caracteres_hacia_hexadecimal(causa)
 	if(minutos>=0){fin+="&roomId=1&nick=" + nombre}
 	if(minutos>0){fin+="&minutes=" + minutos + "&comment=" + causa}
-	var dirección = chat + modo + "?csrf="+ obtener_CSRF() + fin
+	var dirección = chat + modo + "?csrf="+ window.obtener_CSRF() + fin
 	window.descargar(dirección,x=>console.log(x))
 }
-var banear_según_minutos = window.banear_según_minutos
 window.analizar_moderación = function(datos,nombre,función)
 {
 	var objeto = JSON.parse(datos)
@@ -102,20 +117,27 @@ window.eliminar_mensaje = function(número,sala)
 	var chat = location.protocol+"//"+location.host+"/chat/"
 	var modo = "deleteMessages"
 	var fin = "&roomId="+sala+"&messages=" + número
-	var dirección = chat + modo + "?csrf="+ obtener_CSRF() + fin
+	var dirección = chat + modo + "?csrf="+ window.obtener_CSRF() + fin
 	window.descargar(dirección)
 }
-var eliminar_mensaje = window.eliminar_mensaje
 window.enviar_mensaje = function(mensaje,sala,usuarios)
 {
 	var chat = location.protocol+"//"+location.host+"/chat/"
 	var modo = "send"
 	var hacia = usuarios==undefined?"":usuarios
+	mensaje = window.caracteres_hacia_hexadecimal(mensaje)
 	var fin = "&to="+hacia+"&roomId="+sala+"&msg="+ mensaje
-	var dirección = chat + modo + "?csrf="+ obtener_CSRF() + fin
+	var dirección = chat + modo + "?csrf="+ window.obtener_CSRF() + fin
 	window.descargar(dirección)
 }
-var enviar_mensaje = window.enviar_mensaje
+window.entrar_nombre = function(nombre)
+{
+	var chat = location.protocol+"//"+location.host+"/chat/"
+	var modo = "auth"
+	var wid = 60154
+	var fin = "&limit=66&wid="+wid+"&nick="+nombre
+	var dirección = chat + modo + "?csrf="+ window.obtener_CSRF() + fin
+}
 window.obtener_país = function(datos,usuario,sala,hacia)
 {
 	var elemento = document.createElement("html")
@@ -138,7 +160,7 @@ window.obtener_país = function(datos,usuario,sala,hacia)
 	}else{
 		mensaje = objeto_aleatorio(desconocimiento)
 	}
-	enviar_mensaje(mensaje,sala,[usuario])
+	window.enviar_mensaje(mensaje,sala,[usuario])
 }
 window.pedir_hora_usuario = function(datos,usuario,sala,hacia)
 {
@@ -153,7 +175,7 @@ window.pedir_hora_usuario = function(datos,usuario,sala,hacia)
 		window.descargar(dirección,x=>window.obtener_país(x,usuario,sala,hacia))
 	}else{
 		mensaje = objeto_aleatorio(desconocimiento)
-		enviar_mensaje(mensaje,sala,[usuario])
+		window.enviar_mensaje(mensaje,sala,[usuario])
 	}
 }
 function operar_perfil(usuario,sala,hacia)
@@ -175,53 +197,116 @@ window.decir_la_hora = function()
 	var minutos = window.dos_dígitos(fecha.getUTCMinutes())
 	// Falta: Bolivia, Costa Rica, Cuba, El Salvador, Honduras
 	var color = "12aa21"
-	var sp = "%0a"
+	var sp = "\n"
 	var v = ""
 	var mensaje = "[color=%23"+color+"]Horas en el mundo: [/color]" + sp +
 		window.dos_dígitos((hora+24-3)%24) + ":" + minutos + " Argentina y Uruguay." + sp + "[color=%23"+color+"]" +
-		window.dos_dígitos((hora+24-4)%24) + ":" + minutos + " Chile, Paraguay, República Dominicana y Venezuela." + sp + "[/color]" +
+		window.dos_dígitos((hora+24-4)%24) + ":" + minutos + " Chile, Paraguay, República Dominicana y Venezuela." + "[/color]" + sp +
 		window.dos_dígitos((hora+24-5)%24) + ":" + minutos + " Colombia, Ecuador, México, Panamá y Perú." + sp + "[color=%23"+color+"]" +
-		window.dos_dígitos((hora+24-6)%24) + ":" + minutos + " Guatemala y Nicaragua." + sp +"[/color]" +
-		window.dos_dígitos((hora+24+1)%24) + ":" + minutos + " España Islas Canarias." + sp + "[color=%23"+color+"]" +
-		window.dos_dígitos((hora+24+2)%24) + ":" + minutos + " España Madrid." + v + "[/color]"
-	enviar_mensaje(mensaje,1)
+		window.dos_dígitos((hora+24-6)%24) + ":" + minutos + " Guatemala y Nicaragua." +"[/color]" + sp +
+		window.dos_dígitos((hora+24+1)%24) + ":" + minutos + " España, Islas Canarias" + sp + "[color=%23"+color+"]" +
+		window.dos_dígitos((hora+24+2)%24) + ":" + minutos + " España, Madrid... Andalucía" + v + "[/color]"
+	window.enviar_mensaje(mensaje,1)
 	var tiempo = window.aleatorio_hora()
 	setTimeout(window.decir_la_hora,tiempo)
 }
+window.coinciden_palabras_or = function(entrada,palabras)
+{
+	var exp = new RegExp("\\b"+palabras.join("|")+"\\b","gi")
+	return exp.test(entrada)
+}
+window.coinciden_palabras_and = function(entrada,palabras)
+{
+	var coincide = false
+	for(var i in palabras)
+	{
+		coincide = true
+		for(var j in palabras[i])
+		{
+			var exp = new RegExp("\\b"+palabras[i][j]+"\\b","gi")
+			if(!exp.test(entrada)){coincide = false;break}
+		}
+		if(coincide){break}
+	}
+	return coincide
+}
+window.eliminar_palabras = function(entrada,número,sala)
+{
+	var palabras_or = ["martillo"]
+	var palabras_and = ["martillo","martillo"]
+	if(
+		coinciden_palabras_or(entrada,palabras_or)
+		|coinciden_palabras_and(entrada,palabras_and)
+	){
+		window.eliminar_mensaje(número,sala)
+	}
+}
+window.martillo = function(entrada,número,sala)
+{
+	if(/\b[aeiou]*m[aeiou]+rt[aeiou]+(ll|y|sh).*[aeiou]+[ns]?\b/gi.test(entrada))
+	{
+		window.eliminar_mensaje(número,sala)
+	}
+}
 window.banear_18 = function(entrada,usuario,número,sala)
 {
-	if(/\b(sexy?|adult)\b/gi.test(entrada)&/https?:\/\//gi.test(entrada))
+	// i want
+	var palabras_or = ["sexy?","adult","fuck"]
+	if(coinciden_palabras_or(entrada,palabras_or)&/https?:\/{2}/gi.test(entrada))
 	{
-		eliminar_mensaje(número,sala)
-		banear_según_minutos(usuario,44640,"%2B18")
+		window.eliminar_mensaje(número,sala)
+		window.banear_según_minutos(usuario,44640,"+18")
+	}
+}
+window.banear_flood = function(entrada,usuario,número,sala)
+{
+	var mensaje_y_fecha = {}
+	var array = [
+		/^\d{9,10}$/gi.test(entrada)
+		,/hola/gi.test(entrada)
+	]
+	// Uno para cada condición
+	if(window.flood[usuario]==undefined)
+	{
+		window.flood[usuario]=[[],0,0]
+	}
+	for(var i in array)
+	{
+		if(array[i].test(entrada))
+		{
+			window.flood[usuario][0].push([número,sala,+new Date()])
+			++window.flood[usuario][i+1]
+			if(window.flood[usuario][i+1]>=2)
+			{
+				window.banear_según_minutos(usuario,7,"Flood")
+				for(var j in window.flood[usuario][0])
+				{
+					var mensaje = window.flood[usuario][0][j]
+					window.eliminar_mensaje(...mensaje)
+				}
+			}
+		}
 	}
 }
 window.banear_otro_chat = function(entrada,usuario,número,sala)
 {
 	if(entrada.includes("chatovod.com")&!entrada.includes(location.host.split(".")[0]))
 	{
-		borrar = true
+		var borrar = true
 		var lista = ["a","st1","coins","help","account","admin"]
 		for(var i in lista)
 		{
 			if(entrada.includes(lista[i]+".chatovod.com"))
 			{
-				booleano = false
+				borrar = false
 				break
 			}
 		}
-		if(booleano)
+		if(borrar)
 		{
-			eliminar_mensaje(número,sala)
-			banear_según_minutos(usuario,44640,"Pasar chat.")
+			window.eliminar_mensaje(número,sala)
+			window.banear_según_minutos(usuario,44640,"Pasar chat")
 		}
-	}
-}
-function martillo(entrada,número,sala)
-{
-	if(/\b[aeiou]*m[aeiou]+rt[aeiou]+(ll|y|sh).*[aeiou]+[ns]?\b/gi.test(entrada))
-	{
-		eliminar_mensaje(número,sala)
 	}
 }
 window.detectar_enlaces = function(entrada)
@@ -244,7 +329,6 @@ window.detectar_enlaces = function(entrada)
 	var enlaces = entrada.match(expresión)
 	return enlaces
 }
-detectar_enlaces = window.detectar_enlaces
 window.mostrar_imágenes = function(entrada,número,usuario,sala,hacia)
 {
 	var color = Array.map(
@@ -270,10 +354,10 @@ window.mostrar_imágenes = function(entrada,número,usuario,sala,hacia)
 		var res = actual
 		res = res.replace(/\/subefotos\.com\/ver\/\?/gi,"fotos.subefotos.com/")
 		puede_enviar[0] = false
-		if(res.match(/\.(png|jpg|gif)/gi))
+		if(/\.(png|jpg|gif)/gi.test(res))
 		{
 			env(puede_enviar)
-			//borrar = true
+			borrar = true
 		}
 		if(
 			res.includes("gstatic.")
@@ -314,13 +398,14 @@ window.mostrar_imágenes = function(entrada,número,usuario,sala,hacia)
 			res = "i.ytimg.com/vi/"
 				+ res.match(/[a-z0-9-_]+/gi).slice(-1)[0]
 				+ "/hqdefault.jpg"
+			actual = actual.replace(/^[a-z.]+/gi,"youtube.com")
 		}
 		if(puede_enviar[0])
 		{
 			var protocolo = "http"
 			var sitios = [
 				["ytimg"]
-				,["gstatic","imgur","gyazo","amazon","discordapp","pinimg"]
+				,["gstatic","imgur","gyazo","discordapp","pinimg","amazon"]
 			]
 			for(var j in sitios)
 			{
@@ -350,14 +435,14 @@ window.mostrar_imágenes = function(entrada,número,usuario,sala,hacia)
 			}
 			if(!bool&actual.match(/youtu\.be|youtube\./gi)!=null)
 			{
-				salida += "[img]"+protocolo+"://"+res+"[/img]%0A" + protocolo+"://" + actual + ""
+				salida += "[img]"+protocolo+"://"+res+"[/img]\n" + protocolo+"://" + actual + ""
 				bool = true
 			}
 			if(!bool)
 			{
 				salida += "[img]"+protocolo+"://"+res+"[/img]"
 			}
-			salida+="%0AEnviado por: [b][color=%23"+color+"]"+usuario+"[/color][/b]"
+			salida+="\nEnviado por: [b][color=#"+color+"]"+usuario+"[/color][/b]"
 		}else
 		{
 			salida+=res
@@ -367,7 +452,7 @@ window.mostrar_imágenes = function(entrada,número,usuario,sala,hacia)
 	{
 		//console.log(salida)
 		if(borrar){eliminar_mensaje(número,sala)}
-		enviar_mensaje(salida,1,hacia)
+		window.enviar_mensaje(salida,1,hacia)
 	}
 }
 function banear_por_votos(entrada,hacia)
@@ -379,8 +464,8 @@ function banear_por_votos(entrada,hacia)
 			var votado = hacia[0]
 			if(votos[votado]==undefined){votos[votado]=0}
 			++votos[votado]
-			enviar_mensaje(votado+" tiene "+votos[votado]+" votos",1)
-			if(votos[votado]>=5){banear_según_minutos(votado,60,"Votación de usuarios.");votos=0}
+			window.enviar_mensaje(votado+" tiene "+votos[votado]+" votos",1)
+			if(votos[votado]>=5){window.banear_según_minutos(votado,60,"Votación de usuarios.");votos=0}
 		}
 	}
 }
@@ -392,7 +477,7 @@ function agregar_imagen(datos,usuario,hacia,sala)
 	var sitio = location.protocol +"//"+ hospedaje
 	if(identidad!=undefined)
 	{
-		enviar_mensaje("[img]"+sitio+"/n/"+identidad+"/d[/img]",sala,[usuario,hacia])
+		window.enviar_mensaje("[img]"+sitio+"/n/"+identidad+"/d[/img]",sala,[usuario,hacia])
 	}
 }
 function mostrar_avatares(entrada,usuario,hacia,sala)
@@ -426,18 +511,27 @@ window.quitar_puntos_números = function(entrada)
 	}
 	return [entrada,devuelve]
 }
-var quitar_puntos_números = window.quitar_puntos_números
-function formatear_número(número)
+window.formatear_número = function(número)
 {
+	var devuelve
 	var array = []
-	var salida = número+""
-	while(salida.length>=3)
+	var entero = Math.floor(número)+""
+	var coma = (""+número%1).slice(2)
+	if(!/e\+/gi.test(entero))
 	{
-		array.unshift(salida.slice(-3))
-		salida = salida.slice(0,-3)
+		while(entero.length>=3)
+		{
+			array.unshift(entero.slice(-3))
+			entero = entero.slice(0,-3)
+		}
+		if(entero!=""){array.unshift(entero)}
+		devuelve = array.join(".")+(coma==0?"":","+coma)
 	}
-	if(salida!=""){array.unshift(salida)}
-	return array.join(".")
+	else
+	{
+		devuelve = ""+número
+	}
+	return devuelve
 }
 window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 {
@@ -448,7 +542,7 @@ window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 	if(es_texto)
 	{
 		sala=1
-		enviar_mensaje(entrada.slice(1,-1),sala,hacia)
+		window.enviar_mensaje(entrada.slice(1,-1),sala,hacia)
 		return;
 	}
 	else
@@ -457,22 +551,25 @@ window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 	}
 	if(!es_texto)
 	{
-		conv = conv.replace(/\?/gi,"")
+		conv = conv.replace(/\(?\?/gi,"")
 		conv = conv.replace(/\¿/gi,"")
 		conv = conv.replace(/^\s*y*\s*?/gi,"")
 		if(conv.match(/:[a-z0-9]+:/gi)==null)
 		{
+			conv = conv.replace(/:'3/gi,"")
+			conv = conv.replace(/>:v/gi,"")
 			conv = conv.replace(/:\S/gi,"")
 			conv = conv.replace(/\S:/gi,"")
-			conv = conv.replace(/>:v/gi,"")
 		}
-		conv = conv.replace(/%/gi,"/")
+		conv = conv.replace(/\)([-+0-9]+)/gi,")*$1*")
+		conv = conv.replace(/([-+0-9]+)\(/gi,"$1*(")
+		conv = conv.replace(/[%÷]/gi,"/")
 		conv = conv.replace(/dd/gi,"")
 		conv = conv.replace(/xd+/gi,"")
 		conv = conv.replace(/x+/gi,"x")
-		conv = conv.replace(/=$/gi,"")
-		conv = conv.replace(/\.\./gi,"")
-		var quitar_puntos = quitar_puntos_números(conv)
+		conv = conv.replace(/\s*=\s*$/gi,"")
+		conv = conv.replace(/\.\.+/gi,"")
+		var quitar_puntos = window.quitar_puntos_números(conv)
 		conv = quitar_puntos[0]
 		conv = conv.replace(/,/gi,"☺")
 		conv = conv.replace(/\./gi,",")
@@ -485,13 +582,13 @@ window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 		conv = conv.replace(/^\s*b[aeiouáéíóú]t\b/gi,"")
 
 		conv = conv.replace(/\bmenos\b/gi," - ")
-		conv = conv.replace(/\bmas\b/gi," + ")
+		conv = conv.replace(/\bm[aá]s\b/gi," + ")
 		conv = conv.replace(/\bpor\b/gi," * ")
-		conv = conv.replace(/\bcu[aá]ntos?\b/gi,"")
+		conv = conv.replace(/\bcu[aá]ntos?\s+es\b/gi,"")
 		conv = conv.replace(/\bcu[aá]l\s+es\b/gi,"")
-		conv = conv.replace(/\bes\b/gi,"")
+		conv = conv.replace(/\be[sz]\b/gi,"")
 		conv = conv.replace(/\b(el)|(la)\b/gi,"")
-		conv = conv.replace(/\b(entre)|(dividido)\b/gi,"/")
+		conv = conv.replace(/\bentre|dividido(\s+a)?\b/gi,"/")
 		if(!conv.includes("=>"))
 		{
 			conv = conv.replace(/[×x]/gi," * ")
@@ -500,8 +597,8 @@ window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 		{
 			conv = conv.replace(/log(()|(2)|(1p)|(10)) (\d+)/gi,"Math.log$1($6)")
 			conv = conv.replace(/log(\d+)\s+(\d+)/gi,"Math.log($2)*Math.log(Math.E)/Math.log($1)")
-			conv = conv.replace(/ra[ií]z\s+c[uú]bica\s+(de\s+)?(\d+)/gi,"+Math.pow($2,1/3).toFixed(14)")
-			conv = conv.replace(/\bra[ií]z( cuadrada)? del? (\d+([.,]\d+)?)\b/gi,"Math.sqrt($2)")
+			conv = conv.replace(/\bra[ií]z\s+c[uú]bica\s+(de\s+)?(\d+)/gi,"+Math.pow($2,1/3).toFixed(14)")
+			conv = conv.replace(/\bra[ií]z(\s+cuadrada)?\s+del?\s+(\d+([.,]\d+)?)\b/gi,"Math.sqrt($2)")
 			console.log(654,conv)
 			quitar_puntos[1] = false
 		}
@@ -517,7 +614,7 @@ window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 		{
 			if(conv.match(/^[a-z\sáéíóú]+.?$/gi)!=null)
 			{
-				convertido = "\""+formatear_número(window.letrasHaciaNúmero(
+				convertido = "\""+window.formatear_número(window.letrasHaciaNúmero(
 					conv.match(/[a-z\s.áéíóú]+/gi).join(" ")
 				).replace(/\./gi,""))+"\""
 				if(convertido!="\"0\""|convertido=="\"0\""&conv.match(/cero/gi)!=null)
@@ -541,16 +638,18 @@ window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 				& resultado+"" != "NaN"
 				& entrada.match(/^\s*oh\s*$/)==null
 			){
-				if(quitar_puntos[1]){resultado = formatear_número(resultado)}
-				resultado = resultado+""
-				if(isFinite(resultado)){resultado = resultado.replace(/\./gi,",")}
-				resultado = resultado.replace(/\+/gi,"%2B")
+				console.log(resultado)
+				if(quitar_puntos[1]|isFinite(resultado))
+				{
+					resultado = +resultado.toFixed(14)
+					resultado = window.formatear_número(""+resultado)
+				}
 				if(resultado.includes("undefined"))
 				{
-					enviar_mensaje(objeto_aleatorio(error_de_cálculo),sala,hacia)
+					window.enviar_mensaje(objeto_aleatorio(error_de_cálculo),sala,hacia)
 				}else
 				{
-					enviar_mensaje(resultado,sala,hacia)
+					window.enviar_mensaje(resultado,sala,hacia)
 				}
 			}else{
 				console.log("error",resultado)
@@ -586,7 +685,7 @@ window.pedir_la_hora = function(entrada,usuario,sala,hacia)
 		&entrada.match(/virgo|gil|gay|novi/gi)!=null
 	){
 		mensaje = "La hora en la que " + objeto_aleatorio(sexo) + " a tu " + objeto_aleatorio(madre)+"."
-		enviar_mensaje(mensaje,sala,[usuario])
+		window.enviar_mensaje(mensaje,sala,[usuario])
 	}else{
 		if(!hecho&entrada.match(/(([qk]u?)|k)h?[eé]?h? h?ora e[hs]?/gi)!=null)
 		{
@@ -596,19 +695,19 @@ window.pedir_la_hora = function(entrada,usuario,sala,hacia)
 			var minutos = dos_dígitos(fecha.getUTCMinutes())
 			// Falta: Bolivia, Costa Rica, Cuba, Ecuador, El Salvador, Honduras
 			var color = "12aa21"
-			var sp = "%0a"
+			var sp = "\n"
 			var cambio = obtener_GMT(entrada)
 			if(cambio!=undefined)
 			{
 				mensaje = "Las " + dos_dígitos((hora+24+cambio)%24) + ":" + minutos + "."
-				enviar_mensaje(mensaje,sala,[usuario])
+				window.enviar_mensaje(mensaje,sala,[usuario])
 			}else{
 				if(
 					entrada.match(/ en /gi)!=null
 					&entrada.match(/mi pa[íi]s/gi)==null
 				){
 					mensaje = objeto_aleatorio(desconocimiento)
-					enviar_mensaje(mensaje,sala,[usuario])
+					window.enviar_mensaje(mensaje,sala,[usuario])
 				}
 				else
 				{
@@ -624,20 +723,34 @@ window.fonetizar_mensaje = function(entrada,usuario,sala,hacia)
 	{
 		entrada = entrada.replace(/^\s*fon\s+/gi,"")
 		entrada = window.fonetizar(entrada)
-		enviar_mensaje(entrada,sala,[usuario])
+		window.enviar_mensaje(entrada,sala,[usuario])
 	}
 }
 window.color_arcoiris = function(entrada,usuario,sala,hacia)
 {
-	if(entrada.match(/^\s*color\s+/gi)!=null)
+	if(entrada.match(/^\s*color[\s:]+/gi)!=null)
 	{
 		entrada = entrada.replace(/^\s*color\s+/gi,"")
 		entrada = entrada.replace(/\[\/?b\]/gi,"")
+		console.log(entrada)
 		entrada = window.gradual(0,30,entrada,13,0,1)
 		entrada = "[b]"+entrada+"[/b]"
-		entrada = entrada.replace(/#/gi,"%23")
-		enviar_mensaje(entrada,sala,[])
+		window.enviar_mensaje(entrada,sala,[])
 	}
+}
+window.definir = function(entrada,usuario,sala)
+{
+	if(entrada.match(/^\s*definir[\s:]+/gi)!=null)
+	{
+		entrada = entrada.replace(/^\s*definir\s+/gi,"")
+		var partes = entrada.split(/\s+es\s+/gi)
+		var palabra = partes[0]
+		var definición = partes[1]
+		var base_de_datos = localStorage.bot
+		window.enviar_mensaje("Definida la palabra "+palabra,sala,[])
+		window.enviar_mensaje(entrada,sala,[])
+	}
+	var definir = entrada.split(/\s*es\s*/gi)
 }
 window.procesar_mensajes = function(b)
 {
@@ -646,17 +759,19 @@ window.procesar_mensajes = function(b)
 	var usuario = b.f
 	var sala = b.r
 	var hacia = b.to
-	console.log(usuario,número,sala)
+	console.log(usuario,hacia,número,sala)
 	console.log(entrada)
-	console.log(hacia)
-	if(!/bot/gi.test(usuario))
+	var existe_nick = window.nickMenu
+	var nick = existe_nick!=undefined?window.nickMenu.textContent.slice(0,-1):""
+	if(!/bot/gi.test(usuario)&/bot/gi.test(nick))
 	{
 		if(número>window.máximo)
 		{
 			window.máximo = número
 			window.banear_18(entrada,usuario,número,sala)
 			window.banear_otro_chat(entrada,usuario,número,sala)
-			martillo(entrada,número,sala)
+			window.eliminar_palabras(entrada,número,sala)
+			window.martillo(entrada,número,sala)
 			window.mostrar_imágenes(entrada,número,usuario,sala,hacia)
 			banear_por_votos(entrada,hacia)
 			window.pedir_la_hora(entrada,usuario,sala,hacia)
@@ -664,49 +779,53 @@ window.procesar_mensajes = function(b)
 			window.evaluar_javascript(entrada,usuario,sala,hacia)
 			window.fonetizar_mensaje(entrada,usuario,sala,hacia)
 			window.color_arcoiris(entrada,usuario,sala,hacia)
+			window.definir(entrada,usuario,sala)
 		}
 	}
 }
 window.cargar = function()
 {
-	var existe_nick = window.nickMenu
-	var nick = existe_nick!=undefined?window.nickMenu.textContent.slice(0,-1):""
-	if(/bot/gi.test(nick))
-	{
-		window.cc.prototype.log = function (a, b, c) {
-			var info = b.split(" ")
-			var entrada = info[0]
-			entrada = entrada=="enter"?1:entrada=="leave"?0:-1
-			var nombre = info.slice(1).join(" ")
-			if(entrada>=0)
+	window.cc.prototype.log = function (a, b, c) {
+		var info = b.split(" ")
+		var entrada = info[0]
+		var habitación = info[3]
+		habitación = habitación!=undefined?habitación.match(/\[\d+]/gi):undefined
+		var nueva_sala = habitación!=null?(+habitación.slice(-1)[0].slice(1,-1)):sala
+		if(nueva_sala!=window.sala)
+		{
+			window.sala = nueva_sala
+			console.log("Sala: ",sala)
+		}
+		entrada = entrada=="enter"?1:entrada=="leave"?0:-1
+		var nombre = info.slice(1).join(" ")
+		if(entrada>=0)
+		{
+			if(entrada)
 			{
-				if(entrada)
-				{
-					console.log(nombre)
-				}
+				console.log("Entra: ",nombre)
 			}
 		}
-		window.yq = function(a, b) {
-			window.procesar_mensajes(b)
-			var c,d
-			void 0!==b.r?(c="room",d=b.r):(
-				c="private"
-				,d=b.f&&a.j.nick&&a.j.nick.toLowerCase()==b.f.toLowerCase()?b.p:b.f?b.f:b.p
-			)
-			var e=a.I[c+("room"==c?d:d.toLowerCase())]
-			window.xq(a,e,c,d,b)
-		}
-		//Array.map(document.querySelectorAll("link[rel="stylesheet"]"),x=>x.remove())
-		setTimeout(window.decir_la_hora,window.aleatorio_hora())
-		try{if(
-			!location.pathname.includes("id")
-			&!location.pathname.includes("users")
-			&!location.pathname.includes("login")
-		)
-		{
-			document.querySelectorAll("link")[3].remove()
-		}}catch(e){}
-		console.log("Cargado")
 	}
+	window.yq = function(a, b) {
+		window.procesar_mensajes(b)
+		var c,d
+		void 0!==b.r?(c="room",d=b.r):(
+			c="private"
+			,d=b.f&&a.j.nick&&a.j.nick.toLowerCase()==b.f.toLowerCase()?b.p:b.f?b.f:b.p
+		)
+		var e=a.I[c+("room"==c?d:d.toLowerCase())]
+		window.xq(a,e,c,d,b)
+	}
+	//Array.map(document.querySelectorAll("link[rel="stylesheet"]"),x=>x.remove())
+	setTimeout(window.decir_la_hora,window.aleatorio_hora())
+	try{if(
+		!location.pathname.includes("id")
+		&!location.pathname.includes("users")
+		&!location.pathname.includes("login")
+	)
+	{
+		document.querySelectorAll("link")[3].remove()
+	}}catch(e){}
+	console.log("Cargado.")
 }
-setTimeout(window.cargar,6000)
+setTimeout(window.cargar,1)
