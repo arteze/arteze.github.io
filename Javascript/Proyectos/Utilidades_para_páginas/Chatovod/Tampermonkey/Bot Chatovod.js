@@ -184,7 +184,7 @@ function operar_perfil(usuario,sala,hacia)
 }
 window.aleatorio_hora = function()
 {
-	return 60000*Math.floor(1+Math.random()*720)
+	return 60*1000*Math.floor(1+Math.random()*60*24) // 24 horas
 }
 window.dos_dígitos = function(número)
 {
@@ -250,7 +250,6 @@ window.martillo = function(entrada,número,sala)
 }
 window.banear_18 = function(entrada,usuario,número,sala)
 {
-	// i want
 	var palabras_or = ["sexy?","adult","fuck"]
 	if(coinciden_palabras_or(entrada,palabras_or)&/https?:\/{2}/gi.test(entrada))
 	{
@@ -541,8 +540,9 @@ window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 	var es_texto = conv.match(/^"[^"]+"$/gi)!=null
 	if(es_texto)
 	{
-		sala=1
-		window.enviar_mensaje(entrada.slice(1,-1),sala,hacia)
+		if(sala!=1){
+			window.enviar_mensaje(entrada.slice(1,-1),sala,hacia)
+		}
 		return;
 	}
 	else
@@ -581,6 +581,8 @@ window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 		// Palabras
 		conv = conv.replace(/^\s*b[aeiouáéíóú]t\b/gi,"")
 
+		conv = conv.replace(/\bwe\b/gi,"")
+		
 		conv = conv.replace(/\bmenos\b/gi," - ")
 		conv = conv.replace(/\bm[aá]s\b/gi," + ")
 		conv = conv.replace(/\bpor\b/gi," * ")
@@ -629,6 +631,7 @@ window.evaluar_javascript = function(entrada,usuario,sala,hacia)
 	if(conv!="")
 	{
 		var resultado = ""
+		console.log("Conv: ",conv)
 		try{
 			resultado = eval(conv)
 			if(
@@ -726,16 +729,17 @@ window.fonetizar_mensaje = function(entrada,usuario,sala,hacia)
 		window.enviar_mensaje(entrada,sala,[usuario])
 	}
 }
-window.color_arcoiris = function(entrada,usuario,sala,hacia)
+window.color_arcoiris = function(entrada,número,usuario,sala,hacia)
 {
 	if(entrada.match(/^\s*color[\s:]+/gi)!=null)
 	{
-		entrada = entrada.replace(/^\s*color\s+/gi,"")
-		entrada = entrada.replace(/\[\/?b\]/gi,"")
-		console.log(entrada)
-		entrada = window.gradual(0,30,entrada,13,0,1)
-		entrada = "[b]"+entrada+"[/b]"
-		window.enviar_mensaje(entrada,sala,[])
+		var transformado = entrada.replace(/^\s*color\s+/gi,"")
+		transformado = transformado.replace(/\[\/?b\]/gi,"")
+		transformado = usuario+": "+transformado
+		var entrada_color = window.gradual(0,10,transformado,13,0,1)
+		transformado = "[b]"+entrada_color+"[/b]"
+		window.enviar_mensaje(transformado,sala,hacia)
+		window.eliminar_mensaje(número,sala)
 	}
 }
 window.definir = function(entrada,usuario,sala)
@@ -778,7 +782,7 @@ window.procesar_mensajes = function(b)
 			mostrar_avatares(entrada,usuario,hacia,sala)
 			window.evaluar_javascript(entrada,usuario,sala,hacia)
 			window.fonetizar_mensaje(entrada,usuario,sala,hacia)
-			window.color_arcoiris(entrada,usuario,sala,hacia)
+			window.color_arcoiris(entrada,número,usuario,sala,hacia)
 			window.definir(entrada,usuario,sala)
 		}
 	}
@@ -788,13 +792,11 @@ window.cargar = function()
 	window.cc.prototype.log = function (a, b, c) {
 		var info = b.split(" ")
 		var entrada = info[0]
-		var habitación = info[3]
-		habitación = habitación!=undefined?habitación.match(/\[\d+]/gi):undefined
-		var nueva_sala = habitación!=null?(+habitación.slice(-1)[0].slice(1,-1)):sala
-		if(nueva_sala!=window.sala)
+		var cambia = b.includes("changed")
+		if(cambia)
 		{
-			window.sala = nueva_sala
-			console.log("Sala: ",sala)
+			window.sala = +b.match(/\[\d+\]/gi).slice(-1)[0].slice(1,-1)
+			console.log("Sala: "+window.sala)
 		}
 		entrada = entrada=="enter"?1:entrada=="leave"?0:-1
 		var nombre = info.slice(1).join(" ")

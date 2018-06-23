@@ -53,13 +53,19 @@ window.enviar_mensaje = function(mensaje,sala,usuarios)
 window.cc.prototype.log = function (a, b, c) {
 	var info = b.split(" ")
 	var entrada = info[0]
-	var habitación = info[3]
-	habitación = habitación!=undefined?habitación.match(/\[\d+]/gi):undefined
-	var nueva_sala = habitación!=null?(+habitación.slice(-1)[0].slice(1,-1)):sala
-	if(nueva_sala!=window.sala)
+	//var nueva_sala = habitación!=null?(+habitación.slice(-1)[0].slice(1,-1)):window.sala
+	var cambia = b.includes("changed")
+	if(cambia)
 	{
-		window.sala = nueva_sala
-		console.log("Sala: ",sala)
+		var números_en_b = b.match(/\[\d+\]/gi)
+		if(números_en_b!=null)
+		{
+			window.sala = +números_en_b.slice(-1)[0].slice(1,-1)
+		}else{
+			window.sala = 1
+			console.log("Error b: "+ b)
+		}
+		console.log("Sala: "+window.sala)
 	}
 	entrada = entrada=="enter"?1:entrada=="leave"?0:-1
 	var nombre = info.slice(1).join(" ")
@@ -175,7 +181,7 @@ for(i in estilo)
 //Tres
 var estilo = [
 	["visibility","hidden"]
-	,["right","24px"],["top","-31px"], ["width","225px"]
+	,["right","45px"],["top","-31px"], ["width","225px"]
 	,["max-height","405px"]
 ]
 for(i in estilo)
@@ -216,6 +222,24 @@ var caritas = [
 [["pony_smile",":pony_smile:","27","27"],["pony_happy",":pony_happy:","27","27"],["pony_pathetic",":pony_pathetic:","27","27"],["pony_insane",":pony_insane:","27","27"],["pony_shock",":pony_shock:","27","27"],["pony_laugh",":pony_laugh:","27","27"],["pony_confused",":pony_confused:","27","27"],["pony_cheeky",":pony_cheeky:","27","27"],["pony_tease",":pony_tease:","27","27"],["pony_determined",":pony_determined:","27","27"],["pony_speechless",":pony_speechless:","27","27"],["pony_smile2",":pony_smile2:","27","27"],["pony_awkward",":pony_awkward:","27","27"],["pony_blush",":pony_blush:","27","27"],["pony_angry",":pony_angry:","27","27"],["pony_oops",":pony_oops:","27","27"],["pony_shifty(right)",":pony_shifty(right):","27","27"],["pony_shifty(left)",":pony_shifty(left):","27","27"],["pony_smug",":pony_smug:","27","27"],["pony_overwhelmed",":pony_overwhelmed:","27","27"],["pony_tired",":pony_tired:","27","27"],["pony_undecided",":pony_undecided:","27","27"],["pony_bemused",":pony_bemused:","27","27"],["pony_angel",":pony_angel:","27","27"],["pony_rage",":pony_rage:","27","27"],["pony_wince",":pony_wince:","27","27"],["pony_sad",":pony_sad:","27","27"],["pony_awful",":pony_awful:","27","27"],["pony_cry",":pony_cry:","27","27"],["pony_derpy",":pony_derpy:","27","27"],["pony_stunned1",":pony_stunned1:","27","27"],["pony_stunned2",":pony_stunned2:","27","27"],["pony_starry-eyed",":pony_starry-eyed:","27","27"],["pony_bawl",":pony_bawl:","27","27"],["pony_wink",":pony_wink:","27","27"],["pony_despair",":pony_despair:","27","27"],["pony_unsure",":pony_unsure:","27","27"],["pony_heart",":pony_heart:","27","27"],["pony_embarrassed",":pony_embarrassed:","34","27"],["pony_nerdy",":pony_nerdy:","27","27"],["pony_sick",":pony_sick:","27","27"],["pony_cool",":pony_cool:","27","27"]]
 ]
 
+function insertar_texto(texto,caso)
+{
+	var inicio = nuevo_texto.selectionStart
+	var fin = nuevo_texto.selectionEnd
+	var valor = nuevo_texto.value
+	var ini_texto = valor.slice(0,inicio)
+	var fin_texto = valor.slice(fin)
+	var hecho = false
+	nuevo_texto.value = ini_texto + texto + fin_texto
+	if(caso==0){nuevo_texto.selectionStart = inicio+texto.length;hecho=true}
+	if(caso==1){nuevo_texto.selectionStart = inicio+3;hecho=true}
+	if(caso==2){nuevo_texto.selectionStart = inicio+15;hecho=true}
+	if(caso==3){nuevo_texto.selectionStart = inicio+9;hecho=true}
+	if(!hecho){nuevo_texto.selectionStart = inicio}
+	nuevo_texto.selectionEnd = nuevo_texto.selectionStart
+	cambiar_foco()
+}
+
 for(i in caritas)
 {
 	var actual_0 = caritas[i]
@@ -229,8 +253,8 @@ for(i in caritas)
 		carita_img.setAttribute("height","16px")
 		carita_img.setAttribute("width","16px")
 		carita_img.setAttribute("alt",actual_1[1])
-		carita_img.addEventListener("click",x=>document.querySelector("textarea").value+=x.target.alt+" ")
-		carita_div.appendChild(carita_img)
+		carita_img.addEventListener("click",x=>insertar_texto(x.target.alt+" ",0))
+		carita_img.style.cursor="pointer"
 		caritas_nuevas[i].appendChild(carita_img)
 	}
 }
@@ -247,9 +271,130 @@ usuarios.addEventListener("focus",enfocar_usuarios)
 usuarios.addEventListener("blur",desenfocar_usuarios)
 nuevo_texto.addEventListener("focus",enfocar_texto)
 nuevo_texto.addEventListener("blur",desenfocar_texto)
+
 function cambiar_foco()
 {
 	if(window.hay_foco_usuarios==undefined){window.hay_foco_usuarios = false}
 	if(!window.hay_foco_usuarios&!window.hay_foco_texto){nuevo_texto.focus()}
 }
-setInterval(cambiar_foco,143)
+
+function agregar_click_mensajes_y_usuarios(){
+	Array.map(document.querySelectorAll(".chatUsers li"),x=>{
+		if(x.attributes.getNamedItem("onclick")==undefined)
+		{
+			x.setAttribute("onclick","cambiar_foco()")
+		}
+	})
+	Array.map(document.querySelectorAll(".chatMessage.ts .pw .sayto"),x=>{
+		if(x.attributes.getNamedItem("onclick")==undefined)
+		{
+			x.setAttribute("onclick","cambiar_foco()")
+		}
+	})
+}
+document.querySelector(".buttonWrapper .to").addEventListener("DOMSubtreeModified",cambiar_foco)
+setInterval(agregar_click_mensajes_y_usuarios,300)
+
+var botones = document.querySelectorAll(".goog-toolbar-button")
+botones[0].addEventListener("click",x=>insertar_texto("[b][/b]",1))
+botones[1].addEventListener("click",x=>insertar_texto("[i][/i]",1))
+botones[2].addEventListener("click",x=>insertar_texto("[u][/u]",1))
+
+
+var div_paleta = document.createElement("div")
+div_paleta.id = "id_paleta"
+div_paleta.className = "goog-menu goog-menu-vertical"
+div_paleta.style = "visibility: visible; left: 88px; top: 211.8px;"
+div_paleta.setAttribute("role","menu")
+div_paleta.setAttribute("aria-haspopup","true")
+div_paleta.style.display = "none"
+var filas = [1,1,6]
+var colores = [
+	[
+		["000000","444444","666666","999999","cccccc","eeeeee","f3f3f3","ffffff"]
+	],[
+		["ff0000","ff9900","ffff00","00ff00","00ffff","0000ff","9900ff","ff00ff"]
+	],[
+		["f4cccc","fce5cd","fff2cc","d9ead3","d0e0e3","cfe2f3","d9d2e9","ead1dc"]
+		,["ea9999","f9cb9c","ffe599","b6d7a8","a2c4c9","9fc5e8","b4a7d6","d5a6bd"]
+		,["e06666","f6b26b","ffd966","93c47d","76a5af","6fa8dc","8e7cc3","c27ba0"]
+		,["cc0000","e69138","f1c232","6aa84f","45818e","3d85c6","674ea7","a64d79"]
+		,["990000","b45f06","bf9000","38761d","134f5c","0b5394","351c75","741b47"]
+		,["660000","783f04","7f6000","274e13","0c343d","073763","20124d","4c1130"]
+	]
+]
+for(var i=0;i<3;i++)
+{
+	var actual_0 = filas[i]
+	var contenido_paleta = document.createElement("div")
+	var paleta_tabla = document.createElement("table")
+	var paleta_cuerpo = document.createElement("tbody")
+	contenido_paleta.className = "goog-palette"
+	paleta_tabla.className = "goog-palette-table"
+	paleta_cuerpo.className = "goog-palette-body"
+	paleta_tabla.setAttribute("role","grid")
+	paleta_tabla.setAttribute("cellspacing","0")
+	paleta_tabla.setAttribute("cellpadding","0")
+	for(var j=0;j<actual_0;j++)
+	{
+		var paleta_fila = document.createElement("tr")
+		paleta_fila.className = "goog-palette-row"
+		paleta_tabla.setAttribute("role","row")
+		for(var k=0;k<8;k++)
+		{
+			var paleta_elemento = document.createElement("td")
+			var paleta_fondo = document.createElement("div")
+			paleta_elemento.className = "goog-palette-cell"
+			paleta_fondo.className = "goog-palette-colorswatch"
+			paleta_tabla.setAttribute("role","gridcell")
+			paleta_fondo.style["background-color"] = "#"+colores[i][j][k]
+			paleta_elemento.appendChild(paleta_fondo)
+			paleta_fila.appendChild(paleta_elemento)
+		}
+		paleta_cuerpo.appendChild(paleta_fila)
+	}
+	paleta_tabla.appendChild(paleta_cuerpo)
+	contenido_paleta.appendChild(paleta_tabla)
+	div_paleta.appendChild(contenido_paleta)
+}
+Array.map(div_paleta.querySelectorAll(".goog-palette .goog-palette-cell"),x=>x.addEventListener("click",y=>{
+	insertar_texto(
+		"[color=#"+y.target.style["background-color"].match(/\d+/gi).map(
+			x=>("0"+(+x).toString(16)).slice(-2)
+		).join("")+"][/color]"
+		,2
+	)
+	div_paleta.style.display = "none"
+}))
+
+document.body.appendChild(div_paleta)
+
+function borrar_paleta_original()
+{
+	var hecho = false
+	console.log("Buscando paleta para borrar.")
+	var paletas = document.querySelectorAll(".goog-palette")
+	Array.map(paletas,x=>{
+		if(x.parentElement.id=="")
+		{
+			x.parentElement.remove()
+			hecho = true
+			console.log("Paleta borrada.")
+		}
+	})
+	if(!hecho)
+	{
+		setTimeout(borrar_paleta_original,1000)
+	}
+}
+setTimeout(borrar_paleta_original,1000)
+function mostrar_paleta()
+{
+	var estilo_paleta = div_paleta.style
+	estilo_paleta.display = estilo_paleta.display=="none"?"":"none"
+}
+document.querySelector("#\\:1b").addEventListener("click",mostrar_paleta)
+
+document.querySelector("#\\:1c").addEventListener("click",()=>insertar_texto("[size=10][/size]",3))
+document.querySelector("#\\:1d").addEventListener("click",()=>insertar_texto("[size=20][/size]",3))
+document.querySelector("#\\:1e").addEventListener("click",()=>insertar_texto("[size=30][/size]",3))
