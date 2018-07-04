@@ -1,5 +1,5 @@
 body {
-	color:#00ff00aa;
+	color:#3412abaa;
 	font-weight:bold;
 	text-shadow: 1px 1px 0.6em #121212de;
 }
@@ -7,9 +7,9 @@ img {
 	box-shadow: 0px 0px 8em #121212de;
 }
 textarea{
-	color: #ff0;
-	border: 4px solid #12ff3480;
-	background-color: #34ff1210;
+	color: #987;
+	border: 4px solid #12ff3499;
+	background-image: url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/textarea_color.png");
 	font-weight: bold;
 	font-size: 1.em;
 }
