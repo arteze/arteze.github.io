@@ -17,14 +17,14 @@ textarea{
 	background-image: url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/Neko_5.png");
 }
 .chatRoomsAndMessages{
-	background-image:url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/Neko_5.png");
+	background-image: url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/Neko_5.png");
 	border: 2px solid #828effee;
 }
 .chatMessagesScrollBar div {
-	background-color: #828effee;
+	background-image: url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/deslizador.png");
 }
 .chatUsersScrollBar div {
-	background-color: #828effee;
+	background-image: url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/deslizador_usuarios.png");
 }
 .chatUsersTab {
 	background-position: center;
@@ -45,17 +45,17 @@ textarea{
 	background: #70a00015 url("");
 }
 .chatSendControlsWrapper{
-	background-color: #abcdef10;
+	background-image: url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/enviar.png");
 	border: 3px solid #3d85c690;
 }
 .chatRoom{
-	background-color: #20304030 !important;
+	background-image: url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/habitacion.png") !important;
 }
 .hl{
-	background-color:#34121243 !important;
+	background-image: url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/etiquetar.png") !important;
 }
 .chatRooms>ul>li>a{
-	background-color:#12321280 !important;
+	background-color: url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/titulo_sala.png") !important;
 }
 
 /*chatUserPopupWrapper registered moderate*/
