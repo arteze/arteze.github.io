@@ -55,7 +55,7 @@ textarea{
 	background-image: url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/etiquetar.png") !important;
 }
 .chatRooms>ul>li>a{
-	background-color: url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/titulo_sala.png") !important;
+	background-image: url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/titulo_sala.png") !important;
 }
 
 /*chatUserPopupWrapper registered moderate*/
