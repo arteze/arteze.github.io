@@ -7,7 +7,7 @@ img {
 	box-shadow: 0px 0px 8em #121212de;
 }
 textarea{
-	color: #987;
+	color: #321e;
 	border: 4px solid #12ff3499;
 	background-image: url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/textarea_color.png");
 	font-weight: bold;
@@ -29,8 +29,14 @@ textarea{
 .chatUsersTab {
 	background-position: center;
 	background-image: url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/Neko_BN_5.gif");
-	background-color: #eee;
-	border: 2px solid #000000;
+	background-color: #eeeeee80;
+	border: 2px solid #00000080;
+	font-weight:bold;
+	text-shadow: 1px 1px 0.6em #121212de !important;
+}
+.groupIcon {
+	width: 65px;
+	height: 18px;
 }
 .admin .groupIcon {
 	background-image: url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/2FVOqTE.png");
