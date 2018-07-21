@@ -796,7 +796,7 @@ window.soy_bot = function(función)
 	console.log(999,función)
 	if(document.title=="Neko7w7")
 	{
-		window.descargar("https://kawaii45.chatovod.com/chat/start",x=>window.descargar_nick(x,función))
+		window.descargar(location.origin+"/chat/start",x=>window.descargar_nick(x,función))
     }
 }
 window.procesar_mensajes = function(b)
