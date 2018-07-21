@@ -44,6 +44,9 @@ textarea{
 .moderator .groupIcon {
 	background-image: url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/8XXEYKP.png");
 }
+.moderator .groupIcon:nth-child(2) {
+	background-image: url("https://st1.chatovod.com/widget/i/icons/moderator.png");
+}
 .user .groupIcon{
 	background-image: url("https://raw.githubusercontent.com/ArtEze/Otecald/master/CSS/Chatovod/Neko/kmB7Lqn.png");
 }
