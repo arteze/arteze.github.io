@@ -789,11 +789,11 @@ window.descargar_nick = function(datos,función)
 {
 	var nombre = JSON.parse(datos)[0].lastNick
 	var es_bot = nombre.match(/bot/gi)!=null
+	console.log(es_bot)
 	if(es_bot){función()}
 }
 window.soy_bot = function(función)
 {
-	console.log(999,función)
 	if(document.title=="Neko7w7")
 	{
 		window.descargar(location.origin+"/chat/start",x=>window.descargar_nick(x,función))
