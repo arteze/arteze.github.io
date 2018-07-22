@@ -1,5 +1,5 @@
 ﻿// ==UserScript==
-// @name		 Mejora Chatovod 2
+// @name		 Bot Chatovod Asuna
 // @version	  0.7
 // @description  Mejoras para el Chatovod.
 // @author	   ArtEze
@@ -130,7 +130,7 @@ window.cargar = function()
 			var entrada = info[0]
 			entrada = entrada=="enter"?1:entrada=="leave"?0:-1
 			var nombre = info.slice(1).join(" ")
-			if(entrada>0)
+			if(entrada>=0)
 			{
 				if(window.idos[nombre]==undefined){window.idos[nombre] = 0}
 				if(entrada==0&window.idos[nombre]==0)
