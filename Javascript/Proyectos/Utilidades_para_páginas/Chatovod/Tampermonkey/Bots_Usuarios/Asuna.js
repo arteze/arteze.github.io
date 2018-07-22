@@ -130,21 +130,21 @@ window.cargar = function()
 			var entrada = info[0]
 			entrada = entrada=="enter"?1:entrada=="leave"?0:-1
 			var nombre = info.slice(1).join(" ")
+			var mensaje;
 			if(entrada>=0)
 			{
 				if(window.idos[nombre]==undefined){window.idos[nombre] = 0}
 				if(entrada==0&window.idos[nombre]==0)
 				{
-					var mensaje = window.enviar_mensaje("¡Qué mal que te vayas " + nombre + "! ¡Te extrañaremos, vuelve pronto! :3",1,[])
-					setTimeout(mensaje,Math.floor(Math.random()*1000*60*5))
+					mensaje = "¡Qué mal que te vayas " + nombre + "! ¡Te extrañaremos, vuelve pronto! :3"
 					window.idos[nombre] = 1
 				}
 				if(entrada==1&window.entrados[nombre]==0)
 				{
-					var mensaje = window.enviar_mensaje("¡Bienvenido " + nombre + "! ¡Esto es Neko7w7!",1,[])
-					setTimeout(mensaje,Math.floor(Math.random()*1000*60*5))
+					mensaje = "¡Bienvenido " + nombre + "! ¡Esto es Neko7w7!"
 					window.entrados[nombre] = 1
 				}
+				setTimeout(()=>window.enviar_mensaje(mensaje,1,[]),Math.floor(Math.random()*1000*60*5))
 			}
 		}
 		window.yq = function(a, b) {
