@@ -133,6 +133,7 @@ window.cargar = function()
 			var mensaje;
 			if(entrada>=0)
 			{
+				if(window.entrados[nombre]==undefined){window.entrados[nombre] = 0}
 				if(window.idos[nombre]==undefined){window.idos[nombre] = 0}
 				if(entrada==0&window.idos[nombre]==0)
 				{
