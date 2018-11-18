@@ -47,6 +47,7 @@ function agregar_y_cambiar_video()
 				{
 					location.href = "https://www.youtube.com/watch?v="+actual
 					hecho = true
+					break
 				}
 			}
 			if(!hecho)
