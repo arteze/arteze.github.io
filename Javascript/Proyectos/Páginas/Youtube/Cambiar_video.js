@@ -1,12 +1,14 @@
 ﻿// ==UserScript==
-// @name         Youtube cambia
-// @namespace    http://tampermonkey.net/
-// @version      0.1
+// @name		 Youtube cambia
+// @namespace	http://tampermonkey.net/
+// @version	  0.1
 // @description  Cambia video de Youtube si ya se vio.
-// @author       You
-// @match        https://www.youtube.com/*
-// @grant        none
+// @author	   You
+// @match		https://www.youtube.com/*
+// @grant		none
 // ==/UserScript==
+
+console.log(2+2)
 
 function analizar_link(url)
 {
@@ -45,9 +47,14 @@ function agregar_y_cambiar_video()
 				var actual = relacionados[i]
 				if(!videos_array.includes(actual))
 				{
-					location.href = "https://www.youtube.com/watch?v="+actual
-					hecho = true
-					break
+					if(actual!=undefined)
+					{
+						console.log(relacionados)
+					}else{
+						location.href = "https://www.youtube.com/watch?v="+actual
+						hecho = true
+						break
+					}
 				}
 			}
 			if(!hecho)
@@ -58,4 +65,4 @@ function agregar_y_cambiar_video()
 		}
 	}
 }
-agregar_y_cambiar_video()
+setTimeout(agregar_y_cambiar_video,10000)
