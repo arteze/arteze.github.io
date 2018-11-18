@@ -21,6 +21,7 @@ function guardar_videos(array)
 }
 function agregar_y_cambiar_video()
 {
+	if(!location.href.includes("watch")){return;}
 	var videos = localStorage.getItem("videos")
 	var url = document.querySelector("#movie_player").getVideoUrl()
 	var id = analizar_link(url)
@@ -42,22 +43,25 @@ function agregar_y_cambiar_video()
 			.filter(x=>x.getAttributeNode("use-hovered-property"))
 			.map(x=>analizar_link(x.querySelector("a").href))
 			var hecho = false
-			for(var i in relacionados)
+			for(var i=0;i<relacionados.length;i++)
 			{
 				var actual = relacionados[i]
 				if(!videos_array.includes(actual))
 				{
-					if(actual!=undefined)
+					if(actual==undefined)
 					{
-						console.log(relacionados)
+						console.log(i,relacionados.length,relacionados)
 					}else{
-						location.href = "https://www.youtube.com/watch?v="+actual
-						hecho = true
-						break
+                        if(document.title[0]!=".")
+                        {
+                            location.href = "https://www.youtube.com/watch?v="+actual
+                            hecho = true
+                            break
+                        }
 					}
 				}
 			}
-			if(!hecho)
+			if(!hecho & document.title[0]!=".")
 			{
 				var aleatorio = Math.floor(Math.random()*relacionados.length)
 				location.href = "https://www.youtube.com/watch?v="+relacionados[aleatorio]
@@ -65,4 +69,4 @@ function agregar_y_cambiar_video()
 		}
 	}
 }
-setTimeout(agregar_y_cambiar_video,10000)
+setInterval(agregar_y_cambiar_video,10000)
