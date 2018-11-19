@@ -8,8 +8,6 @@
 // @grant		none
 // ==/UserScript==
 
-console.log(2+2)
-
 function analizar_link(url)
 {
 	return url.split("?")[1].split("&").map(x=>x.split("=")).filter(x=>x[0]=="v")[0][1]
@@ -21,6 +19,7 @@ function guardar_videos(array)
 }
 function agregar_y_cambiar_video()
 {
+	console.log(Math.random())
 	if(!location.href.includes("watch")){return;}
 	var videos = localStorage.getItem("videos")
 	var url = document.querySelector("#movie_player").getVideoUrl()
@@ -68,4 +67,4 @@ function agregar_y_cambiar_video()
 		}
 	}
 }
-setTimeout(agregar_y_cambiar_video,10000)
+window.intervalo = setInterval(agregar_y_cambiar_video,10000)
