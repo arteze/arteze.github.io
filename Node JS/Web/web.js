@@ -1,21 +1,19 @@
-﻿// http://190.193.163.21:82/ejemplo
+﻿// https://stackoverflow.com/questions/46141175/running-node-js-server-on-localhost
+// http://190.193.163.21:82/ejemplo
 
-var http = require('http')
-var url=require('url');
-var hostname = '192.168.3.245'
-var port = 82
-var server=http.createServer(function(req,res){
-    var pathname=url.parse(req.url).pathname;
-	res.end(
-		"<h1>"+(pathname=='/ejemplo'?
-			"Correcto: "
-		:
-			"Error 404: "
-		)+((1000+Math.floor(Math.random()*1000))+"").slice(1)
-		+"</h1>"
-	)
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
 
-})
-server.listen(port, hostname, () => {
-  console.log("Ejecutando servidor http://"+hostname+":"+port)
-})
+http.createServer(function (req, res) {
+    const filePath = path.join(__dirname, 'index.html');
+    const stat = fs.statSync(filePath);
+
+    res.writeHead(200, {
+		'Content-Type': 'text/html',
+		'Content-Length': stat.size
+    });
+
+    var stream = fs.createReadStream(filePath);
+    stream.pipe(res);
+}).listen(8080);
