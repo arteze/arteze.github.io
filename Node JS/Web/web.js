@@ -16,4 +16,7 @@ http.createServer(function (req, res) {
 
     var stream = fs.createReadStream(filePath);
     stream.pipe(res);
+	
+	console.log(new Date())
+	
 }).listen(8080);
