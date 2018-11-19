@@ -36,7 +36,7 @@ function agregar_y_cambiar_video()
 			videos_array.push(id)
 			guardar_videos(videos_array)
 			window.último_enlace = id
-			window.title = ". " + window.title
+			document.title = ". " + document.title
 		}
 		else
 		{
