@@ -8,7 +8,7 @@
 // @grant		none
 // ==/UserScript==
 
-function descargar(dirección)
+window.descargar=function(dirección)
 {
 	var descarga = new XMLHttpRequest()
 	var hecho = false
@@ -16,7 +16,7 @@ function descargar(dirección)
 		var descargado = descarga.responseText
 		if (descarga.readyState == 4 && descarga.status == 200)
 		{
-			//console.log(descarga.responseText)
+			console.log(descarga.responseText)
 		}
 	}
 	descarga.open("GET",dirección)
@@ -34,7 +34,11 @@ function guardar_videos(array)
 function agregar_y_cambiar_video()
 {
 	console.log(Math.random())
-	descargar("http://192.168.4.245:8080/")
+    try{document.querySelector("#ifr").remove()}catch(e){}
+	var ifr=document.createElement("iframe")
+	ifr.id="ifr"
+	ifr.src="http://192.168.4.245:8080/"
+	document.body.appendChild(ifr)
 	if(!location.href.includes("watch")){return;}
 	var videos = localStorage.getItem("videos")
 	var url = document.querySelector("#movie_player").getVideoUrl()
