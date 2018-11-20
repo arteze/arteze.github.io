@@ -8,6 +8,20 @@
 // @grant		none
 // ==/UserScript==
 
+function descargar(dirección)
+{
+	var descarga = new XMLHttpRequest()
+	var hecho = false
+	descarga.onreadystatechange = function(){
+		var descargado = descarga.responseText
+		if (descarga.readyState == 4 && descarga.status == 200)
+		{
+			//console.log(descarga.responseText)
+		}
+	}
+	descarga.open("GET",dirección)
+	descarga.send()
+}
 function analizar_link(url)
 {
 	return url.split("?")[1].split("&").map(x=>x.split("=")).filter(x=>x[0]=="v")[0][1]
@@ -20,6 +34,7 @@ function guardar_videos(array)
 function agregar_y_cambiar_video()
 {
 	console.log(Math.random())
+	descargar("http://192.168.4.245:8080/")
 	if(!location.href.includes("watch")){return;}
 	var videos = localStorage.getItem("videos")
 	var url = document.querySelector("#movie_player").getVideoUrl()
