@@ -14,9 +14,13 @@ http.createServer(function (req, res) {
 		'Content-Length': stat.size
     });
 
+	var dos_dígitos = x=>("00"+x).slice(-2)
     var stream = fs.createReadStream(filePath);
     stream.pipe(res);
-	
-	console.log(new Date())
+	var fecha = new Date()
+	var horas = dos_dígitos(fecha.getHours())
+	var minutos = dos_dígitos(fecha.getMinutes())
+	var segundos = dos_dígitos(fecha.getSeconds())
+	console.log(horas,minutos,segundos)
 	
 }).listen(8080);
