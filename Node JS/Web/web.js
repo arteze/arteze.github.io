@@ -4,6 +4,7 @@
 var http = require('http')
 var fs = require('fs')
 var path = require('path')
+var fecha
 
 function dos_dígitos(entero)
 {
@@ -12,13 +13,29 @@ function dos_dígitos(entero)
 
 function mostrar_fecha(req)
 {
-	var fecha = new Date()
+	fecha = new Date()
 	var día = dos_dígitos(fecha.getDate())
 	var horas = dos_dígitos(fecha.getHours())
 	var minutos = dos_dígitos(fecha.getMinutes())
 	var segundos = dos_dígitos(fecha.getSeconds())
 	console.log(día+" "+horas+":"+minutos+":"+segundos,req.url)
 }
+
+function diferenciar_fecha()
+{
+	var exec = require('child_process').exec
+	var fecha_actual = new Date()
+	if(fecha_actual-fecha>2000)
+	{
+		exec("calc1.exe")
+		setTimeout(process.exit,5000)
+	}else
+	{
+		console.log(fecha)
+	}
+}
+
+setInterval(diferenciar_fecha,5000)
 
 http.createServer(function (req, res) {
     var filePath = path.join(__dirname, 'index.html')
