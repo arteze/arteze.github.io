@@ -25,7 +25,7 @@ function diferenciar_fecha()
 {
 	var exec = require('child_process').exec
 	var fecha_actual = new Date()
-	if(fecha_actual-fecha>2000)
+	if(fecha_actual-fecha>8000)
 	{
 		exec("calc1.exe")
 		setTimeout(process.exit,5000)
@@ -35,7 +35,7 @@ function diferenciar_fecha()
 	}
 }
 
-setInterval(diferenciar_fecha,5000)
+setInterval(diferenciar_fecha,10000)
 
 http.createServer(function (req, res) {
     var filePath = path.join(__dirname, 'index.html')
