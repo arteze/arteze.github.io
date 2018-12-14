@@ -1,57 +1,123 @@
-﻿function capturar_valores_viví_tu_suerte()
+﻿window.descargar=function(dirección,función)
 {
-	var salida="\n"
-	var pares_números=div_pizarra.getElementsByClassName("texto_cabezas")
-	var texto_fecha=fecha.value
-	texto_fecha=texto_fecha.replace(/\//g,"-")
-	salida+="/*"+texto_fecha+"*/[\n"
-	var array=[]
-	var sorteo=[]
-	var arrastre=0
-	var k=0
-	for(var i=0;i<pares_números.length;i++)
-	{
-		var par_actual=pares_números[i].getElementsByTagName("td")
-		for(var j=1;j<par_actual.length;j+=2)
+	var descarga = new XMLHttpRequest()
+	var hecho = false
+	descarga.onreadystatechange = function(){
+		var descargado = descarga.responseText
+		if( descarga.readyState==4 && descarga.status==200 )
 		{
-			if(k==20)
-			{
-				sorteo.push(array)
-				array=[]
-				k=0
-			}
-			var ambo=par_actual[j].textContent.slice(3,-1)
-			//console.log(k,ambo)
-			if(ambo!="")
-			{
-				if(k%2==0)
-				{
-					array[k/2]=ambo
-				}
-				else
-				{
-					array[(k-1)/2+10]=ambo
-				}
-				k++
-			}
+			función(descarga.responseText,dirección)
 		}
 	}
-	for(var i=0;i<sorteo.length;i++)
+	descarga.open("GET",dirección)
+	descarga.send()
+}
+function procesar_día(respuesta,dirección)
+{
+	if(respuesta==undefined)
 	{
-		var ambos=""
-		var actual=sorteo[i]
-		var condición=i==3|actual.length==0
-		if(actual.length>0)
-		{
-			if(i>0){ambos+=",\n"}
-			ambos+="\""
-			ambos+=(actual+"").replace(/,/g," ")
-			ambos+="\""
-		}
-		salida+=ambos
+		respuesta = document.children[0].innerHTML
+		dirección = "000000"
 	}
-	salida+="],\n\n"
+	if(window.todo==undefined)
+	{
+		window.todo=[]
+		window.feriados=[]
+	}
+	var html = document.createElement("html")
+	html.innerHTML = respuesta
+	var texto = html.textContent
+	var día = {}
+	var letras = texto.match(/(([A-Z])\n){4}/g)
+	var fecha = dirección.match(/\d{6}/gi)
+	var i;
+	if(letras==undefined)
+	{
+		var feriado = fecha[0]
+		feriados.unshift(feriado)
+		console.log(feriado,feriados)
+		return;
+	}
+	día.juegos = ["Pr","Ma","Ve","No"].map(x=>+texto.includes(x))
+	día.turnos = []
+	for(i in día.juegos)
+	{
+		if(día.juegos[i]==1)
+		{
+			día.turnos.push([])
+		}
+	}
+	día.juegos = día.juegos.join("")
+	día.fecha = fecha[0]
+	día.letras = letras.map(x=>x.split("\n").join(""))
+	i=0
+	while(true)
+	{
+		var regex = new RegExp("\n"+(++i)+"\\.\n+[0-9\\-]+\n","g")
+		var resultados = texto.match(regex)
+		if(resultados==undefined){break}
+		resultados=resultados.map(x=>x.split(/\n+/)[2])
+		if(i==1){día.unidades=resultados.map(x=>x.slice(-1)).join("")}
+		for(var j in resultados)
+		{
+			día.turnos[j].push(resultados[j])
+		}
+	}
+	console.log(día.fecha,día.juegos,día.unidades,día.letras.join(" "))
+	for(i in día.turnos)
+	{
+		console.log(día.turnos[i].join(" "))
+	}
+	todo.unshift(día)
+}
+function descargar_todo()
+{
+	window.fecha = new Date()
+	window.b = 1
+	while(true)
+	{
+		if(fecha.getYear()<111){break}
+		var no_es_domingo = fecha.getDay(fecha)!=0
+		if(no_es_domingo)
+		{
+			var AAMMDD = fecha.getDate()+100*(fecha.getMonth()+1)+(fecha.getYear()-100)*10000
+			var sitio = "http://www.vivitusuerte.com/datospizarra_loteria.php?fecha="+AAMMDD+"&loteria=25"
+			setTimeout("descargar('"+sitio+"',procesar_día)",1000*5*b)
+			++b
+		}
+		fecha = new Date(+fecha-1000*60*60*24)
+	}
+}
+if(window.todo==undefined)
+{
+	window.feriados = []
+	window.todo = []
+}
+descargar_todo()
+
+// Análisis
+function analizar_dígitos(dígitos)
+{
+	return "\n"+[0,1,2,3,4,5,6,7,8,9].map(
+		y=>y+": "+dígitos.split(y).map(x=>x.length).reverse().slice(0,20).join(" ")
+	).join("\n")+"\n"
+}
+function guardar_todo()
+{
+	var salida = ""
+	salida += "\n"
+	for(var i in todo)
+	{
+		var día = todo[i]
+		if(i!=0){salida += "\n"}
+		salida += "   " + día.fecha
+		salida += " " + día.juegos
+		salida += " " + día.unidades
+		salida += " " + día.letras.join(" ")
+		salida += "\n"
+		salida += día.turnos.map(x=>x.join(" ")).join("\n")
+		salida += "\n"
+	}
+	salida += "\n"
 	return salida
 }
-//clear();capturar_valores()
-clear();capturar_valores_viví_tu_suerte()
