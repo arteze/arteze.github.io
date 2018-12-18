@@ -47,18 +47,19 @@ function atrasos(unidades)
 	}
 	return atrasos
 }
-function buscar_binario(binario,cifras)
+function obtener_subcadenas(cadena,cifras)
 {
-	var objeto = []
-	for(var i=0;i<binario.length-cifras+1;i++)
+	var frecuencias = []
+	for(var i=0;i<=cadena.length-cifras;i++)
 	{
-		var parte = binario.slice(i,i+cifras)
-		var elementos = objeto.map(x=>x[0])
+		var parte = cadena.slice(i,i+cifras)
+		var elementos = frecuencias.map(x=>x[0])
 		var pos = elementos.indexOf(parte)
-		if(pos==-1){objeto.push([parte,0]);pos=objeto.length-1}
-		++objeto[pos][1]
+		if(pos==-1){frecuencias.push([parte,0]);pos=frecuencias.length-1}
+		++frecuencias[pos][1]
 	}
-	return objeto
+	frecuencias.sort((a,b)=>a[1]<b[1])
+	return frecuencias
 }
 function el_más_atrasado(cifras)
 {

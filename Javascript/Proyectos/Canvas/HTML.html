@@ -1,0 +1,17 @@
+﻿<html>
+	<head>
+		<meta charset="utf-8" ></meta>
+		<title>Canvas pixel</title>
+		<script src="programa.js" ></script>		
+	</head>
+	<body>
+		Ancho: 
+		<button onclick="window.gens(this)">-</button>
+		<input id="ancho" onkeyup="window.gens()"></input>
+		<button onclick="window.gens(this)">+</button>
+		, Alto: <input id="alto"  onkeyup="window.gens()"></input>
+		<textarea id=caracteres onkeyup="window.gens()"></textarea>
+		<button onclick="window.gens()">Generar</button>
+		<p><canvas id="canvas" width=1000 height=1000></canvas></p>
+	</body>
+</html>
