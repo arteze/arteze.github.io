@@ -6,10 +6,12 @@
 	</head>
 	<body>
 		Ancho: 
-		<button onclick="window.gens(this)">-</button>
+		<button class="ancho" onclick="window.gens(this)">-</button>
 		<input id="ancho" onkeyup="window.gens()"></input>
-		<button onclick="window.gens(this)">+</button>
-		, Alto: <input id="alto"  onkeyup="window.gens()"></input>
+		<button class="ancho" onclick="window.gens(this)">+</button>
+		, <button class="alto" onclick="window.gens(this)">-</button> 
+		Alto: <input id="alto"  onkeyup="window.gens()"></input>
+		<button class="alto" onclick="window.gens(this)">+</button> 
 		<textarea id=caracteres onkeyup="window.gens()"></textarea>
 		<button onclick="window.gens()">Generar</button>
 		<p><canvas id="canvas" width=1000 height=1000></canvas></p>

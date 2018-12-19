@@ -1,4 +1,16 @@
-﻿function generar_atrasos(cantidad)
+﻿// ==UserScript==
+// @name         Viví tu suerte
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  Funciones utilitarias para el análisis numérico.
+// @author       ArtEze
+// @match        http://www.vivitusuerte.com/datospizarra_loteria.php?fecha=*
+// @grant        none
+// ==/UserScript==
+
+window.otecald = {}
+
+window.otecald.generar_atrasos = function(cantidad)
 {
 	var salida=""
 	var array=[]
@@ -17,10 +29,10 @@
 	}
 	return salida
 }
-function convertir_lista_geogebra(dígitos)
+window.otecald.convertir_lista_geogebra = function(cadena,cantidad)
 {
 	var salida=""
-	var array=dígitos.split(" ")
+	var array=cadena.split(" ")
 	array.unshift(0)
 	for(var i in array)
 	{
@@ -30,15 +42,15 @@ function convertir_lista_geogebra(dígitos)
 	salida += "Polígono({("+array.join("),(")+")})"
 	return salida
 }
-function atrasos(unidades)
+window.otecald.atrasos = function(cadena,cantidad)
 {
 	var atrasos = []
-	for(var i=1;i<unidades.length;i++)
+	for(var i=1;i<cadena.length;i++)
 	{
-		var actual=unidades[i]
+		var actual=cadena[i]
 		for(var j=i-1;j>=0;j--)
 		{
-			if(unidades[j]==actual)
+			if(cadena[j]==actual)
 			{
 				atrasos.push(i-j)
 				break
@@ -47,12 +59,12 @@ function atrasos(unidades)
 	}
 	return atrasos
 }
-function obtener_subcadenas(cadena,cifras)
+window.otecald.obtener_subcadenas = function(cadena,cantidad)
 {
 	var frecuencias = []
-	for(var i=0;i<=cadena.length-cifras;i++)
+	for(var i=0;i<=cadena.length-cantidad;i++)
 	{
-		var parte = cadena.slice(i,i+cifras)
+		var parte = cadena.slice(i,i+cantidad)
 		var elementos = frecuencias.map(x=>x[0])
 		var pos = elementos.indexOf(parte)
 		if(pos==-1){frecuencias.push([parte,0]);pos=frecuencias.length-1}
@@ -61,7 +73,7 @@ function obtener_subcadenas(cadena,cifras)
 	frecuencias.sort((a,b)=>a[1]<b[1])
 	return frecuencias
 }
-function el_más_atrasado(cifras)
+window.otecald.el_más_atrasado = function(cifras)
 {
 	var más_atrasados = ""
 	for(var i = 150;i<cifras.length;i++)
@@ -78,7 +90,7 @@ function el_más_atrasado(cifras)
 	}
 	return más_atrasados
 }
-function detectar_cambios(cadena)
+window.otecald.detectar_cambios = function(cadena)
 {
 	var cambios=[]
 	var cambio=""
@@ -94,7 +106,7 @@ function detectar_cambios(cadena)
 	cambios.push(cambio)
 	return cambios
 }
-function frecuencias_diez()
+window.otecald.frecuencias_diez = function()
 {
 	var diez=[]
 	var i;
@@ -104,15 +116,15 @@ function frecuencias_diez()
 	}
     return diez
 }
-function salidores(cadena,desde)
+window.otecald.salidores = function(cadena,desde)
 {
 	var salidas = []
-	var cadena = cadena.split("")
+	cadena = cadena.split("")
 	var inicio = 0
 	if(desde!=undefined){inicio=cadena.length-desde}
 	for(var i=inicio;i<cadena.length;i++)
 	{
-		var frecuencias=frecuencias_diez();
+		var frecuencias=window.otecald.frecuencias_diez();
 		for(var j=i;j>=0;j--)
 		{
 			frecuencias[cadena[j]][1]++
@@ -123,7 +135,7 @@ function salidores(cadena,desde)
 	}
 	return salidas
 }
-function formatear_salidores(array)
+window.otecald.formatear_salidores = function(array)
 {
 	return array.map(
 		x=>x[0]
@@ -131,15 +143,18 @@ function formatear_salidores(array)
 		+" "+x[1].map(x=>x[1]).join(" ")
 	).join("\n")
 }
-function analizar_frecuencias(array)
+window.otecald.analizar_frecuencias = function(array)
 {
 	var salida=[]
 	for(var i =1;i<array.length;i++)
 	{
-		t6_3.push([array[i][0],array[i-1][1].map(x=>x[0]).indexOf(array[i][0])])
+		salida.push([array[i][0],array[i-1][1].map(x=>x[0]).indexOf(array[i][0])])
 	}
 	return salida
 }
-// Foreach 
-var array = []
-array.forEach((e,i,a)=>console.log(e,i,a)) // elem,i,arr
+window.otecald.foreach = function(e,i,a)
+{
+	var array = [2,3,4]
+	array.forEach((e,i,a)=>console.log(e,i,a)) // elem,i,arr
+}
+console.log("otecald.formatear_salidores(otecald.salidores(unis,10))")
