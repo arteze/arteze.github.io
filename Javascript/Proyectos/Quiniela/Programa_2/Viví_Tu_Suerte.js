@@ -68,7 +68,7 @@ function procesar_día(respuesta,dirección)
 	{
 		console.log(día.turnos[i].join(" "))
 	}
-	todo.unshift(día)
+	window.todo.unshift(día)
 }
 function descargar_todo()
 {
@@ -76,7 +76,7 @@ function descargar_todo()
 	window.b = 1
 	while(true)
 	{
-		if(fecha.getYear()<111){break}
+		if(fecha.getDate()<10){break}
 		var no_es_domingo = fecha.getDay(fecha)!=0
 		if(no_es_domingo)
 		{
@@ -106,9 +106,9 @@ function guardar_todo()
 {
 	var salida = ""
 	salida += "\n"
-	for(var i in todo)
+	for(var i in window.todo)
 	{
-		var día = todo[i]
+		var día = window.todo[i]
 		if(i!=0){salida += "\n"}
 		salida += "   " + día.fecha
 		salida += " " + día.juegos
@@ -120,4 +120,8 @@ function guardar_todo()
 	}
 	salida += "\n"
 	return salida
+}
+function obtener_unidades()
+{
+	return window.todo.map(x=>x.unidades).join("")
 }

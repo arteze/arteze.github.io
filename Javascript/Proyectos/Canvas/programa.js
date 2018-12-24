@@ -18,8 +18,9 @@ window.gens = function(botón)
 {
 	if(botón)
 	{
-		if(botón.textContent=="-"){elem.ancho.value=(+elem.ancho.value)-1}
-		if(botón.textContent=="+"){elem.ancho.value=(+elem.ancho.value)+1}		
+		var elemento = elem[botón.className]
+		if(botón.textContent=="-"){elemento.value=(+elem.ancho.value)-1}
+		if(botón.textContent=="+"){elemento.value=(+elem.ancho.value)+1}
 	}
 	var y=caracteres.value.split("").map(x=>Math.round(x/9*256))
 
