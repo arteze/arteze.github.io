@@ -12,7 +12,7 @@ function puedo_jugar()
 	var día_semana = fecha.getDay()
 	var h = fecha.getHours()
 	var m = fecha.getMinutes()
-	comprobar_hora = 	 hora_entre(h,m,12,0,13,30)
+	var comprobar_hora = 	 hora_entre(h,m,12,0,13,30)
 						|hora_entre(h,m,15,30,17,0)
 						|hora_entre(h,m,18,0,20,30)
 	return día_semana!=0&&comprobar_hora

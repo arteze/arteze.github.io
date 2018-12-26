@@ -10,6 +10,8 @@
 
 window.otecald = {}
 
+console.log("otecald.formatear_salidores(otecald.salidores(otecald.obtener_unidades(),10))")
+
 window.otecald.generar_atrasos = function(cantidad)
 {
 	var salida=""
@@ -137,11 +139,11 @@ window.otecald.salidores = function(cadena,desde)
 }
 window.otecald.formatear_salidores = function(array)
 {
-	return array.map(
+	return "\n"+array.map(
 		x=>x[0]
 		+" "+x[1].map(x=>x[0]).join("")
 		+" "+x[1].map(x=>x[1]).join(" ")
-	).join("\n")
+	).join("\n")+"\n"
 }
 window.otecald.analizar_frecuencias = function(array)
 {
@@ -157,4 +159,3 @@ window.otecald.foreach = function(e,i,a)
 	var array = [2,3,4]
 	array.forEach((e,i,a)=>console.log(e,i,a)) // elem,i,arr
 }
-console.log("otecald.formatear_salidores(otecald.salidores(unis,10))")
