@@ -27,24 +27,24 @@ function obtener_local_storage()
 	}
 	return devuelve
 }
-function guardar_local_storage()
+window.otecald.guardar_local_storage = function(objeto)
 {
-	var todo_2 = window.todo
-	var local = localStorage.getItem("sorteos")
-	if(local!=undefined)
+	localStorage.setItem("sorteos",JSON.stringify(objeto))
+}
+window.otecald.local_storage_eliminar_último_sorteo = function()
+{
+	var asignar = JSON.parse(localStorage.getItem("sorteos")).slice(0,-1)
+	localStorage.setItem("sorteos",JSON.stringify(asignar))
+	return asignar
+}
+window.otecald.obtener_AAMMDD = function(fecha)
+{
+	if(fecha==undefined)
 	{
-		todo_2 = JSON.parse(local)
-		for(var i in window.todo)
-		{
-            var fecha_actual = window.todo[i].fecha
-			if(!todo_2.map(x=>x.fecha).includes(fecha_actual))
-			{
-				todo_2.push(window.todo[i])
-			}
-		}
+		fecha = new Date()
 	}
-	window.todo = todo_2
-	localStorage.setItem("sorteos",JSON.stringify(todo_2))
+	var AAMMDD = fecha.getDate()+100*(fecha.getMonth()+1)+(fecha.getYear()-100)*10000
+	return AAMMDD
 }
 window.procesar_día = function(respuesta,dirección)
 {
@@ -52,11 +52,11 @@ window.procesar_día = function(respuesta,dirección)
 	if(respuesta==undefined)
 	{
 		respuesta = document.children[0].innerHTML
-		dirección = "000000"
+		dirección = window.otecald.obtener_AAMMDD()+""
 	}
-	if(window.todo==undefined)
+	if(window.todo_3==undefined)
 	{
-		window.todo=obtener_local_storage()
+		window.todo_3=[]
 		window.feriados=[]
 	}
 	var html = document.createElement("html")
@@ -104,7 +104,7 @@ window.procesar_día = function(respuesta,dirección)
 	{
 		//console.log(día.turnos[i].join(" "))
 	}
-	window.todo.unshift(día)
+	window.todo_3.unshift(día)
 }
 function descargar_todo()
 {
@@ -113,11 +113,12 @@ function descargar_todo()
 	window.c = 0
 	while(true)
 	{
-		if(window.fecha.getYear()+1900<2018){break}
+		//if(window.fecha.getYear()+1900<2018){break}
+		if(window.fecha.getMonth()+1<12){break}
 		var no_es_domingo = window.fecha.getDay(window.fecha)!=0
 		if(no_es_domingo)
 		{
-			var AAMMDD = window.fecha.getDate()+100*(window.fecha.getMonth()+1)+(window.fecha.getYear()-100)*10000
+			var AAMMDD = window.otecald.obtener_AAMMDD(window.fecha)
 			var sitio = "http://www.vivitusuerte.com/datospizarra_loteria.php?fecha="+AAMMDD+"&loteria=25"
 			if(!window.todo.map(x=>x.fecha).includes(AAMMDD+""))
 			{
@@ -127,43 +128,20 @@ function descargar_todo()
 		}
 		window.fecha = new Date(+window.fecha-1000*60*60*24)
 	}
-	setTimeout(guardar_local_storage,1000*5*(window.b+3))
+	setTimeout(()=>{
+		window.todo=window.todo.concat(window.todo_3)
+		var hora = new Date().getHours()+new Date().getMinutes()/60
+		if(!(hora>=9&hora<=21.5))
+		{
+			window.otecald.guardar_local_storage(window.todo)
+		}
+    },1000*5*(window.b+3))
 }
 if(window.todo==undefined)
 {
 	window.feriados = []
 	window.todo = obtener_local_storage()
+	window.todo_3 = []
 }
-guardar_local_storage()
+window.otecald.guardar_local_storage(window.todo)
 descargar_todo()
-
-// Análisis
-function analizar_dígitos(dígitos)
-{
-	return "\n"+[0,1,2,3,4,5,6,7,8,9].map(
-		y=>y+": "+dígitos.split(y).map(x=>x.length).reverse().slice(0,20).join(" ")
-	).join("\n")+"\n"
-}
-function guardar_todo()
-{
-	var salida = ""
-	salida += "\n"
-	for(var i in window.todo)
-	{
-		var día = window.todo[i]
-		if(i!=0){salida += "\n"}
-		salida += "   " + día.fecha
-		salida += " " + día.juegos
-		salida += " " + día.unidades
-		salida += " " + día.letras.join(" ")
-		salida += "\n"
-		salida += día.turnos.map(x=>x.join(" ")).join("\n")
-		salida += "\n"
-	}
-	salida += "\n"
-	return salida
-}
-window.otecald.obtener_unidades = function()
-{
-	return window.todo.map(x=>x.unidades).join("")
-}
