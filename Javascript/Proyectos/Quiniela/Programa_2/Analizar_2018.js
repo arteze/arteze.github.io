@@ -75,13 +75,22 @@ window.otecald.obtener_subcadenas = function(cadena,cantidad)
 	frecuencias.sort((a,b)=>a[1]<b[1])
 	return frecuencias
 }
+window.otecald.contar_unidades = function(cadena)
+{
+	var diez = window.otecald.array_diez()
+	for(var i in cadena)
+	{
+		++diez[cadena[i]]
+	}
+	return diez
+}
 window.otecald.el_más_atrasado = function(cifras)
 {
 	var más_atrasados = ""
 	for(var i = 150;i<cifras.length;i++)
 	{
 		var sección = cifras.slice(i-150,i)
-		var diez = [...Array(10)].map(x=>0)
+		var diez = window.otecald.array_diez()
 		for(var j=sección.length-1;j>=0;j--)
 		{
 			var actual=sección[j]
@@ -108,15 +117,39 @@ window.otecald.detectar_cambios = function(cadena)
 	cambios.push(cambio)
 	return cambios
 }
-window.otecald.frecuencias_diez = function()
+window.otecald.cantidades_nulas = function()
 {
 	var diez=[]
-	var i;
-	for(i=0;i<10;i++)
+	for(var i=0;i<10;i++)
 	{
 		diez[i]=[i,0]
 	}
-    return diez
+	return diez
+}
+window.otecald.frecuencias_diez = function(cadena)
+{
+	var diez = window.otecald.cantidades_nulas()
+	for(var i in cadena)
+	{
+		++diez[+cadena[i]][1]
+	}
+    return diez.sort((a,b)=>a[1]<b[1])
+}
+window.otecald.buscar_mímimos = function(cadena)
+{
+	var mínimos = []
+	var frecuencias = window.otecald.frecuencias_diez(cadena)
+	var actual = frecuencias.slice(-1)[0][1]
+	for(var i=9;i>=0;--i)
+	{
+		if(frecuencias[i][1]==actual)
+		{
+			mínimos.push(frecuencias[i][0])
+		}else{
+			break
+		}
+	}
+	return [actual,mínimos.sort((a,b)=>a>b)]
 }
 window.otecald.salidores = function(cadena,desde)
 {
@@ -126,14 +159,19 @@ window.otecald.salidores = function(cadena,desde)
 	if(desde!=undefined){inicio=cadena.length-desde}
 	for(var i=inicio;i<cadena.length;i++)
 	{
-		var frecuencias=window.otecald.frecuencias_diez();
+		var frecuencias = window.otecald.cantidades_nulas()
 		for(var j=i;j>=0;j--)
 		{
 			frecuencias[cadena[j]][1]++
-			if(new Set(frecuencias.map(x=>x[1])).size==frecuencias.length){break}
+			if(
+				new Set(frecuencias.map(x=>x[1])).size==frecuencias.length
+				//& j<i-975
+			){
+				break
+			}
 		}
 		salidas.push([+cadena[i],frecuencias.sort((a,b)=>a[1]<b[1])])
-		var cant=200;if(i%cant==0){console.log(Math.ceil(cadena.length/cant))}
+		var cant=100;if(i%cant==0){console.log(Math.ceil(cadena.length/cant))}
 	}
 	return salidas
 }
@@ -158,4 +196,95 @@ window.otecald.foreach = function(e,i,a)
 {
 	var array = [2,3,4]
 	array.forEach((e,i,a)=>console.log(e,i,a)) // elem,i,arr
+}
+window.otecald.comparar = function(unis,pred)
+{
+	var s=""
+	for(var i=0;i<unis.length;i++)
+	{
+		s+=+(unis[i]==pred[i])
+	}
+	var atrasos = s.split("1").map(x=>x.length)
+	//atrasos.sort((a,b)=>a>b)
+	return atrasos.join(" ")
+}
+window.otecald.predicción_subcadenas = function(cadena,n)
+{
+	var array = []
+	for(var i=0;i<cadena.length;i++)
+	{
+		var m=i-n
+		var j=m<0?0:m
+		var frecuencias = otecald.obtener_subcadenas(cadena.slice(j,i+1),2)
+		var último = cadena[i]
+		var fr_2 = frecuencias.filter(x=>x[0][1]==último)[0]
+		//console.log(fr_2)
+		if(fr_2==undefined){fr_2="x"}else{fr_2=fr_2[0][0]}
+		array.push(fr_2)
+		var k=10;if(i%k==0)console.log(cadena.length/k)
+	}
+	var pred = "x"+array.join("")
+	var p = window.otecald.comparar(cadena,pred)
+	ordenado = p.split(" ").sort((a,b)=>+a<+b)
+	console.log(ordenado)
+	console.log(p.split(" ").length)
+	return p
+}
+window.otecald.depurar = function(i,array,cantidad)
+{
+	if(i%cantidad==0)
+	{
+		console.log(array.length/cantidad)
+	}
+}
+window.otecald.últimos_turnos = function()
+{
+	var t = window.todo.slice(-2)
+	var a = t[0].turnos
+	var b = t[1].turnos
+	return a.concat(b)
+}
+window.otecald.filtrar = function(mínimos,contado)
+{
+	var filtrado = []
+	for(var i in mínimos)
+	{
+		var valor = mínimos[i]
+		var pos = contado.map(x=>x[0]).indexOf(valor)
+		filtrado.push(contado[pos])
+	}
+	filtrado.sort((a,b)=>a[1]<b[1])
+	var actual = filtrado.slice(-1)[0][1]
+	filtrado = filtrado.filter(x=>x[1]==actual)
+	filtrado = filtrado.map(x=>x[0])
+	return filtrado
+}
+window.otecald.pred_20 = function()
+{
+	var turnos = window.otecald.últimos_turnos()
+	var mínimos = []
+	for(var j=0;j<3;j++)
+	{
+		var c = []
+		var b = turnos.slice(-1-j)[0]
+		for(var i=0;i<4;i++)
+		{
+			var cadena = b.map(x=>x.slice(-1-i)[0])
+            var contado
+			if(j==0)
+			{
+				contado = window.otecald.buscar_mímimos(cadena)[1]
+			}else
+			{
+				contado = window.otecald.frecuencias_diez(cadena)
+				var filtrado = window.otecald.filtrar(mínimos[3-i],contado)
+				mínimos[3-i] = filtrado
+			}
+			c.unshift(contado)
+		}
+		if(j==0){mínimos = c}
+	}
+	console.log(mínimos.join("\n"))
+	console.log(mínimos.join(" "))
+	return mínimos.map(x=>x[0])
 }
