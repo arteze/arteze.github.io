@@ -12,17 +12,39 @@ function puedo_jugar()
 	var día_semana = fecha.getDay()
 	var h = fecha.getHours()
 	var m = fecha.getMinutes()
-	var comprobar_hora = 	 hora_entre(h,m,12,0,13,30)
-						|hora_entre(h,m,15,30,17,0)
-						|hora_entre(h,m,18,0,20,30)
+	var comprobar_hora = 
+		 hora_entre(h,m,10, 0,10,40)
+		|hora_entre(h,m,12, 0,12,40)
+		|hora_entre(h,m,14,30,16,40)
+		|hora_entre(h,m,18, 0,20,10)
+	return día_semana!=0&&comprobar_hora
+}
+function está_sorteando()
+{
+	/*
+		Primera:    11:00 11:30
+		Matutina:   13:30 14:00
+		Vespertina: 17:00 17:30
+		Nocturna:   20:30 21:00
+	*/
+	var puedo = true
+	var fecha = new Date()
+	var día_semana = fecha.getDay()
+	var h = fecha.getHours()
+	var m = fecha.getMinutes()
+	var comprobar_hora =
+		 hora_entre(h,m,11,30,12, 0)
+		|hora_entre(h,m,14, 0,14,30)
+		|hora_entre(h,m,17,30,18, 0)
+		|hora_entre(h,m,21, 0,21,30)
 	return día_semana!=0&&comprobar_hora
 }
 function instante()
 {
 	var puedo = puedo_jugar()
-	//puedo=Math.floor(Math.random()*2)
-	document.querySelector("body").style.setProperty("background-color",puedo?"#0f0":"#f00")
-	document.title = document.title = puedo?"✅":"❌"
+	var sortea = está_sorteando()
+	document.querySelector("body").style.setProperty("background-color",sortea?"#00f":puedo?"#0f0":"#f00")
+	document.title = document.title = sortea?"🎲":puedo?"✅":"❌"
 	setTimeout(instante,10000)
 }
 document.onreadystatechange = instante

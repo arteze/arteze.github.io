@@ -1,5 +1,12 @@
-﻿window.descargar=function(dirección,función)
+﻿window.cambiar_puede_descargar = function()
 {
+	var res = localStorage.puede_descargar^=1
+	return res
+}
+window.descargar=function(dirección,función)
+{
+	console.log(dirección,función)
+	if(!+localStorage.puede_descargar){return;}
 	var descarga = new XMLHttpRequest()
 	var hecho = false
 	descarga.onreadystatechange = function(){
@@ -49,6 +56,7 @@ window.otecald.obtener_AAMMDD = function(fecha)
 window.procesar_día = function(respuesta,dirección)
 {
 	++window.c
+	try{respuesta}catch(e){respuesta=undefined}
 	if(respuesta==undefined)
 	{
 		respuesta = document.children[0].innerHTML
@@ -57,54 +65,29 @@ window.procesar_día = function(respuesta,dirección)
 	if(window.todo_3==undefined)
 	{
 		window.todo_3=[]
-		window.feriados=[]
 	}
 	var html = document.createElement("html")
 	html.innerHTML = respuesta
-	var texto = html.textContent
+	var texto = html.querySelector("table").textContent.replace(/\n/g," ").replace(/\s{2,}/g," ")
+	var sorteos = texto.split("iu").slice(1)
+	var letras = sorteos
+		.map(x=>x.slice(-9,-1).replace(/\s/g,""))
+		.map(x=>x.match(/[A-Z]+/g)==null?"":x.match(/[A-Z]+/g)[0])
+	var turnos = sorteos.map(x=>x.slice(0,-9)).map(
+		x=>x.match(/\d{1,2}\.\s[0-9-]+/g).map(x=>x.split(". "))
+	).map(x=>x.map(x=>[+x[0],x[1]]).sort((a,b)=>a[0]>b[0]).map(x=>x[1]))
+	var fecha = dirección.match(/\d{6}/gi)[0]
+	var juegos = ["Pr","Ma","Ve","No"].map(x=>+texto.includes(x)).join("")
 	var día = {}
-	var letras = texto.match(/(([A-Z])\n){4}/g)
-	var fecha = dirección.match(/\d{6}/gi)
-	var i;
-	if(letras==undefined)
-	{
-		var feriado = fecha[0]
-		window.feriados.unshift(feriado)
-		console.log(feriado,window.feriados)
-		return;
-	}
-	día.juegos = ["Pr","Ma","Ve","No"].map(x=>+texto.includes(x))
-	día.turnos = []
-	for(i in día.juegos)
-	{
-		if(día.juegos[i]==1)
-		{
-			día.turnos.push([])
-		}
-	}
-	día.juegos = día.juegos.join("")
-	día.fecha = fecha[0]
-	día.letras = letras.map(x=>x.split("\n").join(""))
-	i=0
-	while(true)
-	{
-		var regex = new RegExp("\n"+(++i)+"\\.\n+[0-9\\-]+\n","g")
-		var resultados = texto.match(regex)
-		if(resultados==undefined){break}
-		resultados=resultados.map(x=>x.split(/\n+/)[2])
-		if(i==1){día.unidades=resultados.map(x=>x.slice(-1)).join("")}
-		for(var j in resultados)
-		{
-			día.turnos[j].push(resultados[j])
-		}
-	}
-	//console.log(día.fecha,día.juegos,día.unidades,día.letras.join(" "))
+	día.fecha = fecha
+	día.juegos = juegos
+	día.letras = letras
+	día.turnos = turnos
 	console.log(window.c/window.b*100)
-	for(i in día.turnos)
+	if(día.turnos.length)
 	{
-		//console.log(día.turnos[i].join(" "))
+		window.todo_3.unshift(día)
 	}
-	window.todo_3.unshift(día)
 }
 function descargar_todo()
 {
@@ -135,7 +118,7 @@ function descargar_todo()
 		{
 			window.otecald.guardar_local_storage(window.todo)
 		}
-    },1000*5*(window.b+3))
+	},1000*5*(window.b+3))
 }
 if(window.todo==undefined)
 {

@@ -10,7 +10,22 @@
 
 window.otecald = {}
 
-console.log("otecald.formatear_salidores(otecald.salidores(otecald.obtener_unidades(),10))")
+window.otecald.obtener_decenas = function()
+{
+	return window.todo.map(x=>x.turnos.map(x=>x[0].slice(-2,-1)).join("")).join("")
+}
+window.otecald.obtener_unidades = function()
+{
+	return window.todo.map(x=>x.turnos.map(x=>x[0].slice(-1)).join("")).join("")
+}
+window.otecald.formateado_salidores = function()
+{
+	var cantidad = 7
+	console.log(window.otecald.formatear_salidores(window.otecald.salidores(window.otecald.obtener_decenas(),cantidad)))
+	console.log(window.otecald.formatear_salidores(window.otecald.salidores(window.otecald.obtener_unidades(),cantidad)))
+}
+console.log("window.otecald.formateado_salidores()")
+setTimeout(window.otecald.formateado_salidores,1000*10)
 
 window.otecald.generar_atrasos = function(cantidad)
 {
@@ -244,47 +259,208 @@ window.otecald.últimos_turnos = function()
 	var b = t[1].turnos
 	return a.concat(b)
 }
-window.otecald.filtrar = function(mínimos,contado)
+window.otecald.pred_20 = function(a,turnos)
 {
-	var filtrado = []
-	for(var i in mínimos)
-	{
-		var valor = mínimos[i]
-		var pos = contado.map(x=>x[0]).indexOf(valor)
-		filtrado.push(contado[pos])
+	if(turnos==undefined){
+		turnos = window.otecald.últimos_turnos()
 	}
-	filtrado.sort((a,b)=>a[1]<b[1])
-	var actual = filtrado.slice(-1)[0][1]
-	filtrado = filtrado.filter(x=>x[1]==actual)
-	filtrado = filtrado.map(x=>x[0])
-	return filtrado
-}
-window.otecald.pred_20 = function()
-{
-	var turnos = window.otecald.últimos_turnos()
 	var mínimos = []
-	for(var j=0;j<3;j++)
-	{
+	var total = a==undefined?5:a // Se podría aumentar.
+	var cifras = 4
+	for(var j in turnos){
 		var c = []
-		var b = turnos.slice(-1-j)[0]
-		for(var i=0;i<4;i++)
-		{
-			var cadena = b.map(x=>x.slice(-1-i)[0])
-            var contado
-			if(j==0)
-			{
-				contado = window.otecald.buscar_mímimos(cadena)[1]
-			}else
-			{
-				contado = window.otecald.frecuencias_diez(cadena)
-				var filtrado = window.otecald.filtrar(mínimos[3-i],contado)
-				mínimos[3-i] = filtrado
+		var actual = turnos[turnos.length-1-j]
+		var turno = actual.map(x=>x.slice(-cifras))
+		for(var i=0;i<cifras;i++){
+			var cifra = turno.map(x=>x[i])
+			var contado = window.otecald.frecuencias_diez(cifra)
+			var filtrado
+			if(j==0){
+				filtrado = contado.filter(x=>x[1]==contado[contado.length-1][1]).map(x=>x[0]).join("")
+				c.push(filtrado)
+			}else{
+				var mínimo = mínimos[mínimos.length-1][i]
+				var filtro = []
+				filtrado = contado
+				for(var k in mínimo){
+					filtro = filtro.concat(filtrado.filter(x=>x[0]==mínimo[k]))
+				}
+				filtro = filtro.sort((a,b)=>a[1]<b[1])
+				filtrado = filtro.filter(x=>x[1]==filtro[filtro.length-1][1]).map(x=>x[0]).join("")
+				c.push(filtrado)
 			}
-			c.unshift(contado)
 		}
-		if(j==0){mínimos = c}
+		if(j>0&&c.join(" ")==mínimos[mínimos.length-1].join(" ")){break}
+		mínimos.push(c)
 	}
-	console.log(mínimos.join("\n"))
-	console.log(mínimos.join(" "))
-	return mínimos.map(x=>x[0])
+	return "\n"+mínimos.map(x=>x.join(" ")).join("\n")+"\n"
+}
+window.otecald.generar_jugadas = function(cadena){
+	var array = cadena.split(" ")
+	var i,j,k,m,p=0
+	var t=""
+	for(var i in array[0]){
+		for(var j in array[1]){
+			for(var k in array[2]){
+				var s = []
+				for(var m in array[3]){
+					s.push(array[0][i]+array[1][j]+array[2][k]+array[3][m])
+					++p
+				}
+				t+=s.join(" ")+"\n"
+	}}}
+	t+="\n"
+	for(var j in array[1]){
+		for(var k in array[2]){
+			var s = []
+			for(var m in array[3]){
+				s.push(array[1][j]+array[2][k]+array[3][m])
+				++p
+			}
+			t+=s.join(" ")+"\n"
+	}}
+	t+="\n"
+	for(var k in array[2]){
+		var s = []
+		for(var m in array[3]){
+			s.push(array[2][k]+array[3][m])
+			++p
+		}
+		t+=s.join(" ")+"\n"
+	}
+	console.log(t)
+	return p
+}
+window.otecald.simular_20_un_año = function(){
+	var s=""
+	var ale = x=>Math.floor(Math.random()*100)
+	for(var i=0;i<365.2425*4*100;i++)
+	{
+		var simu = [...Array(20)].map(x=>ale())
+		var alea = ale()
+		s+=+(simu.includes(alea)|simu.includes((alea+1)%100))
+	}
+	s=s.split(1).map(x=>x.length).sort((a,b)=>a<b)
+	return s
+}
+window.otecald.costo = function(unidad,ambo,cantidad_ambos)
+{
+	var a = 405+unidad+cantidad_ambos*ambo
+	return [a,cantidad_ambos*ambo*3.5,unidad*7]
+}
+window.otecald.costo_20 = function(cantidad_ambos,extra)
+{
+	var precio_2 = 2
+	var precio_3 = 2
+	var precio_4 = 2
+	if(extra==undefined){extra=0}
+	var calcular_total = (cantidad_ambos,d,c,b)=>d+c+b*cantidad_ambos+extra
+	var veces_a_acertar = Math.ceil(cantidad_ambos/3.5)
+	console.log("Hay que acertar ",veces_a_acertar," veces.")
+	var i=0
+	while(
+		calcular_total(cantidad_ambos,precio_4,precio_3,precio_2)>=precio_2*3.5*veces_a_acertar
+		| calcular_total(cantidad_ambos,precio_4,precio_3,precio_2)>=precio_3*25
+		| calcular_total(cantidad_ambos,precio_4,precio_3,precio_2)>=precio_4*175
+	)
+	{
+		if(i>10000){break}
+		while(calcular_total(cantidad_ambos,precio_4,precio_3,precio_2)>=precio_2*3.5*veces_a_acertar)
+		{
+			precio_2 = Math.ceil(calcular_total(cantidad_ambos,precio_4,precio_3,precio_2)/veces_a_acertar/2)*2
+			if(calcular_total(cantidad_ambos,precio_4,precio_3,precio_2)==precio_2*3.5*veces_a_acertar)
+			{
+				++precio_2
+			}
+		}
+		while(calcular_total(cantidad_ambos,precio_4,precio_3,precio_2)>=precio_3*25)
+		{
+			precio_3 = Math.ceil(calcular_total(cantidad_ambos,precio_4,precio_3,precio_2)/25)
+			if(calcular_total(cantidad_ambos,precio_4,precio_3,precio_2)==precio_3*25)
+			{
+				++precio_3
+			}
+		}
+		while(calcular_total(cantidad_ambos,precio_4,precio_3,precio_2)>=precio_4*175)
+		{
+			precio_4 = Math.ceil(calcular_total(cantidad_ambos,precio_4,precio_3,precio_2)/175)
+			if(calcular_total(cantidad_ambos,precio_4,precio_3,precio_2)==precio_4*175)
+			{
+				++precio_4
+			}
+		}
+		++i
+	}
+	for(var i=0;i<cantidad_ambos;i++)
+	{
+		console.log("__xx",precio_2,precio_2*3.5)
+	}
+	console.log("_xxx",precio_3,precio_3*25)
+	console.log("xxxx",precio_4,precio_4*175)
+	console.log(
+		"Total: ",precio_2*cantidad_ambos
+		,precio_3
+		,precio_4
+		,calcular_total(cantidad_ambos,precio_4,precio_3,precio_2)
+	)
+}
+window.otecald.comparar_cadenas = function(a,b)
+{
+	var cantidad = 0
+	for(var i=0;i<10;i++)
+	{
+		cantidad+=+(a.includes(i)&&b.includes(i))
+	}
+	return cantidad
+}
+window.comparar_sorteos = function(a,b)
+{
+	var array = []
+	for(var i=0;i<20;i++)
+	{
+		array.push(
+			otecald.comparar_cadenas(a[i],b[i])
+		)
+	}
+	return array
+}
+window.otecald.coincidencias_sorteos = function()
+{
+	var salida=""
+	var turnos = otecald.obtener_turnos()
+	for(var i in turnos)
+	{
+		if(i!=0)
+		{
+			salida+=+turnos[i-1].map(x=>x.slice(-1)).slice(1,2).includes(turnos[i][0].slice(-1))
+		}
+	}
+	return salida
+}
+window.otecald.comparar_turnos = function(arr,turnos)
+{
+	var s=[]
+	for(var i in arr)
+	{
+		s.push(
+			     +turnos[i].map(x=>x.slice(-4)).includes(arr[i].slice(-4))
+			+""+(+turnos[i].map(x=>x.slice(-3)).includes(arr[i].slice(-3)))
+			+""+(+turnos[i].map(x=>x.slice(-2)).includes(arr[i].slice(-2)))
+			+""+(+turnos[i].map(x=>x.slice(-1)).includes(arr[i].slice(-1)))
+		)
+	}
+	return s
+}
+window.otecald.frecuencias_cien = function(sorteo)
+{
+	var frecuencias = []
+	for(var i=0;i<sorteo.length;i++)
+	{
+		var actual = sorteo[i]
+		var pos = frecuencias.map(x=>x[0]).indexOf(actual)
+		if(pos==-1){frecuencias.push([actual,0]);pos=frecuencias.length-1}
+		++frecuencias[pos][1]
+	}
+	frecuencias.sort((a,b)=>a[1]<b[1]?1:a[1]==b[1]&&a[0]>b[0]?1:-1)
+	return frecuencias
 }
