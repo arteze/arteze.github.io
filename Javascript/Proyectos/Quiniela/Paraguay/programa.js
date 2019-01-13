@@ -45,21 +45,34 @@ function predecir()
 	var entrada = document.querySelector("textarea").value
 	var salida = document.querySelectorAll("textarea")[1]
 	var procesado = entrada.match(/\d{3}/g)
-	var salida
-	if(procesado!=null)
+	var sorteos = [
+		 procesado.slice(14*0,14*1)
+		,procesado.slice(14*1,14*2)
+		,procesado.slice(14*2,14*3)
+	]
+	salida.value = ""
+	for(var j in sorteos)
 	{
-		var array = []
-		for(var i=0;i<3;i++)
+		var actual = sorteos[j]
+		if(actual.length>0)
 		{
-			var unidades = procesado.map(x=>x[i]).join("")
-			var frecuencias = frecuencias_diez(unidades)
-			var filtrado = frecuencias.filter(x=>x[1]==frecuencias[frecuencias.length-1][1]).map(x=>x[0]).join("")
-			array.push(filtrado)
+			if(actual!=null)
+			{
+				var array = []
+				for(var i=0;i<3;i++)
+				{
+					var unidades = actual.map(x=>x[i]).join("")
+					var frecuencias = frecuencias_diez(unidades)
+					var filtrado = frecuencias.filter(x=>x[1]==frecuencias[frecuencias.length-1][1]).map(x=>x[0]).join("")
+					array.push(filtrado)
+				}
+				predicción = generar_jugadas(array.join(" "))
+			}else
+			{
+				predicción = "Error"
+			}
+			if(j>0){salida.value += "\n"}
+			salida.value += "Sorteo "+j+"\n\n"+ predicción
 		}
-		predicción = generar_jugadas(array.join(" "))
-	}else
-	{
-		predicción = "Error"
 	}
-	salida.value = predicción
 }
