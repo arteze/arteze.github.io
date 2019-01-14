@@ -18,26 +18,32 @@ function frecuencias_diez(cadena)
 }
 function generar_jugadas(cadena){
 	var array = cadena.split(" ")
-	var i,j,k,m,p=0
+    var s=[]
+	var i,j,k,m
 	var t=""
-	for(var j in array[0]){
-		for(var k in array[1]){
-			var s = []
-			for(var m in array[2]){
+	t+="\n"
+	for(j in array[0]){
+		for(k in array[1]){
+			s = []
+			for(m in array[2]){
 				s.push(array[0][j]+array[1][k]+array[2][m])
-				++p
 			}
 			t+=s.join(" ")+"\n"
 	}}
 	t+="\n"
-	for(var k in array[1]){
-		var s = []
-		for(var m in array[2]){
+	for(k in array[1]){
+		s = []
+		for(m in array[2]){
 			s.push(array[1][k]+array[2][m])
-			++p
 		}
 		t+=s.join(" ")+"\n"
 	}
+	t+="\n"
+	s = []
+	for(m in array[2]){
+		s.push(array[2][m])
+	}
+	t+=s.join(" ")+"\n"
 	return t
 }
 function separar_sorteos(procesado)
