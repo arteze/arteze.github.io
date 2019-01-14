@@ -21,7 +21,6 @@ function generar_jugadas(cadena){
     var s=[]
 	var i,j,k,m
 	var t=""
-	t+="\n"
 	for(j in array[0]){
 		for(k in array[1]){
 			s = []
