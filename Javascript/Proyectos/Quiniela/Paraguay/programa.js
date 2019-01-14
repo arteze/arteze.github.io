@@ -68,7 +68,7 @@ function predecir()
 {
 	var entrada = document.querySelector("textarea").value
 	var salida = document.querySelectorAll("textarea")[1]
-	var procesado = entrada.match(/\d{3}/g)
+	var procesado = entrada.match(/\d{3}|-/g)
 	var sorteos = separar_sorteos(procesado)
 	salida.value = ""
 	for(var j in sorteos)
@@ -76,7 +76,7 @@ function predecir()
 		var actual = sorteos[j]
 		if(actual.length>0)
 		{
-			if(actual!=null)
+			if(actual!=undefined&&actual[0]!="-")
 			{
 				var array = []
 				for(var i=0;i<3;i++)
