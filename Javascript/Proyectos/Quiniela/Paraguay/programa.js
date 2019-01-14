@@ -84,7 +84,7 @@ function predecir()
 				predicción = "Error"
 			}
 			if(j>0){salida.value += "\n"}
-			salida.value += "Sorteo "+j+"\n"+ predicción
+			salida.value += "Sorteo "+j+"\n\n"+ predicción
 		}
 	}
 }
