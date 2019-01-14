@@ -43,14 +43,17 @@ function generar_jugadas(cadena){
 function separar_sorteos(procesado)
 {
 	var sorteos = []
-	if(procesado.length<=14)
+	if(procesado!=undefined)
 	{
-		sorteos = [procesado.slice(0,14)]
-	}else{
-		sorteos = [[],[],[]]
-		for(var i=0;i<procesado.length;i+=3){
-			for(var j=0;j<3;j++){
-				sorteos[j].push(procesado[i+j])
+		if(procesado.length<=14)
+		{
+			sorteos = [procesado.slice(0,14)]
+		}else{
+			sorteos = [[],[],[]]
+			for(var i=0;i<procesado.length;i+=3){
+				for(var j=0;j<3;j++){
+					sorteos[j].push(procesado[i+j])
+				}
 			}
 		}
 	}
