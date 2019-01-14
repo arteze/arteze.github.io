@@ -40,16 +40,28 @@ function generar_jugadas(cadena){
 	}
 	return t
 }
+function separar_sorteos(procesado)
+{
+	var sorteos = []
+	if(procesado.length<=14)
+	{
+		sorteos = [procesado.slice(0,14)]
+	}else{
+		sorteos = [[],[],[]]
+		for(var i=0;i<procesado.length;i+=3){
+			for(var j=0;j<3;j++){
+				sorteos[j].push(procesado[i+j])
+			}
+		}
+	}
+	return sorteos
+}
 function predecir()
 {
 	var entrada = document.querySelector("textarea").value
 	var salida = document.querySelectorAll("textarea")[1]
 	var procesado = entrada.match(/\d{3}/g)
-	var sorteos = [
-		 procesado.slice(14*0,14*1)
-		,procesado.slice(14*1,14*2)
-		,procesado.slice(14*2,14*3)
-	]
+	var sorteos = separar_sorteos(procesado)
 	salida.value = ""
 	for(var j in sorteos)
 	{
@@ -72,7 +84,7 @@ function predecir()
 				predicción = "Error"
 			}
 			if(j>0){salida.value += "\n"}
-			salida.value += "Sorteo "+j+"\n\n"+ predicción
+			salida.value += "Sorteo "+j+"\n"+ predicción
 		}
 	}
 }
