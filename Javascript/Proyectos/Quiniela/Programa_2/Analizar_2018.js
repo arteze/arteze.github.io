@@ -8,6 +8,8 @@
 // @grant        none
 // ==/UserScript==
 
+Array.prototype.u=function(){return this[this.length-1]}
+
 window.otecald = {}
 
 window.otecald.obtener_decenas = function()
@@ -254,18 +256,20 @@ window.otecald.depurar = function(i,array,cantidad)
 }
 window.otecald.últimos_turnos = function()
 {
-	var t = window.todo.slice(-2)
-	var a = t[0].turnos
-	var b = t[1].turnos
-	return a.concat(b)
+	var a = []
+	var t = window.todo.slice(-10)
+	for(var i in t){
+		if(t[i].turnos==undefined){console.log(t,i)}
+		a=a.concat(t[i].turnos)
+	}
+	return a
 }
-window.otecald.pred_20 = function(a,turnos)
+window.otecald.pred_20 = function(turnos)
 {
 	if(turnos==undefined){
 		turnos = window.otecald.últimos_turnos()
 	}
 	var mínimos = []
-	var total = a==undefined?5:a // Se podría aumentar.
 	var cifras = 4
 	for(var j in turnos){
 		var c = []
@@ -290,46 +294,63 @@ window.otecald.pred_20 = function(a,turnos)
 				c.push(filtrado)
 			}
 		}
-		if(j>0&&c.join(" ")==mínimos[mínimos.length-1].join(" ")){break}
 		mínimos.push(c)
+		if(c.join(" ").length==7){break}
 	}
 	return "\n"+mínimos.map(x=>x.join(" ")).join("\n")+"\n"
 }
 window.otecald.generar_jugadas = function(cadena){
 	var array = cadena.split(" ")
-	var i,j,k,m,p=0
-	var t=""
-	for(var i in array[0]){
-		for(var j in array[1]){
-			for(var k in array[2]){
-				var s = []
-				for(var m in array[3]){
+    var s=[]
+	var i,j,k,m,p,q
+	var t="\n"
+	q=0
+	p=0
+	for(i in array[0]){
+		for(j in array[1]){
+			for(k in array[2]){
+				s = []
+				for(m in array[3]){
 					s.push(array[0][i]+array[1][j]+array[2][k]+array[3][m])
 					++p
 				}
 				t+=s.join(" ")+"\n"
 	}}}
+	console.log(p)
+	q+=p;p=0
 	t+="\n"
-	for(var j in array[1]){
-		for(var k in array[2]){
-			var s = []
-			for(var m in array[3]){
+	for(j in array[1]){
+		for(k in array[2]){
+			s = []
+			for(m in array[3]){
 				s.push(array[1][j]+array[2][k]+array[3][m])
 				++p
 			}
 			t+=s.join(" ")+"\n"
 	}}
+	console.log(p)
+	q+=p;p=0
 	t+="\n"
-	for(var k in array[2]){
-		var s = []
-		for(var m in array[3]){
+	for(k in array[2]){
+		s = []
+		for(m in array[3]){
 			s.push(array[2][k]+array[3][m])
 			++p
 		}
 		t+=s.join(" ")+"\n"
 	}
-	console.log(t)
-	return p
+	console.log(p)
+	q+=p;p=0
+	t+="\n"
+	s = []
+	for(m in array[3]){
+		s.push(array[3][m])
+		++p
+	}
+	t+=s.join(" ")+"\n"
+	q+=p
+	console.log(p,q)
+	return t
 }
 window.otecald.simular_20_un_año = function(){
 	var s=""
@@ -391,7 +412,7 @@ window.otecald.costo_20 = function(cantidad_ambos,extra)
 		}
 		++i
 	}
-	for(var i=0;i<cantidad_ambos;i++)
+	for(i=0;i<cantidad_ambos;i++)
 	{
 		console.log("__xx",precio_2,precio_2*3.5)
 	}
@@ -403,6 +424,19 @@ window.otecald.costo_20 = function(cantidad_ambos,extra)
 		,precio_4
 		,calcular_total(cantidad_ambos,precio_4,precio_3,precio_2)
 	)
+}
+window.otecald.costo_20_2 = function(m,c,d,u){
+	var a = [175,25,3.5,0.35]
+	var b = []
+	for(var i in a)
+	{
+		var cantidad = Math.ceil(arguments[i]/a[i])
+		b.push(cantidad)
+	}
+	for(var i=0;i<10;i++){
+		;
+	}
+	return b
 }
 window.otecald.comparar_cadenas = function(a,b)
 {
