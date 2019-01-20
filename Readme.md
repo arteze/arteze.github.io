@@ -1,5 +1,10 @@
 ﻿# Otecald
-Se intentará que el repositorio sea bueno.
+
+Bienvenido al sitio web de ArtEze... El sitio Otecald en GitHub.
+
+https://arteze.github.io/
+
+Se intenta que el sitio sea bueno.
 
 Proyectos actuales:
 
@@ -12,5 +17,3 @@ Proyectos triviales:
 
 * Descargar AJAX: Ejemplo de cómo se descarga una página mediante AJAX.
 * Enviar mail: Página que sirve para enviarme un mail.
-
-
