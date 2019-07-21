@@ -149,7 +149,7 @@ var retrollamadas = function(bajar){
 		, "poderes.mostrar.config" + sip
 		, "poderes.mostrar.pedido" + nop
 		, "poderes.mostrar.respuesta.$" + nop
-		, "mostrar.respuesta.cabezas.$" + sip
+		, "poderes.mostrar.respuesta.cabezas.$" + sip
 		, "poderes.mostrar.respuesta.cabezas.redireccionado" + sip
 		, "poderes.mostrar.respuesta.cabezas.post.longitud" + sip
 		, "poderes.mostrar.respuesta.cabezas.post.tipo" + sip
