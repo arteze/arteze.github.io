@@ -56,8 +56,20 @@ var analizar_url = function(url){
 	}
 	return analizado
 }
+var analizar_galletas = function(cabezas,filtro){
+	// Ejemplo de uso: analizar_galletas(cabezas,["sid","csrf"])
+	var objeto = {}
+	var pares = cabezas.map(function(x){
+		var pares = x.split("; ")[0].split("=")
+		filtro.includes(pares[0]) && (objeto[pares[0]] = pares[1])
+	})
+	return objeto
+}
 var descargar = function(url,método,cabezas,cbs,poderes){
-	poderes.mostrar.log && poderes.mostrar.url && console.log(url)
+	var puede_mostrar = poderes.mostrar.$
+	var mostrar = poderes.mostrar
+	var mos_res = mostrar.respuesta
+	var mos_cab = mostrar.respuesta.cabezas
 	var enlace = analizar_url(url)
 	var config = {
 		hostname: enlace.sitio
@@ -69,32 +81,70 @@ var descargar = function(url,método,cabezas,cbs,poderes){
 	if(método=="POST"){
 		config.path = enlace.post.ruta
 		config.headers["Content-Type"] = "application/x-www-form-urlencoded;charset=utf-8"
-		console.log("Datos: ", enlace.post.datos)
 		config.headers["Content-Length"] = enlace.post.datos.length // Longitud de a=2&b=3
+		if(puede_mostrar){
+			if(mostrar.enlace.post.datos){
+				console.log("Datos: ", enlace.post.datos)
+			}
+		}
 	}
-	poderes.mostrar.log && poderes.mostrar.config && console.log(config)
+	if(puede_mostrar){
+		mostrar.url && console.log(url)
+		mostrar.config && console.log(config)
+	}
 	var cuerpo = ""
 	var protocolo = enlace.protocolo=="https"?https:http
 	var pedido = protocolo.request(config, function(respuesta) {
-		var mostrar = poderes.mostrar
-		var mos_res = mostrar.respuesta
-		if(poderes.mostrar.log){
-			mostrar.pedido && console.log(pedido)
-			mos_res.$ && console.log(respuesta)
-			mos_res.cabezas.$ && console.log(respuesta.headers)
-			mos_res.cabezas.redireccionado && console.log(respuesta.headers.location)
-			mos_res.cabezas.galletas && console.log(estado,respuesta.headers["set-cookie"])
-			mos_res.cabezas.post.longitud && console.log(respuesta.headers["content-length"])
-			mos_res.cabezas.post.tipo && console.log(respuesta.headers["content-type"])
-			mostrar.poderes && (console.log(poderes),console.log("cabezas",mos_res.cabezas))
+		if(puede_mostrar){
+			[
+				[ mostrar.poderes, "Poderes: " ]
+				, [ mostrar.poderes, poderes ]
+				, [ mostrar.poderes, "Poderes cabezas: " ]
+				, [ mostrar.poderes, mos_cab ]
+
+				, [ mos_cab.galletas, respuesta.headers["set-cookie"] ]
+				, [ mostrar.pedido , pedido ]
+				, [ mos_res.$, respuesta.headers ]
+				, [ mos_cab.redireccionado, respuesta.headers.location ]
+				, [ mos_cab.post.longitud, respuesta.headers["content-length"] ]
+				, [ mos_cab.post.tipo, respuesta.headers["content-type"] ]
+				, [ mostrar.estado, respuesta.statusCode ]
+			].map(function(x){
+				if(x[0]){
+					console.log(x[1])
+				}
+			})
 		}
 		var estado = respuesta.statusCode
-		mostrar.estado && console.log(respuesta.statusCode)
 		if(estado>=300 && estado<=399){ // Redirecciona.
 			if(poderes.estado.redireccionar){
-				console.log(estado,respuesta.headers["set-cookie"])
-				console.log(estado,respuesta.headers.location)
-				//descarga_normal(respuesta.headers.location,método,respuesta.headers)
+				var nueva_url = respuesta.headers.location
+				var galletas = respuesta.headers["set-cookie"]
+				var galletas_form = objeto_hacia_formulario(galletas)
+
+				var bajar = {
+					url: nueva_url
+					, método: método
+					, cbs: {
+						error: function(){
+							return true
+						}
+					}, poderes: {
+						mostrar: {
+							log: true
+							, cuerpo: true
+						}, estado: {
+							redireccionar: true
+							, abortar_pedido: true
+						}
+					}
+				}
+				if(galletas_form){
+					bajar.cabezas = {Cookies: galletas_form}
+				}else{
+					bajar.cabezas = {}
+				}
+				descargar(...objeto_a_pedido(retrollamadas(bajar)))
 			}
 			if(poderes.estado.abortar){
 				pedido.abort()
@@ -104,7 +154,16 @@ var descargar = function(url,método,cabezas,cbs,poderes){
 			cuerpo+=texto.toString()
 		})
 		respuesta.on("end", function(){
-			poderes.mostrar.log && poderes.mostrar.cuerpo && console.log(cuerpo)
+			if(puede_mostrar){
+				if(mostrar.cuerpo){
+					if(estado>=200 && estado<=299){
+						 console.log(cuerpo)
+					}else{
+						 console.log("El código de estado no es de tipo 2xx.")
+						 console.log(cuerpo)
+					}		
+				}
+			}
 		})
 	})
 	if(método=="POST"){
@@ -153,19 +212,21 @@ var retrollamadas = function(bajar){
 		, "método='GET'"
 		, "cabezas={}"
 		, "cbs={}"
-		, "poderes.mostrar.log" + sip
+		, "poderes.mostrar.$" + sip
 		, "poderes.mostrar.url" + sip
-		, "poderes.mostrar.config" + sip
+		, "poderes.mostrar.config" + nop
 		, "poderes.mostrar.pedido" + nop
-		, "poderes.mostrar.estado" + sip
+		, "poderes.mostrar.estado" + nop
+		, "poderes.mostrar.cuerpo" + sip
+		, "poderes.mostrar.poderes" + nop
+		, "poderes.mostrar.enlace.$" + nop
+		, "poderes.mostrar.enlace.post.datos" + nop
 		, "poderes.mostrar.respuesta.$" + nop
 		, "poderes.mostrar.respuesta.cabezas.$" + sip
 		, "poderes.mostrar.respuesta.cabezas.redireccionado" + sip
 		, "poderes.mostrar.respuesta.cabezas.galletas" + sip
-		, "poderes.mostrar.respuesta.cabezas.post.longitud" + sip
-		, "poderes.mostrar.respuesta.cabezas.post.tipo" + sip
-		, "poderes.mostrar.cuerpo" + sip
-		, "poderes.mostrar.poderes" + sip
+		, "poderes.mostrar.respuesta.cabezas.post.longitud" + nop
+		, "poderes.mostrar.respuesta.cabezas.post.tipo" + nop
 		, "poderes.estado.redireccionar" + sip
 		, "poderes.estado.abortar" + nop
 
@@ -185,10 +246,11 @@ var descargar_normal = function(url,método,cabezas){
 			}
 		}, poderes: {
 			mostrar: {
-				log: false
+				log: true
+				, cuerpo: true
 			}, estado: {
 				redireccionar: true
-				, abortar_pedido: false
+				, abortar_pedido: true
 			}
 		}
 	}
@@ -238,11 +300,18 @@ var replicar_flavio = function(){
 			}
 		}, poderes: {
 			mostrar: {
-				log: true
+				$: true
 				, url: true
 				, config: true
 				, pedido: false
 				, estado: true
+				, cuerpo: true
+				, poderes: true
+				, enlace : {
+					$: false
+					, post: {
+						datos: true
+				}}
 				, respuesta: {
 					$: false
 					, cabezas: {
@@ -252,10 +321,8 @@ var replicar_flavio = function(){
 						, post: {
 							longitud: true
 							, tipo: true
-						}}
-				}, cuerpo: false
-				, poderes: true
-			}, estado: {
+			}}}}
+			, estado: {
 				redireccionar: true
 				, abortar_pedido: false
 			}
@@ -271,6 +338,7 @@ module.exports = {
 
 	, analizar_post_datos: analizar_post_datos
 	, analizar_url: analizar_url
+	, analizar_galletas: analizar_galletas
 
 	, descargar: descargar
 	, asignar: asignar
