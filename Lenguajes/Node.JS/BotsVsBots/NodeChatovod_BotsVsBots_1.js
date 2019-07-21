@@ -24,6 +24,7 @@ var descargar = function(url,método,callbacks){
 	var enlace = http_otecald.analizar_url(url)
 	var opciones = {
 		hostname: enlace.sitio,
+		port: enlace.puerto,
 		path: enlace.parámetros,
 		method: método, // "GET" o "POST"
 		headers: callbacks.activado.headers // {'Cookie': 'myCookie=myvalue'}
