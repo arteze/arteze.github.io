@@ -22,10 +22,12 @@ var objeto_a_pedido = function(descarga){
 }
 var analizar_post_datos = function(args){
 	var post = (
-		args.replace(
-			/^([^\?]+)?([\?]+)?((&?[^=]+=[^&]+)+)/g,"$1 $2 $3 $4"
-		) + " " + " "
+		args
+		.replace(/\x20/g,"%20")
+		.replace(/^([^\?]+)?([\?]+)?((&?[^=]+=[^&]+)+)/g,"$1 $2 $3 $4")
+		+ " " + " "
 	).split(" ")
+	.map(function(x){return x.replace(/%20/g," ")})
 	var post_objeto = {
 		ruta: post[0]
 		, datos: post[2]
@@ -37,7 +39,10 @@ var analizar_url = function(url){
 	var host = "([^/?]+)"
 	var parámetros = "(/.+$)?"
 	var regex = new RegExp(protocolo+host+parámetros,"")
-	var partes = url.replace(regex,"$2 $3 $4").split(" ")
+	var partes = url
+		.replace(/\x20/g,"%20")
+		.replace(regex,"$2 $3 $4").split(" ")
+		.map(function(x){return x.replace(/%20/g," ")})
 	var post = analizar_post_datos(partes[2])
 	var analizado = {
 		protocolo: partes[0]
@@ -64,6 +69,7 @@ var descargar = function(url,método,cabezas,cbs,poderes){
 	if(método=="POST"){
 		config.path = enlace.post.ruta
 		config.headers["Content-Type"] = "application/x-www-form-urlencoded;charset=utf-8"
+		console.log("Datos: ", enlace.post.datos)
 		config.headers["Content-Length"] = enlace.post.datos.length // Longitud de a=2&b=3
 	}
 	poderes.mostrar.log && poderes.mostrar.config && console.log(config)
@@ -77,6 +83,7 @@ var descargar = function(url,método,cabezas,cbs,poderes){
 			mos_res.$ && console.log(respuesta)
 			mos_res.cabezas.$ && console.log(respuesta.headers)
 			mos_res.cabezas.redireccionado && console.log(respuesta.headers.location)
+			mos_res.cabezas.galletas && console.log(estado,respuesta.headers["set-cookie"])
 			mos_res.cabezas.post.longitud && console.log(respuesta.headers["content-length"])
 			mos_res.cabezas.post.tipo && console.log(respuesta.headers["content-type"])
 			mostrar.poderes && (console.log(poderes),console.log("cabezas",mos_res.cabezas))
@@ -85,7 +92,9 @@ var descargar = function(url,método,cabezas,cbs,poderes){
 		mostrar.estado && console.log(respuesta.statusCode)
 		if(estado>=300 && estado<=399){ // Redirecciona.
 			if(poderes.estado.redireccionar){
-				console.log(estado)
+				console.log(estado,respuesta.headers["set-cookie"])
+				console.log(estado,respuesta.headers.location)
+				//descarga_normal(respuesta.headers.location,método,respuesta.headers)
 			}
 			if(poderes.estado.abortar){
 				pedido.abort()
@@ -131,7 +140,7 @@ var asignar = function(variable,ruta,debug){
 	if(eval_2==undefined){
 		eval(ruta_total+"="+partes[1])
 	}
-	return array_ruta
+	return variable
 }
 var retrollamadas = function(bajar){
 	if(bajar==undefined){
@@ -140,7 +149,7 @@ var retrollamadas = function(bajar){
 	var sip =  "=" + true
 	var nop =  "=" + false
 	var asignaciones = [
-		"url='http://google.com'"
+		"url='google.com'"
 		, "método='GET'"
 		, "cabezas={}"
 		, "cbs={}"
@@ -148,12 +157,13 @@ var retrollamadas = function(bajar){
 		, "poderes.mostrar.url" + sip
 		, "poderes.mostrar.config" + sip
 		, "poderes.mostrar.pedido" + nop
+		, "poderes.mostrar.estado" + sip
 		, "poderes.mostrar.respuesta.$" + nop
 		, "poderes.mostrar.respuesta.cabezas.$" + sip
 		, "poderes.mostrar.respuesta.cabezas.redireccionado" + sip
+		, "poderes.mostrar.respuesta.cabezas.galletas" + sip
 		, "poderes.mostrar.respuesta.cabezas.post.longitud" + sip
 		, "poderes.mostrar.respuesta.cabezas.post.tipo" + sip
-		, "poderes.mostrar.estado" + sip
 		, "poderes.mostrar.cuerpo" + sip
 		, "poderes.mostrar.poderes" + sip
 		, "poderes.estado.redireccionar" + sip
@@ -163,6 +173,26 @@ var retrollamadas = function(bajar){
 		asignar(bajar,x,false)
 	})
 	return bajar
+}
+var descargar_normal = function(url,método,cabezas){
+	var bajar = {
+		url: url
+		, método: método
+		, cabezas: cabezas
+		, cbs: {
+			error: function(){
+				return true
+			}
+		}, poderes: {
+			mostrar: {
+				log: false
+			}, estado: {
+				redireccionar: true
+				, abortar_pedido: false
+			}
+		}
+	}
+	descargar(...objeto_a_pedido(retrollamadas(bajar)))
 }
 var descargar_flavio = function(){
 	console.log("Extraído de: ", "https://flaviocopes.com/node-http-post/")
@@ -198,7 +228,7 @@ var replicar_flavio = function(){
 	console.log("Extraído de: ", "https://flaviocopes.com/node-http-post/")
 	var bajar = {
 		url: "https://flaviocopes.com/todos?todo=Buy the milk"
-		, método: "GET"
+		, método: "POST"
 		, cabezas: {
 			//"Cookie": "a=2&b=3"
 		}
@@ -212,15 +242,17 @@ var replicar_flavio = function(){
 				, url: true
 				, config: true
 				, pedido: false
+				, estado: true
 				, respuesta: {
 					$: false
 					, cabezas: {
 						$: true
 						, redireccionado: true
+						, galletas: true
 						, post: {
 							longitud: true
 							, tipo: true
-						}}, estado: true
+						}}
 				}, cuerpo: false
 				, poderes: true
 			}, estado: {
@@ -243,6 +275,7 @@ module.exports = {
 	, descargar: descargar
 	, asignar: asignar
 	, retrollamadas: retrollamadas
+	, descargar_normal: descargar_normal
 
 	, descargar_flavio: descargar_flavio
 	, replicar_flavio: replicar_flavio
