@@ -122,22 +122,12 @@ var descargar = function(url,método,cabezas,cbs,poderes){
 				var galletas = respuesta.headers["set-cookie"]
 				var galletas_form = objeto_hacia_formulario(galletas)
 
+				
 				var bajar = {
 					url: nueva_url
 					, método: método
-					, cbs: {
-						error: function(){
-							return true
-						}
-					}, poderes: {
-						mostrar: {
-							log: true
-							, cuerpo: true
-						}, estado: {
-							redireccionar: true
-							, abortar_pedido: true
-						}
-					}
+					, cbs: cbs
+					, poderes: poderes
 				}
 				if(galletas_form){
 					bajar.cabezas = {Cookies: galletas_form}
@@ -155,14 +145,12 @@ var descargar = function(url,método,cabezas,cbs,poderes){
 		})
 		respuesta.on("end", function(){
 			if(puede_mostrar){
-				if(mostrar.cuerpo){
-					if(estado>=200 && estado<=299){
-						 console.log(cuerpo)
-					}else{
-						 console.log("El código de estado no es de tipo 2xx.")
-						 console.log(cuerpo)
-					}		
+				if(estado>=200 && estado<=299){
+					mostrar.cuerpo.correcto && console.log(cuerpo)
+				}else{
+					mostrar.cuerpo.error && console.log(cuerpo)
 				}
+				process.stdout.write("\n> ")
 			}
 		})
 	})
@@ -217,18 +205,19 @@ var retrollamadas = function(bajar){
 		, "poderes.mostrar.config" + nop
 		, "poderes.mostrar.pedido" + nop
 		, "poderes.mostrar.estado" + nop
-		, "poderes.mostrar.cuerpo" + sip
 		, "poderes.mostrar.poderes" + nop
+		, "poderes.mostrar.cuerpo.correcto" + sip
+		, "poderes.mostrar.cuerpo.error" + nop
 		, "poderes.mostrar.enlace.$" + nop
 		, "poderes.mostrar.enlace.post.datos" + nop
 		, "poderes.mostrar.respuesta.$" + nop
-		, "poderes.mostrar.respuesta.cabezas.$" + sip
-		, "poderes.mostrar.respuesta.cabezas.redireccionado" + sip
-		, "poderes.mostrar.respuesta.cabezas.galletas" + sip
+		, "poderes.mostrar.respuesta.cabezas.$" + nop
+		, "poderes.mostrar.respuesta.cabezas.redireccionado" + nop
+		, "poderes.mostrar.respuesta.cabezas.galletas" + nop
 		, "poderes.mostrar.respuesta.cabezas.post.longitud" + nop
 		, "poderes.mostrar.respuesta.cabezas.post.tipo" + nop
 		, "poderes.estado.redireccionar" + sip
-		, "poderes.estado.abortar" + nop
+		, "poderes.estado.abortar" + sip
 
 	].map(function(x){
 		asignar(bajar,x,false)
@@ -246,8 +235,12 @@ var descargar_normal = function(url,método,cabezas){
 			}
 		}, poderes: {
 			mostrar: {
-				log: true
-				, cuerpo: true
+				$: true
+				, url: true
+				, cuerpo: {
+					correcto: true
+					, error: false
+				}
 			}, estado: {
 				redireccionar: true
 				, abortar_pedido: true
@@ -305,8 +298,11 @@ var replicar_flavio = function(){
 				, config: true
 				, pedido: false
 				, estado: true
-				, cuerpo: true
 				, poderes: true
+				, cuerpo: {
+					correcto: true
+					, error: false
+				}
 				, enlace : {
 					$: false
 					, post: {
