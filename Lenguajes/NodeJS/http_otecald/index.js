@@ -147,6 +147,7 @@ var descargar = function(url,método,cabezas,cbs,poderes){
 			if(puede_mostrar){
 				if(estado>=200 && estado<=299){
 					mostrar.cuerpo.correcto && console.log(cuerpo)
+					cbs.estado.correcto()
 				}else{
 					mostrar.cuerpo.error && console.log(cuerpo)
 				}
@@ -199,7 +200,8 @@ var retrollamadas = function(bajar){
 		"url='google.com'"
 		, "método='GET'"
 		, "cabezas={}"
-		, "cbs={}"
+		, "cbs.estado.correcto=function(){return true}"
+		, "cbs.estado.error=function(){return true}"
 		, "poderes.mostrar.$" + sip
 		, "poderes.mostrar.url" + sip
 		, "poderes.mostrar.config" + nop
@@ -224,14 +226,18 @@ var retrollamadas = function(bajar){
 	})
 	return bajar
 }
-var descargar_normal = function(url,método,cabezas){
+var descargar_normal = function(url,método,opciones){
 	var bajar = {
 		url: url
 		, método: método
-		, cabezas: cabezas
+		, cabezas: opciones && opciones.cabezas
 		, cbs: {
 			error: function(){
 				return true
+			}
+			, estado: {
+				correcto: opciones.cbs.estado.correcto
+				, error: opciones.cbs.estado.error
 			}
 		}, poderes: {
 			mostrar: {
