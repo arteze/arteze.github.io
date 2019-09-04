@@ -145,13 +145,14 @@ var descargar = function(url,método,cabezas,cbs,poderes){
 		})
 		respuesta.on("end", function(){
 			if(puede_mostrar){
+				function escribir_flecha(){process.stdout.write("\n> ")}
 				if(estado>=200 && estado<=299){
-					mostrar.cuerpo.correcto && console.log(cuerpo)
-					cbs.estado.correcto()
+					mostrar.cuerpo.correcto && (console.log(cuerpo),escribir_flecha())
+					cbs.estado.correcto(cuerpo)
 				}else{
-					mostrar.cuerpo.error && console.log(cuerpo)
+					mostrar.cuerpo.error && (console.log(cuerpo),escribir_flecha())
+					cbs.estado.error(cuerpo)
 				}
-				process.stdout.write("\n> ")
 			}
 		})
 	})
@@ -159,7 +160,7 @@ var descargar = function(url,método,cabezas,cbs,poderes){
 		pedido.write(enlace.post.datos)
 	}
 	pedido.on("error", function(e) {
-		cbs.error(e)
+		cbs.estado.error(e)
 		//process.exit()
 		poderes.mostrar.log && poderes.mostrar.error && console.log("Error: ",e)
 	})
@@ -200,8 +201,8 @@ var retrollamadas = function(bajar){
 		"url='google.com'"
 		, "método='GET'"
 		, "cabezas={}"
-		, "cbs.estado.correcto=function(){return true}"
 		, "cbs.estado.error=function(){return true}"
+		, "cbs.estado.correcto=function(){return true}"
 		, "poderes.mostrar.$" + sip
 		, "poderes.mostrar.url" + sip
 		, "poderes.mostrar.config" + nop
@@ -232,12 +233,9 @@ var descargar_normal = function(url,método,opciones){
 		, método: método
 		, cabezas: opciones && opciones.cabezas
 		, cbs: {
-			error: function(){
-				return true
-			}
-			, estado: {
-				correcto: opciones.cbs.estado.correcto
-				, error: opciones.cbs.estado.error
+			estado: {
+				error: opciones.cbs.estado.error
+				, correcto: opciones.cbs.estado.correcto
 			}
 		}, poderes: {
 			mostrar: {
@@ -294,8 +292,15 @@ var replicar_flavio = function(){
 			//"Cookie": "a=2&b=3"
 		}
 		, cbs: {
-			error: function(){
-				return true
+			estado: {
+				error: function(x){
+					console.log(x)
+					return true
+				}
+				, correcto: function(x){
+					console.log(x)
+					return true
+				}
 			}
 		}, poderes: {
 			mostrar: {
@@ -306,8 +311,8 @@ var replicar_flavio = function(){
 				, estado: true
 				, poderes: true
 				, cuerpo: {
-					correcto: true
-					, error: false
+					error: false
+					, correcto: true
 				}
 				, enlace : {
 					$: false
