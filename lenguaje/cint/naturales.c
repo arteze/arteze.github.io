@@ -1,4 +1,12 @@
 /*
+	caracter: char
+	texto: char*
+	
+	salto_de_linea: "\n"
+	nuevo: Crea nuevos textos o enteros.
+	natural: Es un texto que representa un número natural incluyendo el 0.
+	es: int que representa un booleano
+	
 	textitud: Es longitud de un string convertida a texto. La longitud de un
 	 string es pasada con strlen, devuelve un size_t, y lo transforma a int.
 */
@@ -70,7 +78,6 @@ int main(int argc, char *argv[])
 {
 	mostrar_texto("Texto: '");
 	char* cadena = nuevo_texto();
-	char* salto_de_linea = nuevo_salto_de_linea();
 	mostrar_texto(cadena);
 	mostrar_texto( "'\n" );
 	for(int i=1;i<argc;++i){
@@ -78,12 +85,12 @@ int main(int argc, char *argv[])
 		mostrar_texto("Entero: ");
 		char* natural = natural_desde_texto(actual);
 		mostrar_texto(natural);
-		mostrar_texto( salto_de_linea );
+		mostrar_texto( "\n" );
 
 		char* la_textitud_de_natural = textitud_de_natural(natural);	
 		mostrar_texto("longitud de natural: ");
 		mostrar_natural(la_textitud_de_natural);
-		mostrar_texto( salto_de_linea );
+		mostrar_texto( "\n" );
 	}
 	return 0;	
 }
