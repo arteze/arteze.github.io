@@ -4,6 +4,8 @@ Bienvenido al sitio web de ArtEze. Se intenta que el sitio sea bueno. El sitio O
 
 https://arteze.github.io/ (por ahora solo genera un __Hola mundo__ mediante JavaScript)
 
+Página alternativa en GitHub Pages: https://otecald.github.io/
+
 Proyectos actuales:
 
 * Cofonedor: Conversor de fonética.
