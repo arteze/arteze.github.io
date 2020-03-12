@@ -1,4 +1,4 @@
-﻿# Otecald
+# arteze.github.io
 
 Bienvenido al sitio web de ArtEze. Se intenta que el sitio sea bueno. El sitio Otecald en GitHub.
 
@@ -6,6 +6,13 @@ https://arteze.github.io/ (por ahora solo genera un __Hola mundo__ mediante Java
 
 Página alternativa en GitHub Pages: https://otecald.github.io/
 - Proyecto GitHub: https://github.com/Otecald/otecald.github.io
+
+> ## Otros repositorios
+> - charlavod: https://arteze.github.io/charlavod/
+>   - Proyecto GitHub: https://github.com/ArtEze/charlavod
+> 
+> - NaCludora: https://arteze.github.io/NaCludora/
+>   - Proyecto GitHub: https://github.com/ArtEze/NaCludora
 
 Proyectos actuales:
 
