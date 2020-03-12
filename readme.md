@@ -14,24 +14,26 @@ Página alternativa en GitHub Pages: https://otecald.github.io/
 > - NaCludora: https://otecald.github.io/nacludora/
 >   - Proyecto GitHub: https://github.com/Otecald/nacludora
 
-Proyectos actuales:
+### Proyectos actuales:
 
 * Cofonedor: Conversor de fonética.
 * Bot Otecald: Bot conversacional basado en ElizaBot (faltan cosas por traducir).
 * Base 64 hacia Palabras de Wikcionario.
 * Estadísticas de la Quiniela.
 
-Proyectos triviales:
+### Proyectos triviales:
 
 * Descargar AJAX: Ejemplo de cómo se descarga una página mediante AJAX.
 * Enviar mail: Página que sirve para enviarme un mail.
 
-Herramientas generales: [js/General][General]
+### Herramientas generales: [js/General][General]
 
-> Herramientas generales: [General.js][General.js]  
-Criterios de ordenamiento: [Criterios_ordenamiento.js][Criterios]  
-Ordenado unidimensional: [ordenar.js][Ordenar 1D]  
-Ordenado bidimensional: [ordenado_2D.js][Ordenar 2D]
+- Herramientas generales: [General.js][General.js]
+- Criterios de ordenamiento: [Criterios_ordenamiento.js][Criterios]
+- Ordenado unidimensional: [ordenar.js][Ordenar 1D]
+- Ordenado bidimensional: [ordenado_2D.js][Ordenar 2D]
+
+<a/>
 
 [General]: https://github.com/ArtEze/arteze.github.io/tree/master/js/General
 
