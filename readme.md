@@ -34,3 +34,8 @@ Ordenado unidimensional: [ordenar.js][Ordenar 1D]
 Ordenado bidimensional: [ordenado_2D.js][Ordenar 2D]
 
 [General]: https://github.com/ArtEze/arteze.github.io/tree/master/js/General
+
+[General.js]: https://github.com/ArtEze/arteze.github.io/blob/master/js/General/General.js
+[Criterios]: https://github.com/ArtEze/arteze.github.io/blob/master/js/General/Criterios_ordenamiento.js
+[Ordenar 1D]: https://github.com/ArtEze/arteze.github.io/blob/master/js/General/ordenar.js
+[Ordenar 2D]: https://github.com/ArtEze/arteze.github.io/blob/master/js/General/ordenado_2D.js
