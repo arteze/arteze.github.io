@@ -11,8 +11,8 @@ Página alternativa en GitHub Pages: https://otecald.github.io/
 > - charlavod: https://arteze.github.io/charlavod/
 >   - Proyecto GitHub: https://github.com/ArtEze/charlavod
 > 
-> - NaCludora: https://otecald.github.io/NaCludora/
->   - Proyecto GitHub: https://github.com/Otecald/NaCludora
+> - NaCludora: https://otecald.github.io/nacludora/
+>   - Proyecto GitHub: https://github.com/Otecald/nacludora
 
 Proyectos actuales:
 
