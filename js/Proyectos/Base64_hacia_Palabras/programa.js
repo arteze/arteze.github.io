@@ -1,6 +1,6 @@
 /*
 	Código javascript creado por Emiliano Ezequiel Parenti.
-	Lingüística computacional 2017, http://otecald.github.io
+	Lingüística computacional 2017, https://otecald.github.io
 	Email: passymas@gmail.com
 */
 function abecedario(tipo)
