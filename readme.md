@@ -5,7 +5,7 @@ Bienvenido al sitio web de ArtEze. Se intenta que el sitio sea bueno. El sitio O
 https://arteze.github.io/ (por ahora solo genera un __Hola mundo__ mediante JavaScript)
 
 Página alternativa en GitHub Pages: https://otecald.github.io/
-- Proyecto GitHub: https://github.com/Otecald/otecald.github.io
+- Proyecto GitHub: https://github.com/otecald/otecald.github.io
 
 > ## Otros repositorios
 > - charlavod: https://arteze.github.io/charlavod/
