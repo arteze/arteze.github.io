@@ -1,4 +1,4 @@
-﻿# Bot Otecald
+# Bot Otecald
 Este proyecto está basado en ElizaBot (http://www.masswerk.at/elizabot/).
 
 Archivos:
