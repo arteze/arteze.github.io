@@ -1,7 +1,7 @@
 /*
-Descargar analizador_html desde:
-	https://github.com/ArtEze/arteze.github.io/Lenguajes/NodeJS/analizador_html/index.js
-
+Descargar este módulo llamado analizador_html desde:
+	Archivo en proyecto: https://github.com/arteze/arteze.github.io/blob/master/lenguaje/node_js/analizador_html/index.js
+	Ruta en GitHub Pages: https://arteze.github.io/lenguaje/node_js/analizador_html/index.js
 */
 
 var s_a = "\x20\x09\x0d\x0a"
@@ -232,4 +232,3 @@ module.exports = {
 	html: analizar_html
 	, buscar: buscar_elementos
 }
-
