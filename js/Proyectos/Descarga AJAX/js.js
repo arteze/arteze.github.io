@@ -33,7 +33,7 @@
 
 window.onload = function ()
 {
-	var hospedaje="https://arteze.github.io/js/Proyectos/Base64_hacia_Palabras/"
+	var hospedaje="../Base64_hacia_Palabras/"
 	var códigos=[
 		"Wikcionario_Lemario_3.js",
 		"General/General.js"
