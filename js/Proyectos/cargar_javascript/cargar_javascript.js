@@ -1,14 +1,3 @@
-function iniciar(callback){
-	var intervalo = setInterval(function(){
-		try{
-			callback()
-			iniciado = true
-		}catch(e){}
-		if(iniciado){
-			clearInterval(intervalo)
-		}
-	})
-}
 iniciar(function(){
 	var html = document.createElement("html")
 	var head = document.createElement("head")
