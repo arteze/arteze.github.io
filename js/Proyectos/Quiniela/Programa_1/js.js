@@ -1,7 +1,10 @@
-﻿//Código javascript creado por Emiliano Ezequiel Parenti.
-//Predicción Quiniela, http://otecald.atspace.com
-//Email: passymas@gmail.com
-
+/*
+	Código javascript creado por Emiliano Ezequiel Parenti.
+	Predicción Quiniela, http://otecald.github.io
+	Email: passymas@gmail.com
+	
+	Código que intenta simular un juego de Quiniela.
+*/
 function rellenarArray(array,dígitos)
 {
 	var longitud=Math.pow(10,dígitos)
