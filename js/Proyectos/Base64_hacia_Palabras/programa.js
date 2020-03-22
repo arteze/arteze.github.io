@@ -1,7 +1,8 @@
-﻿//Código javascript creado por Emiliano Ezequiel Parenti.
-//Lingüística computacional 2017, http://otecald.atspace.com
-//Email: passymas@gmail.com
-
+/*
+	Código javascript creado por Emiliano Ezequiel Parenti.
+	Lingüística computacional 2017, http://otecald.github.io
+	Email: passymas@gmail.com
+*/
 function abecedario(tipo)
 {
 	var devuelve,caracteres,tipos
