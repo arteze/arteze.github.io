@@ -12,7 +12,7 @@ Página alternativa en GitHub Pages: https://otecald.github.io/
 >   - Proyecto GitHub: https://github.com/ArtEze/charlavod
 > 
 > - NaCludora: https://otecald.github.io/nacludora/
->   - Proyecto GitHub: https://github.com/Otecald/nacludora
+>   - Proyecto GitHub: https://github.com/otecald/nacludora
 
 ### Proyectos actuales:
 
@@ -35,9 +35,9 @@ Página alternativa en GitHub Pages: https://otecald.github.io/
 
 <a/>
 
-[General]: https://github.com/ArtEze/arteze.github.io/tree/master/js/General
+[General]: https://github.com/artEze/arteze.github.io/tree/master/js/General
 
-[General.js]: https://github.com/ArtEze/arteze.github.io/blob/master/js/General/General.js
-[Criterios]: https://github.com/ArtEze/arteze.github.io/blob/master/js/General/Criterios_ordenamiento.js
-[Ordenar 1D]: https://github.com/ArtEze/arteze.github.io/blob/master/js/General/ordenar.js
-[Ordenar 2D]: https://github.com/ArtEze/arteze.github.io/blob/master/js/General/ordenado_2D.js
+[General.js]: https://github.com/artEze/arteze.github.io/blob/master/js/General/General.js
+[Criterios]: https://github.com/artEze/arteze.github.io/blob/master/js/General/Criterios_ordenamiento.js
+[Ordenar 1D]: https://github.com/artEze/arteze.github.io/blob/master/js/General/ordenar.js
+[Ordenar 2D]: https://github.com/artEze/arteze.github.io/blob/master/js/General/ordenado_2D.js
