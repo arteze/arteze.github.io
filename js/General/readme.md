@@ -35,7 +35,7 @@
 * `ordenar_números`: Ordena la matriz por número (usa `criterio_números`).
   * `ordenar_secuencias`: Ordena la matriz por longitud de string (usa `criterio_secuencias`).
 
-[General.js]: https://github.com/ArtEze/arteze.github.io/blob/master/js/General/General.js
-[Criterios]: https://github.com/ArtEze/arteze.github.io/blob/master/js/General/Criterios_ordenamiento.js
-[Ordenar 1D]: https://github.com/ArtEze/arteze.github.io/blob/master/js/General/ordenar.js
-[Ordenar 2D]: https://github.com/ArtEze/arteze.github.io/blob/master/js/General/ordenado_2D.js
+[General.js]: https://github.com/arteze/arteze.github.io/blob/master/js/General/General.js
+[Criterios]: https://github.com/arteze/arteze.github.io/blob/master/js/General/Criterios_ordenamiento.js
+[Ordenar 1D]: https://github.com/arteze/arteze.github.io/blob/master/js/General/ordenar.js
+[Ordenar 2D]: https://github.com/arteze/arteze.github.io/blob/master/js/General/ordenado_2D.js
