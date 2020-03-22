@@ -7,7 +7,7 @@ function iniciar(callback,mostrar_error){
 		}catch(e){
 			if(mostrar_error){
 				console.log(e)
-			}		
+			}
 		}
 		if(iniciado){
 			clearInterval(intervalo)
