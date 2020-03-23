@@ -1,4 +1,10 @@
-function iniciar(callback,puede_depurar){
+function iniciar(callback,opciones){
+	/* Opciones:
+		var opciones = {
+			puede_depurar: true | false
+			, milisegundos: 10 | 20 | 50 | 100 // ...
+		}
+	*/	
 	var iniciado = false
 	var contador = 0
 	var errores = []
@@ -7,12 +13,11 @@ function iniciar(callback,puede_depurar){
 			callback()
 			iniciado = true
 		}catch(e){
-			if(puede_depurar){
+			if(opciones && opciones.puede_depurar){
 				console.log(e)
 			}
 			errores.push(e)
-			++contador
-			if(contador==1000){
+			if(++contador==1000){
 				clearInterval(intervalo)
 				var depurado = (function mostrar_errores(){
 					if(errores.length>0){
@@ -24,10 +29,10 @@ function iniciar(callback,puede_depurar){
 		}
 		if(iniciado){
 			clearInterval(intervalo)
-			if(puede_depurar){
+			if(opciones && opciones.puede_depurar){
 				console.log(iniciado,contador)
 			}
 		}
-	})
+	},opciones && opciones.milisegundos?opciones.milisegundos:0)
 	return intervalo
 }
