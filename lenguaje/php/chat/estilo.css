@@ -1,0 +1,31 @@
+html, body, .chat_dentro    { height: 100%; margin:   0; background: #000000ff; }
+table, th, td { border-collapse: collapse; border: 0px solid #ffffffff; }
+textarea      { width:  99%; min-height: 50px; background: #ffffffe0; font-size : 1.6em; }
+a             { color: #ffffffff; margin: 0; min-height: 200px; width:  150px; vertical-align: top; font-size : 1.6em; }
+input         { width:  125px; vertical-align: top; font-size : 1.6em; }
+button        { padding: 0px 0px 0px 0px; height: 100%; width:  110px; vertical-align: top; font-size : 1.6em; }
+.chat_fuera   {
+	display: inline-block;
+	height:  85%;
+	width: 100%;
+	background: #ffffff70;
+	color: #ffffffff;
+	vertical-align: top;
+}
+.chat  {
+	display: inline-block;
+	height:  100%;
+	width: 85%;
+	background: #ffffff70;
+	overflow: scroll;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	color: #ffffffff;
+	font-size : 1.4em;
+}
+.texto        { height:  15%; width: 100%; background: #ffffff60; }
+.columna_alias_a  { min-width: 75px; }
+.columna_chat_a  { vertical-align: top; font-size : 1.6em; display: inline-block; }
+.columna_alias_b  { min-width: 150px; }
+.columna_textarea { min-width: 74%; }
+.columna_enviar { min-width: 100px; }
