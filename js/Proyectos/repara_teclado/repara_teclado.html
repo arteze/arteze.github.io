@@ -5,7 +5,7 @@
     <title>Repara teclado HTML</title>
     <script>
 
-function s(){
+function t(){
 
 	var x = document.querySelector("#t2")
 
@@ -30,8 +30,19 @@ function s(){
 	x.value = x.value.replace(/\(/g,"i".toUpperCase())
 	x.value = x.value.replace(/\)/g,"o".toUpperCase())
 	x.value = x.value.replace(/\=/g,"p".toUpperCase())
-	
+
+	x.value = x.value.replace(/º3/g,"é")
+	x.value = x.value.replace(/º7/g,"ú")
+	x.value = x.value.replace(/º8/g,"í")
+	x.value = x.value.replace(/º9/g,"ó")
+
+	x.value = x.value.replace(/º·/g,"é".toUpperCase())
+	x.value = x.value.replace(/º\//g,"ú".toUpperCase())
+	x.value = x.value.replace(/º\(/g,"í".toUpperCase())
+	x.value = x.value.replace(/º\)/g,"ó".toUpperCase())
+
 	document.querySelector("#t1").value = x.value
+
 }
 
     </script>
@@ -39,6 +50,6 @@ function s(){
   <body>
     <p>Escriba números:</p>
     <p><textarea disabled id="t1" ></textarea></p>
-    <textarea onkeyup="s()" id="t2" ></textarea>
+    <textarea onkeyup="t()" id="t2" ></textarea>
   </body>
 </html>
