@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Repara teclado HTML</title>
+    <script>
+
+setInterval(function(){
+var x = document.querySelector("textarea")
+x.value = x.value.replace(/1/g,"q")
+x.value = x.value.replace(/2/g,"w")
+x.value = x.value.replace(/3/g,"e")
+x.value = x.value.replace(/4/g,"r")
+x.value = x.value.replace(/5/g,"t")
+x.value = x.value.replace(/6/g,"y")
+x.value = x.value.replace(/7/g,"u")
+x.value = x.value.replace(/8/g,"i")
+x.value = x.value.replace(/9/g,"o")
+x.value = x.value.replace(/0/g,"p")
+
+x.value = x.value.replace(/!/g,"q".toUpperCase())
+x.value = x.value.replace(/"/g,"w".toUpperCase())
+x.value = x.value.replace(/·/g,"e".toUpperCase())
+x.value = x.value.replace(/\$/g,"r".toUpperCase())
+x.value = x.value.replace(/%/g,"t".toUpperCase())
+x.value = x.value.replace(/&/g,"y".toUpperCase())
+x.value = x.value.replace(/\//g,"u".toUpperCase())
+x.value = x.value.replace(/\(/g,"i".toUpperCase())
+x.value = x.value.replace(/\)/g,"o".toUpperCase())
+x.value = x.value.replace(/\=/g,"p".toUpperCase())
+
+},20)
+
+    </script>
+  </head>
+  <body>
+    <p>Escriba números:</p>
+    <textarea></textarea>
+  </body>
+</html>
