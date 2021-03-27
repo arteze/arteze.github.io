@@ -10,7 +10,7 @@ https://github.com/arteze/arteze.github.io/blob/master/js/Proyectos/repara_tecla
 
 function t(){
 
-	Array.from(document.querySelectorAll("textarea")).map(function(x){
+	Array.from(document.querySelectorAll("#t2")).map(function(x){
 		x.value = x.value.replace(/1/g,"q")
 		x.value = x.value.replace(/2/g,"w")
 		x.value = x.value.replace(/3/g,"e")
@@ -54,6 +54,8 @@ function t(){
 		x.value = x.value.replace(/ºI/g,"í".toUpperCase())
 		x.value = x.value.replace(/ºO/g,"ó".toUpperCase())
 		x.value = x.value.replace(/ºA/g,"á".toUpperCase())
+
+		document.querySelector("#t1").value = x.value
 
 	})
 }
