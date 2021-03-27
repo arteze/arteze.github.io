@@ -1,5 +1,8 @@
 <!DOCTYPE HTML>
-<!-- https://arteze.github.io/js/Proyectos/repara_teclado/repara_teclado.html -->
+<!--
+https://arteze.github.io/js/Proyectos/repara_teclado/repara_teclado.html
+https://github.com/arteze/arteze.github.io/blob/master/js/Proyectos/repara_teclado/repara_teclado.html
+-->
 <html>
   <head>
     <title>Repara teclado HTML</title>
@@ -7,52 +10,52 @@
 
 function t(){
 
-	var x = document.querySelector("#t2")
+	Array.from(document.querySelectorAll("textarea")).map(function(x){
+		x.value = x.value.replace(/1/g,"q")
+		x.value = x.value.replace(/2/g,"w")
+		x.value = x.value.replace(/3/g,"e")
+		x.value = x.value.replace(/4/g,"r")
+		x.value = x.value.replace(/5/g,"t")
+		x.value = x.value.replace(/6/g,"y")
+		x.value = x.value.replace(/7/g,"u")
+		x.value = x.value.replace(/8/g,"i")
+		x.value = x.value.replace(/9/g,"o")
+		x.value = x.value.replace(/0/g,"p")
 
-	x.value = x.value.replace(/1/g,"q")
-	x.value = x.value.replace(/2/g,"w")
-	x.value = x.value.replace(/3/g,"e")
-	x.value = x.value.replace(/4/g,"r")
-	x.value = x.value.replace(/5/g,"t")
-	x.value = x.value.replace(/6/g,"y")
-	x.value = x.value.replace(/7/g,"u")
-	x.value = x.value.replace(/8/g,"i")
-	x.value = x.value.replace(/9/g,"o")
-	x.value = x.value.replace(/0/g,"p")
+		x.value = x.value.replace(/!/g,"q".toUpperCase())
+		x.value = x.value.replace(/"/g,"w".toUpperCase())
+		x.value = x.value.replace(/·/g,"e".toUpperCase())
+		x.value = x.value.replace(/\$/g,"r".toUpperCase())
+		x.value = x.value.replace(/%/g,"t".toUpperCase())
+		x.value = x.value.replace(/&/g,"y".toUpperCase())
+		x.value = x.value.replace(/\//g,"u".toUpperCase())
+		x.value = x.value.replace(/\(/g,"i".toUpperCase())
+		x.value = x.value.replace(/\)/g,"o".toUpperCase())
+		x.value = x.value.replace(/\=/g,"p".toUpperCase())
 
-	x.value = x.value.replace(/!/g,"q".toUpperCase())
-	x.value = x.value.replace(/"/g,"w".toUpperCase())
-	x.value = x.value.replace(/·/g,"e".toUpperCase())
-	x.value = x.value.replace(/\$/g,"r".toUpperCase())
-	x.value = x.value.replace(/%/g,"t".toUpperCase())
-	x.value = x.value.replace(/&/g,"y".toUpperCase())
-	x.value = x.value.replace(/\//g,"u".toUpperCase())
-	x.value = x.value.replace(/\(/g,"i".toUpperCase())
-	x.value = x.value.replace(/\)/g,"o".toUpperCase())
-	x.value = x.value.replace(/\=/g,"p".toUpperCase())
+		x.value = x.value.replace(/º3/g,"é")
+		x.value = x.value.replace(/º7/g,"ú")
+		x.value = x.value.replace(/º8/g,"í")
+		x.value = x.value.replace(/º9/g,"ó")
 
-	x.value = x.value.replace(/º3/g,"é")
-	x.value = x.value.replace(/º7/g,"ú")
-	x.value = x.value.replace(/º8/g,"í")
-	x.value = x.value.replace(/º9/g,"ó")
+		x.value = x.value.replace(/º·/g,"é".toUpperCase())
+		x.value = x.value.replace(/º\//g,"ú".toUpperCase())
+		x.value = x.value.replace(/º\(/g,"í".toUpperCase())
+		x.value = x.value.replace(/º\)/g,"ó".toUpperCase())
 
-	x.value = x.value.replace(/º·/g,"é".toUpperCase())
-	x.value = x.value.replace(/º\//g,"ú".toUpperCase())
-	x.value = x.value.replace(/º\(/g,"í".toUpperCase())
-	x.value = x.value.replace(/º\)/g,"ó".toUpperCase())
+		x.value = x.value.replace(/ºe/g,"é")
+		x.value = x.value.replace(/ºu/g,"ú")
+		x.value = x.value.replace(/ºi/g,"í")
+		x.value = x.value.replace(/ºo/g,"ó")
+		x.value = x.value.replace(/ºa/g,"á")
 
-	x.value = x.value.replace(/ºe/g,"é")
-	x.value = x.value.replace(/ºu/g,"ú")
-	x.value = x.value.replace(/ºi/g,"í")
-	x.value = x.value.replace(/ºo/g,"ó")
+		x.value = x.value.replace(/ºE/g,"é".toUpperCase())
+		x.value = x.value.replace(/ºU/g,"ú".toUpperCase())
+		x.value = x.value.replace(/ºI/g,"í".toUpperCase())
+		x.value = x.value.replace(/ºO/g,"ó".toUpperCase())
+		x.value = x.value.replace(/ºA/g,"á".toUpperCase())
 
-	x.value = x.value.replace(/ºE/g,"é".toUpperCase())
-	x.value = x.value.replace(/ºU/g,"ú".toUpperCase())
-	x.value = x.value.replace(/ºI/g,"í".toUpperCase())
-	x.value = x.value.replace(/ºO/g,"ó".toUpperCase())
-
-	document.querySelector("#t1").value = x.value
-
+	})
 }
 
     </script>
