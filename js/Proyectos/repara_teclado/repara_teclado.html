@@ -41,6 +41,16 @@ function t(){
 	x.value = x.value.replace(/º\(/g,"í".toUpperCase())
 	x.value = x.value.replace(/º\)/g,"ó".toUpperCase())
 
+	x.value = x.value.replace(/ºe/g,"é")
+	x.value = x.value.replace(/ºu/g,"ú")
+	x.value = x.value.replace(/ºi/g,"í")
+	x.value = x.value.replace(/ºo/g,"ó")
+
+	x.value = x.value.replace(/ºE/g,"é".toUpperCase())
+	x.value = x.value.replace(/ºU/g,"ú".toUpperCase())
+	x.value = x.value.replace(/ºI/g,"í".toUpperCase())
+	x.value = x.value.replace(/ºO/g,"ó".toUpperCase())
+
 	document.querySelector("#t1").value = x.value
 
 }
