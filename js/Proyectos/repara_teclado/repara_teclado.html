@@ -9,11 +9,7 @@ https://gist.github.com/arteze/f3cb48fcf0b04b82d9baec14fcc96c99
     <title>Repara teclado HTML</title>
   </head>
   <body>
-    <p>Escriba números:</p>
-    <p><textarea disabled id="t1" ></textarea></p>
-    <p><textarea onkeyup="t()" id="t2" ></textarea></p>
-    <p><textarea></textarea></p>
-	  
+
     <script>
 
 // ==UserScript==
@@ -132,8 +128,8 @@ g.crear_botón_botones = function(){
 					}
 				});
 			}],
-			["mouseenter",g.aparecer],
-			["mouseleave",g.desaparecer]
+			["mouseenter",g.aparecer]/*,
+			["mouseleave",g.desaparecer]*/
 		]
 	});
 }
@@ -174,8 +170,8 @@ g.crear_div = function(id,fijado,mouse){
 		div.style["background-color"] = "#8000ff80";
 		div.style.position = "relative";
 	}
-	[["mouseenter",g.aparecer],
-	["mouseleave",g.desaparecer]].map(x=>{
+	[["mouseenter",g.aparecer]/*,
+	["mouseleave",g.desaparecer]*/].map(x=>{
 		div.addEventListener(x[0],x[1])
 	})
 	return div;
