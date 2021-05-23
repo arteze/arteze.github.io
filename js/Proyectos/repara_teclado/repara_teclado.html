@@ -2,63 +2,325 @@
 <!--
 https://arteze.github.io/js/Proyectos/repara_teclado/repara_teclado.html
 https://github.com/arteze/arteze.github.io/blob/master/js/Proyectos/repara_teclado/repara_teclado.html
+https://gist.github.com/arteze/f3cb48fcf0b04b82d9baec14fcc96c99
 -->
 <html>
   <head>
     <title>Repara teclado HTML</title>
     <script>
 
-function t(){
+// ==UserScript==
+// @name         reparar_teclado.user.js
+// @version      0.12.43
+// @description  textarea
+// @author       ArtEze
+// @match        *://*/*
+// @grant        none
+// @namespace    http://tampermonkey.net/
+// @source       https://gist.github.com/arteze/f3cb48fcf0b04b82d9baec14fcc96c99/
+// ==/UserScript==
 
-	Array.from(document.querySelectorAll("#t2")).map(function(x){
-		x.value = x.value.replace(/1/g,"q")
-		x.value = x.value.replace(/2/g,"w")
-		x.value = x.value.replace(/3/g,"e")
-		x.value = x.value.replace(/4/g,"r")
-		x.value = x.value.replace(/5/g,"t")
-		x.value = x.value.replace(/6/g,"y")
-		x.value = x.value.replace(/7/g,"u")
-		x.value = x.value.replace(/8/g,"i")
-		x.value = x.value.replace(/9/g,"o")
-		x.value = x.value.replace(/0/g,"p")
+var g = {};
+window.g3 = "";
+window.g = g;
 
-		x.value = x.value.replace(/!/g,"q".toUpperCase())
-		x.value = x.value.replace(/"/g,"w".toUpperCase())
-		x.value = x.value.replace(/·/g,"e".toUpperCase())
-		x.value = x.value.replace(/\$/g,"r".toUpperCase())
-		x.value = x.value.replace(/%/g,"t".toUpperCase())
-		x.value = x.value.replace(/&/g,"y".toUpperCase())
-		x.value = x.value.replace(/\//g,"u".toUpperCase())
-		x.value = x.value.replace(/\(/g,"i".toUpperCase())
-		x.value = x.value.replace(/\)/g,"o".toUpperCase())
-		x.value = x.value.replace(/\=/g,"p".toUpperCase())
+g.transformar = function(entrada){
 
-		x.value = x.value.replace(/º3/g,"é")
-		x.value = x.value.replace(/º7/g,"ú")
-		x.value = x.value.replace(/º8/g,"í")
-		x.value = x.value.replace(/º9/g,"ó")
-
-		x.value = x.value.replace(/º·/g,"é".toUpperCase())
-		x.value = x.value.replace(/º\//g,"ú".toUpperCase())
-		x.value = x.value.replace(/º\(/g,"í".toUpperCase())
-		x.value = x.value.replace(/º\)/g,"ó".toUpperCase())
-
-		x.value = x.value.replace(/ºe/g,"é")
-		x.value = x.value.replace(/ºu/g,"ú")
-		x.value = x.value.replace(/ºi/g,"í")
-		x.value = x.value.replace(/ºo/g,"ó")
-		x.value = x.value.replace(/ºa/g,"á")
-
-		x.value = x.value.replace(/ºE/g,"é".toUpperCase())
-		x.value = x.value.replace(/ºU/g,"ú".toUpperCase())
-		x.value = x.value.replace(/ºI/g,"í".toUpperCase())
-		x.value = x.value.replace(/ºO/g,"ó".toUpperCase())
-		x.value = x.value.replace(/ºA/g,"á".toUpperCase())
-
-		document.querySelector("#t1").value = x.value
-
+	var reemplazos = [
+		["1","q"],["!"  ,"Q"],["º3","é"],["º·"  ,"É"],["ªq","1"],["ªQ","!"],
+		["2","w"],['"'  ,"W"],["º7","ú"],["º/"  ,"Ú"],["ªw","2"],["ªW",'"'],
+		["3","e"],["·"  ,"E"],["º8","í"],["º\\(","Í"],["ªe","3"],["ªE","·"],
+		["4","r"],["\\$","R"],["º9","ó"],["º\\)","Ó"],["ªr","4"],["ªR","$"],
+		["5","t"],["%"  ,"T"],["ºa","á"],["ºA"  ,"Á"],["ªt","5"],["ªT","%"],
+		["6","y"],["&"  ,"Y"],["ºe","é"],["ºE"  ,"É"],["ªy","6"],["ªY","&"],
+		["7","u"],["/"  ,"U"],["ºu","ú"],["ºU"  ,"Ú"],["ªu","7"],["ªU","/"],
+		["8","i"],["\\(","I"],["ºi","í"],["ºI"  ,"Í"],["ªi","8"],["ªI","("],
+		["9","o"],["\\)","O"],["ºo","ó"],["ºO"  ,"Ó"],["ªo","9"],["ªO",")"],
+		["0","p"],["="  ,"P"],["ºa","á"],["ºA"  ,"Á"],["ªp","0"],["ªP","="]
+	]
+	reemplazos.map(function(x){
+		var regex = new RegExp(x[0],"g");
+		entrada = entrada.replace(regex,x[1]);
+	})
+	return entrada;
+}
+g.destransformar = function(entrada){
+	var partido = entrada.split("");
+	var reemplazos = [
+		["1","ª1"],["q","1"],["!","ª!"],["Q","!"],["á","ºa"],
+		["2","ª2"],['w',"2"],['"','ª"'],["W",'"'],["é","ºe"],
+		["3","ª3"],["e","3"],["·","ª·"],["E","·"],["í","ºi"],
+		["4","ª4"],["r","4"],["$","ª$"],["R","$"],["ó","ºo"],
+		["5","ª5"],["t","5"],["%","ª%"],["T","%"],["ú","ºu"],
+		["6","ª6"],["y","6"],["&","ª&"],["Y","&"],["Á","ºA"],
+		["7","ª7"],["u","7"],["/","ª/"],["U","/"],["É","ºE"],
+		["8","ª8"],["i","8"],["(","ª("],["I","("],["Í","ºI"],
+		["9","ª9"],["o","9"],[")","ª)"],["O",")"],["Ó","ºO"],
+		["0","ª0"],["p","0"],["=","ª="],["P","="],["Ú","ºU"]
+	]
+	for(var i=0;i<partido.length;i++){
+		for(var j=0;j<reemplazos.length;j++){
+			if(partido[i]==reemplazos[j][0]){
+				partido[i] = reemplazos[j][1];
+			}
+		}
+	}
+	var reemplazado = partido.join("");
+	return reemplazado;
+}
+g.crear_botón = function(argumentos){
+	console.log(argumentos);
+	var div = document.createElement("div");
+	var botón = document.createElement("button");
+	var b = document.createElement("b");
+	div.classList.add(...argumentos.clases);
+	div.id = argumentos.id;
+	botón.style["background-color"] = argumentos.background_color;
+	b.innerHTML = argumentos.texto;
+	argumentos.eventos.map(function(x){
+		botón.addEventListener(x[0],x[1]);
+	})
+	botón.appendChild(b);
+	div.appendChild(botón);
+	return {
+		div: div,
+		botón: botón,
+		b: b
+	};
+}
+g.obtener_estilos_cajas = function(){
+	return Array.from(
+		document.querySelectorAll(".caja")
+	).map(function(x){
+		return x.style;
 	})
 }
+g.aparecer = function(x){
+	var d8v = document.querySelector("#d8v");
+	d8v && (d8v.style.left = "10px");
+	return x;
+}
+g.desaparecer = function(x){
+	var d8v = document.querySelector("#d8v");
+	d8v && (d8v.style.left = "-2000px");
+	return x;
+}
+g.crear_botón_botones = function(){
+	return g.crear_botón({
+		id: "botón_botones",
+		background_color: "#ddddddf0",
+		texto: "botones",
+		clases: ["botón","principal"],
+		eventos: [
+			["click",function(){
+				return Array.from(
+					document.querySelectorAll("#d9v")
+				).map(function(x){
+					return x.style;
+				}).map(function(x){
+					if(x.display=="none"){
+						x.display = "block";
+					}else{
+						x.display = "none";
+					}
+				});
+			}],
+			["mouseenter",g.aparecer],
+			["mouseleave",g.desaparecer]
+		]
+	});
+}
+g.crear_botón_intercambiar = function(){
+	return g.crear_botón({
+		id: "botón_intercambiar",
+		background_color: "#ddddddf0",
+		texto: "intercambiar",
+		clases: ["botón","secundario"],
+		eventos: [
+			["click",function(){
+				return Array.from(
+					document.querySelectorAll("textarea")
+				).map(function(x){
+					return x.style;
+				}).map(function(x){
+					if(x.display=="none"){
+						x.display = "block";
+					}else{
+						x.display = "none";
+					}
+				});
+			}]
+		]
+	});
+}
+g.crear_div = function(id,fijado,mouse){
+	var div = document.createElement("div");
+	div.id = id;
+	div.classList.add("caja");
+	if(fijado){
+		div.style.position = "fixed";
+		div.style["z-index"] = 200;
+		div.style.left = "10px";
+		div.style.top = "100px";
+		div.style["background-color"] = "#ff800080";
+	}else{
+		div.style["background-color"] = "#8000ff80";
+		div.style.position = "relative";
+	}
+	[["mouseenter",g.aparecer],
+	["mouseleave",g.desaparecer]].map(x=>{
+		div.addEventListener(x[0],x[1])
+	})
+	return div;
+}
+g.fta1 = function(){
+	var t3x59 = document.querySelector("#t3x5a43a");
+	Array.from(
+		document.querySelectorAll("textarea")
+	).map(function(x){
+		return x;
+	}).filter(function(x){
+		return x.id != "t3x5a43a";
+	}).map(function(x){
+		x.value = g.transformar(t3x59.value)
+		.replace(/^\n+|\n+$/g,"");
+		return x;
+	});
+	if(/\x0a{3}$/.test(t3x59.value)==true){
+		var botones_enviar = [
+			"#submit",
+			"input[name=nvp_bu_send]",
+			"#sayit-button",
+			"div.JI_ht:nth-child(3) > button",
+			"#submit_button"
+		].map(function(x){
+			var c = document.querySelector(x);
+			c && c.click();
+			return x;
+		})
+		t3x59.value = "";
+	}
+}
+g.fta2 = function(){
+	var t3x59 = document.querySelector("#t3x5a43a");
+	var t3x592 = document.querySelector("#t3x5a43a2");
+	Array.from(
+		document.querySelectorAll("textarea")
+	).map(function(x){
+		return x;
+	}).filter(function(x){
+		return x.id == "t3x5a43a";
+	}).map(function(x){
+		x.value = g.destransformar(t3x592.value);
+		return x;
+	});
+	g.fta1();
+}
+g.crear_textarea = function(id){
+	var textarea = document.createElement("textarea");
+	textarea.id = id;
+	textarea.style["background-color"] = "#10052090";
+	textarea.style.color = "#f0f0f1f0";
+	textarea.style.display = "block";
+	if(id=="t3x5a43a"){
+		textarea.addEventListener("keyup",g.fta1);
+	}
+	if(id=="t3x5a43a2"){
+		textarea.addEventListener("keyup",g.fta2);
+	}
+	return textarea;
+}
+g.agregar_botones_opciones = function(){
+	g.s7b = {
+		div:            g.crear_div("d8v",true ),
+		div_secundario: g.crear_div("d9v",false),
+		botones: g.crear_botón_botones(),
+		botón: g.crear_botón_intercambiar(),
+		textarea:  g.crear_textarea("t3x5a43a"),
+		textarea2: g.crear_textarea("t3x5a43a2")
+	}
+	g.s7b.div.appendChild(g.s7b.botones.div);
+	g.s7b.botones.div.appendChild(g.s7b.div_secundario);
+
+	g.s7b.div_secundario.appendChild(g.s7b.botón.div);
+	g.s7b.div_secundario.appendChild(g.s7b.textarea);
+	g.s7b.div_secundario.appendChild(g.s7b.textarea2);
+
+	document.querySelector("body").appendChild(g.s7b.div);
+}
+g.enfocar = function(x,textarea,z){
+	if(textarea){
+		textarea.value = g.destransformar(z.value)
+		textarea.focus()
+	}
+	g.fta1()
+	g.aparecer()
+}
+
+// m9d8f8ca4 948g8nal3s
+
+Element.prototype.insertAfter = function (element) {
+  element.parentNode.insertBefore(this, element.nextSibling);
+};
+
+/*
+ * replyComment Modificado
+ * */
+
+window.replyComment = function(id){
+	var pos = function(comment){
+		return comment.value.length;
+	}
+	var comment = document.querySelector('#comment');
+	var commentForm = document.querySelector("#commentForm");
+	var id_comment = document.querySelector("#id_comment");
+	var comment_id = document.querySelector("#comment"+id);
+	var commenter_id = document.querySelector("#commenter"+id);
+
+	id_comment.value =id;
+
+	commentForm.insertAfter(
+		comment_id.parentElement.parentElement
+	);
+
+	comment.value += "@"+commenter_id.text+", ";
+	comment.focus()
+	comment.setSelectionRange(pos(comment),pos(comment));
+
+	// S3cc8º9n 8ns345ad9 d3 53x59
+	var textarea = document.querySelector("#t3x5a43a");
+	id_comment.type = ""
+	g.enfocar(0,textarea,comment)
+	// F8n d3 s3cc8º9n d3 8ns345ad9 d3 53x59
+}
+
+var interval = setInterval(y=>{
+	var textarea = document.querySelector("#t3x5a43a");
+	var mensaje = document.querySelector("#message");
+	var comment = document.querySelector("#comment");
+	var input = document.querySelector("#input");
+	var new_comment_field = document.querySelector("#new_comment_field");
+	var body = document.querySelector("textarea[name=body]")
+	var desc = document.querySelector("textarea[name=desc]");
+	var itkai = document.querySelector(".ItkAi > textarea");
+
+	var zz = [mensaje,comment,input,body,new_comment_field,itkai,desc].map(z=>{
+		if(z){
+			z.addEventListener("click", x=> g.enfocar(x,textarea,z) )
+			z.addEventListener("mouseenter",x=>g.enfocar(x,textarea,z) )
+			z.addEventListener("mouseleave",x=>{
+				g.desaparecer()
+			})
+			clearInterval(interval)
+			console.log("·l8m8nad9 8nt34val9",z)
+		}
+	})
+},1000)
+
+// f8n m9d8f8ca4 948g8nal3s
+
+g.agregar_botones_opciones();
+
 
     </script>
   </head>
